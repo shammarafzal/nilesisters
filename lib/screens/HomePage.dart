@@ -299,7 +299,7 @@ class _HomePageState extends State<HomePage> {
           new Home(),
           new Chat_Screen(),
           new EventsViewer(),
-         // new mapView(),
+          new mapView(),
           new PdfViewer(),
           // new YourCustomFeedWidget(),
           //new YourCustomCommunityWidget(),
