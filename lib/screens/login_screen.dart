@@ -64,7 +64,7 @@ class _LoginDemoState extends State<LoginDemo> {
                   final String RPassword = password;
                   final String Remail = email;
                   if(RPassword != null && Remail != null){
-                    var url = Uri.http('localhost:8888', '/public_html/login.php', {"q": "dart"});
+                    var url = Uri.https('nilesisters.codingoverflow.com', '/api/login.php', {"q": "dart"});
                     final response = await http.post(url, body: {
                       "email": Remail,
                       "password": RPassword,

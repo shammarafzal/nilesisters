@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
 
   getUsers() async {
     var url =
-    Uri.http('localhost:8888', '/public_html/getusers.php', {"q": "dart"});
+    Uri.https('nilesisters.codingoverflow.com', '/api/getusers.php', {"q": "dart"});
     final response = await http.post(url, body: {
       "email": widget.text,
     });

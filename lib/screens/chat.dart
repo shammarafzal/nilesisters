@@ -14,7 +14,7 @@ class _Chat_ScreenState extends State<Chat_Screen> {
   String name;
   getUsers() async {
     var url =
-    Uri.http('localhost:8888', '/public_html/getusers.php', {"q": "dart"});
+    Uri.https('nilesisters.codingoverflow.com', '/api/getusers.php', {"q": "dart"});
     final response = await http.post(url, body: {
       "email": 'a',
     });
@@ -33,7 +33,7 @@ class _Chat_ScreenState extends State<Chat_Screen> {
   String msg;
   getPosts() async {
     var url =
-    Uri.http('localhost:8888', '/public_html/getposts.php', {"q": "dart"});
+    Uri.https('nilesisters.codingoverflow.com', '/api/getposts.php', {"q": "dart"});
     final response = await http.post(url);
     if (response.statusCode == 200) {
       final String responseString = response.body;

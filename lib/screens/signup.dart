@@ -84,7 +84,7 @@ class _SignupState extends State<Signup> {
                   final String Remail = email;
                   final String Rpic = "aaa";
                   if(RName != null && RPassword != null && Remail != null){
-                    var url = Uri.http('localhost:8888', '/public_html/userregistration.php', {"q": "dart"});
+                    var url = Uri.https('nilesisters.codingoverflow.com', '/api/userregistration.php', {"q": "dart"});
                     final response = await http.post(url, body: {
                       "email": Remail,
                       "password": RPassword,
