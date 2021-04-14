@@ -177,14 +177,14 @@ class _HomePageState extends State<HomePage> {
                 return ListView(
                   children: <Widget>[
                     new UserAccountsDrawerHeader(
-                      accountName: Text(name),
+                      accountName: Text(name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                       accountEmail: Text(email),
-                      currentAccountPicture: GestureDetector(
-                        child: new CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          child: Icon(Icons.person, color: Colors.white),
-                        ),
-                      ),
+                      // currentAccountPicture: GestureDetector(
+                      //   child: new CircleAvatar(
+                      //     backgroundColor: Colors.grey,
+                      //     child: Icon(Icons.person, color: Colors.white),
+                      //   ),
+                      // ),
                       decoration: new BoxDecoration(color: Colors.blue),
                     ),
                     InkWell(
