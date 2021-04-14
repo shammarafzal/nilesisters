@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
 import 'package:nilesisters/screens/login_screen.dart';
 import 'screens/signup.dart';
 void main() {
+  HttpOverrides.global = new MyHttpOverrides();
   runApp(MyApp());
 }
 class MyApp extends StatefulWidget {
@@ -52,6 +55,13 @@ class _MyAppState extends State<MyApp> {
           }
         }
     );
+  }
+}
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
 
