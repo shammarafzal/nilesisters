@@ -128,210 +128,210 @@ class _HomePageState extends State<HomePage> {
         case 'am':
           _temp = Locale(language.languageCode, 'ET');
           break;
-      /*case 'so':
-          _temp = Locale(language.languageCode,'ET');
-          break;*/
         default:
           _temp = Locale(language.languageCode, 'US');
       }
       MyApp.setLocale(context, _temp);
     }
 
-    return Scaffold(
-      appBar: new AppBar(
-        elevation: 0.0,
-        centerTitle: true,
-        backgroundColor: Colors.blue,
-        title: Text('Nile Sisters'),
-        actions: [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: DropdownButton(
-                onChanged: (Language language) {
-                  _changeLanguage(language);
-                },
-                underline: SizedBox(),
-                icon: Icon(
-                  Icons.language,
-                  color: Colors.white,
-                ),
-                items: Language.languageList()
-                    .map<DropdownMenuItem<Language>>((lang) => DropdownMenuItem(
-                    value: lang,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(lang.flag),
-                        Text(lang.name),
-                      ],
-                    )))
-                    .toList()),
-          ),
-        ],
-      ),
-      drawer: new Drawer(
-        child: FutureBuilder(
-            future: getUsers(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView(
-                  children: <Widget>[
-                    new UserAccountsDrawerHeader(
-                      accountName: Text(name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                      accountEmail: Text(email),
-                      // currentAccountPicture: GestureDetector(
-                      //   child: new CircleAvatar(
-                      //     backgroundColor: Colors.grey,
-                      //     child: Icon(Icons.person, color: Colors.white),
-                      //   ),
-                      // ),
-                      decoration: new BoxDecoration(color: Colors.blue),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new founder()));
-                      },
-                      child: ListTile(
-                        title: Text(DemoLocalization.of(context)
-                            .getTranslatedValue('home')),
-                        leading: Icon(Icons.home, color: Colors.green),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new Staff()));
-                      },
-                      child: ListTile(
-                        title: Text(DemoLocalization.of(context)
-                            .getTranslatedValue('staff')),
-                        leading: Icon(Icons.person, color: Colors.red),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new ContactUs()));
-                      },
-                      child: ListTile(
-                        title: Text(DemoLocalization.of(context)
-                            .getTranslatedValue('contact_us')),
-                        leading: Icon(Icons.contact_phone, color: Colors.blue),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new PrivacyPolicy()));
-                      },
-                      child: ListTile(
-                        title: Text(DemoLocalization.of(context)
-                            .getTranslatedValue('privacy_policy')),
-                        leading: Icon(Icons.policy, color: Colors.green),
-                      ),
-                    ),
-                    /*InkWell(
-                onTap: () {},
-                child: ListTile(
-                  title: Text('Change Language'),
-                  leading: Icon(Icons.language, color: Colors.red),
-                ),
-              ),*/
-                    Divider(),
-                    InkWell(
-                      onTap: () {
-                        Share.share(
-                            'https://play.google.com/store/apps/details?id=com.codingoverflow.nilesisters');
-                      },
-                      child: ListTile(
-                        title: Text(DemoLocalization.of(context)
-                            .getTranslatedValue('share')),
-                        leading: Icon(Icons.share, color: Colors.blue),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new VideoViewer()));
-                      },
-                      child: ListTile(
-                        title: Text(DemoLocalization.of(context)
-                            .getTranslatedValue('videos')),
-                        leading:
-                        Icon(Icons.videocam_sharp, color: Colors.green),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new MyApp()));
-                      },
-                      child: ListTile(
-                        title: Text(DemoLocalization.of(context)
-                            .getTranslatedValue('logout')),
-                        leading: Icon(Icons.logout, color: Colors.green),
-                      ),
-                    ),
-                  ],
-                );
-              }
-              return Container();
-            }
-
+    return WillPopScope(
+      onWillPop: () async => !Navigator.of(context).userGestureInProgress,
+      child: Scaffold(
+        appBar: new AppBar(
+          elevation: 0.0,
+          centerTitle: true,
+          backgroundColor: Colors.blue,
+          title: Text('Nile Sisters'),
+          actions: [
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: DropdownButton(
+                  onChanged: (Language language) {
+                    _changeLanguage(language);
+                  },
+                  underline: SizedBox(),
+                  icon: Icon(
+                    Icons.language,
+                    color: Colors.white,
+                  ),
+                  items: Language.languageList()
+                      .map<DropdownMenuItem<Language>>((lang) => DropdownMenuItem(
+                      value: lang,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(lang.flag),
+                          Text(lang.name),
+                        ],
+                      )))
+                      .toList()),
+            ),
+          ],
         ),
-      ),
-      body: new IndexedStack(
-        index: _selectedIndex,
-        children: <Widget>[
-          new Home(),
-          new Chat_Screen(),
-          new EventsViewer(),
-          new mapView(),
-          new PdfViewer(),
-          // new YourCustomFeedWidget(),
-          //new YourCustomCommunityWidget(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+        drawer: new Drawer(
+          child: FutureBuilder(
+              future: getUsers(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView(
+                    children: <Widget>[
+                      new UserAccountsDrawerHeader(
+                        accountName: Text(name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                        accountEmail: Text(email),
+                        // currentAccountPicture: GestureDetector(
+                        //   child: new CircleAvatar(
+                        //     backgroundColor: Colors.grey,
+                        //     child: Icon(Icons.person, color: Colors.white),
+                        //   ),
+                        // ),
+                        decoration: new BoxDecoration(color: Colors.blue),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new founder()));
+                        },
+                        child: ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('home')),
+                          leading: Icon(Icons.home, color: Colors.green),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new Staff()));
+                        },
+                        child: ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('staff')),
+                          leading: Icon(Icons.person, color: Colors.red),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new ContactUs()));
+                        },
+                        child: ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('contact_us')),
+                          leading: Icon(Icons.contact_phone, color: Colors.blue),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new PrivacyPolicy()));
+                        },
+                        child: ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('privacy_policy')),
+                          leading: Icon(Icons.policy, color: Colors.green),
+                        ),
+                      ),
+                      /*InkWell(
+                  onTap: () {},
+                  child: ListTile(
+                    title: Text('Change Language'),
+                    leading: Icon(Icons.language, color: Colors.red),
+                  ),
+                ),*/
+                      Divider(),
+                      InkWell(
+                        onTap: () {
+                          Share.share(
+                              'https://play.google.com/store/apps/details?id=com.codingoverflow.nilesisters');
+                        },
+                        child: ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('share')),
+                          leading: Icon(Icons.share, color: Colors.blue),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new VideoViewer()));
+                        },
+                        child: ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('videos')),
+                          leading:
+                          Icon(Icons.videocam_sharp, color: Colors.green),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new MyApp()));
+                        },
+                        child: ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('logout')),
+                          leading: Icon(Icons.logout, color: Colors.green),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                return Container();
+              }
+
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Community',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event),
-            label: 'Events',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Map',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.picture_as_pdf),
-            label: 'Pdf',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-        unselectedItemColor: Colors.blue,
+        ),
+        body: new IndexedStack(
+          index: _selectedIndex,
+          children: <Widget>[
+            new Home(),
+            new Chat_Screen(),
+            new EventsViewer(),
+            new mapView(),
+            new PdfViewer(),
+            // new YourCustomFeedWidget(),
+            //new YourCustomCommunityWidget(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Community',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.event),
+              label: 'Events',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              label: 'Map',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.picture_as_pdf),
+              label: 'Pdf',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.amber[800],
+          onTap: _onItemTapped,
+          unselectedItemColor: Colors.blue,
+        ),
       ),
     );
   }

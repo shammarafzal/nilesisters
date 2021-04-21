@@ -61,7 +61,6 @@ flutter:
     - lib/lang/fa.json
     - lib/lang/hi.json
     - lib/lang/fr.json
-    - lib/lang/so.json
     - lib/lang/am.json
     - lib/lang/sw.json
 

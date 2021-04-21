@@ -42,6 +42,7 @@ class _MyAppState extends State<MyApp> {
           Locale('fr','FR'),
           Locale('sw','KE'),
           Locale('am','ET'),
+
         ],
         localizationsDelegates: [
           DemoLocalization.delegate,

@@ -56,7 +56,8 @@ class _PdfViewerState extends State<PdfViewer> {
                                 throw 'Could not launch $url';
                               }
                             },
-                            child: new Text('Download'),
+                            color: Colors.blue,
+                            child: new Text('Download',style: TextStyle(color: Colors.white),),
                           ),
                         ],
                       ),
