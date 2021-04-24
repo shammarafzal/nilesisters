@@ -178,12 +178,6 @@ class _HomePageState extends State<HomePage> {
                       new UserAccountsDrawerHeader(
                         accountName: Text(name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                         accountEmail: Text(email),
-                        // currentAccountPicture: GestureDetector(
-                        //   child: new CircleAvatar(
-                        //     backgroundColor: Colors.grey,
-                        //     child: Icon(Icons.person, color: Colors.white),
-                        //   ),
-                        // ),
                         decoration: new BoxDecoration(color: Colors.blue),
                       ),
                       InkWell(
@@ -238,13 +232,6 @@ class _HomePageState extends State<HomePage> {
                           leading: Icon(Icons.policy, color: Colors.green),
                         ),
                       ),
-                      /*InkWell(
-                  onTap: () {},
-                  child: ListTile(
-                    title: Text('Change Language'),
-                    leading: Icon(Icons.language, color: Colors.red),
-                  ),
-                ),*/
                       Divider(),
                       InkWell(
                         onTap: () {
@@ -289,7 +276,6 @@ class _HomePageState extends State<HomePage> {
                 }
                 return Container();
               }
-
           ),
         ),
         body: new IndexedStack(
@@ -300,8 +286,6 @@ class _HomePageState extends State<HomePage> {
             new EventsViewer(),
             new mapView(),
             new PdfViewer(),
-            // new YourCustomFeedWidget(),
-            //new YourCustomCommunityWidget(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(

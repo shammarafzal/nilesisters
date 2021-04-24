@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nilesisters/API_Data/getpost.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'fetchposts.dart';
 class ShowPosts extends StatefulWidget {
   @override

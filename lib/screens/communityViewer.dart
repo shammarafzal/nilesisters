@@ -1,7 +1,5 @@
 import 'package:nilesisters/API_Data/communtiy.dart';
-import 'package:nilesisters/API_Data/pdf.dart';
 import 'package:nilesisters/screens/community_api.dart';
-import 'package:nilesisters/screens/pdf_api.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 class CommunityViewer extends StatefulWidget {

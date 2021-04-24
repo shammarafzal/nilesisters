@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:nilesisters/API_Data/getpost.dart';
 import 'package:nilesisters/API_Data/users.dart';
 import 'package:nilesisters/screens/showuserposts.dart';
-import 'fetchposts.dart';
 class Chat_Screen extends StatefulWidget {
   @override
   _Chat_ScreenState createState() => _Chat_ScreenState();
