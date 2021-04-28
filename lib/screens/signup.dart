@@ -67,7 +67,7 @@ class _SignupState extends State<Signup> {
                   onChanged: (value){
                     password = value;
                   },
-                  //  obscureText: true,
+                    obscureText: true,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',

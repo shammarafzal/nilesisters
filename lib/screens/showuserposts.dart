@@ -28,48 +28,47 @@ class _ShowPostsState extends State<ShowPosts> {
       appBar: AppBar(
         title: Text('Niesisters'),
       ),
-      body: ListView(
-        children: [
+      body: FutureBuilder(
+        future: fetchPosts(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            return ListView.builder(itemCount: snapshot.data.length,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, index ){
+                GetPosts eventss = snapshot.data[index];
+                return Card(
+                  margin: EdgeInsets.all(10.0),
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Column(
 
-          FutureBuilder(
-            future: fetchPosts(),
-            builder: (context,snapshot){
-              if(snapshot.hasData){
-                return ListView.builder(itemCount: snapshot.data.length,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, index ){
-                    GetPosts eventss = snapshot.data[index];
-                    return Card(
-                      margin: EdgeInsets.all(10.0),
-                      child: Padding(
-                        padding: EdgeInsets.all(12.0),
-                        child: Column(
-
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            new RichText(
-                              text: new TextSpan(
-                                style: new TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                ),
-                                children: <TextSpan>[
-                                  new TextSpan(text: 'From \t\t\t\t\t\t  ${eventss.username} \n\n'),
-                                  new TextSpan(text: 'Message \t\t\t\t\t\t  ${eventss.posttext} \n\n'),
-                                ],
-                              ),
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        new RichText(
+                          text: new TextSpan(
+                            style: new TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.black,
                             ),
-                          ],
+                            children: <TextSpan>[
+                              new TextSpan(text: 'From: \t\t\t\t\t\t  ',style: TextStyle(color: Colors.blue,fontSize: 18)),
+                              new TextSpan(text: '${eventss.username} \n\n',style: TextStyle(color: Colors.black,fontSize: 16)),
+                              new TextSpan(text: 'Message: \t\t\t\t\t\t  ',style: TextStyle(color: Colors.blue,fontSize: 18)),
+                              new TextSpan(text: '${eventss.posttext} \n\n',style: TextStyle(color: Colors.black,fontSize: 16)),
+                          //    new TextSpan(text: 'Message \t\t\t\t\t\t  ${eventss.posttext} \n\n',style: TextStyle(color: Colors.blue,fontSize: 18)),
+
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      ],
+                    ),
+                  ),
                 );
-              }
-              return CircularProgressIndicator();
-            },
-          ),
-        ],
+              },
+            );
+          }
+          return CircularProgressIndicator();
+        },
       ),
     );
   }

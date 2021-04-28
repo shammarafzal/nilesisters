@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 class mapView extends StatefulWidget {
   @override
   _mapViewState createState() => _mapViewState();
@@ -38,7 +38,27 @@ class _mapViewState extends State<mapView> {
         initialCameraPosition: _initialPosition,
         markers: _markers,
         onMapCreated: _onMapCreated,
+        myLocationButtonEnabled: false,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          MapUtils.openMap(32.75914335350104, -117.0754778);
+        },
+        child: Icon(Icons.map),
       ),
     );
+  }
+}
+class MapUtils {
+
+  MapUtils._();
+
+  static Future<void> openMap(double latitude, double longitude) async {
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
   }
 }
