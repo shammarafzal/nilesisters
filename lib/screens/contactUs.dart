@@ -62,6 +62,22 @@ class _ContactUsState extends State<ContactUs> {
       throw 'Could not launch $url';
     }
   }
+  _launchMap1() async {
+    const url = "https://www.google.com/maps/place/5532+El+Cajon+Blvd+%235,+San+Diego,+CA+92115,+USA/@32.7588005,-117.0776665,17z/data=!3m1!4b1!4m5!3m4!1s0x80d9569ee50c9e5f:0x13ac1399d3d79550!8m2!3d32.7588005!4d-117.0754778";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+  _launchMap2() async {
+    const url = "https://www.google.com/maps/place/100+N+Brand+Blvd+UNIT+219,+Glendale,+CA+91203,+USA/@34.1465191,-118.2569264,17z/data=!3m1!4b1!4m5!3m4!1s0x80c2c0ff8fc4bd21:0xd574952757c34cd3!8m2!3d34.1465191!4d-118.2547377";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     TextStyle linkStyle = TextStyle(color: Colors.blue);
@@ -94,8 +110,12 @@ class _ContactUsState extends State<ContactUs> {
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
-                        new TextSpan(text: '5532 El Cajon Blvd., Ste. 5 San Diego, CA 92115–3642. \n\n'),
-                        new TextSpan(text: '100 North Brand BBlvd., Suite 219 Glendle CA 91203 \n\n'),
+                        new TextSpan(text: '5532 El Cajon Blvd., Ste. 5 San Diego, CA 92115–3642. \n\n',style: linkStyle,recognizer: TapGestureRecognizer()..onTap=(){
+                          _launchMap1();
+                        }),
+                        new TextSpan(text: '100 North Brand BBlvd., Suite 219 Glendle CA 91203 \n\n',style: linkStyle,recognizer: TapGestureRecognizer()..onTap=(){
+                          _launchMap2();
+                        }),
                         new TextSpan(text: 'T \t\t\t\t\t\t   619 265-2959 \n\n',style: linkStyle,recognizer: TapGestureRecognizer()..onTap = (){
                           _launchCaller();
                         }),
