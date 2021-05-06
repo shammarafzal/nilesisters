@@ -16,6 +16,7 @@ class _SignupState extends State<Signup> {
   bool _validateEmail = false;
   bool  _validatePassword = false;
   bool emailValid = false;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -24,6 +25,7 @@ class _SignupState extends State<Signup> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text("Register"),
+          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -102,6 +104,7 @@ class _SignupState extends State<Signup> {
                       final String Rpic = "aaa";
                       var url = Uri.https('nilesisters.codingoverflow.com',
                           '/api/userregistration.php', {"q": "dart"});
+                      isLoading = true;
                       final response = await http.post(url, body: {
                         "email": _email.text,
                         "password": _password.text,
@@ -111,6 +114,9 @@ class _SignupState extends State<Signup> {
                       if (response.statusCode == 200) {
                         final String responseString = response.body;
                         if (responseString == 'Register Successfull') {
+                          setState(() {
+                            isLoading = false;
+                          });
                           Fluttertoast.showToast(
                             msg: "Register Successfull",
                             toastLength: Toast.LENGTH_SHORT,
@@ -123,6 +129,9 @@ class _SignupState extends State<Signup> {
                           await Navigator.pushNamed(context, 'loginroute');
                         }
                         if (responseString == 'Already Registered') {
+                          setState(() {
+                            isLoading = false;
+                          });
                           Fluttertoast.showToast(
                             msg: "Email Already Exist",
                             toastLength: Toast.LENGTH_SHORT,
@@ -134,6 +143,9 @@ class _SignupState extends State<Signup> {
                           );
                         }
                         else {
+                          setState(() {
+                            isLoading = false;
+                          });
                           Fluttertoast.showToast(
                             msg: "Error",
                             toastLength: Toast.LENGTH_SHORT,
@@ -146,6 +158,9 @@ class _SignupState extends State<Signup> {
                         }
                       }
                       else {
+                        setState(() {
+                          isLoading = false;
+                        });
                         Fluttertoast.showToast(
                           msg: "API Response Error",
                           toastLength: Toast.LENGTH_SHORT,
@@ -158,6 +173,9 @@ class _SignupState extends State<Signup> {
                       }
                     }
                     else{
+                      setState(() {
+                        isLoading = false;
+                      });
                       Fluttertoast.showToast(
                         msg: "Check Input Data",
                         toastLength: Toast.LENGTH_SHORT,
@@ -172,7 +190,11 @@ class _SignupState extends State<Signup> {
 
 
                   },
-                  child:  Text(
+                  child: isLoading
+                      ? Center(
+                    child: CircularProgressIndicator( valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),),
+                  )
+                      :Text(
                     'Register',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),

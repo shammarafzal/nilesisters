@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nilesisters/API_Data/getpost.dart';
 import 'package:http/http.dart' as http;
+import 'package:nilesisters/localization/demo_localization.dart';
 import 'dart:convert';
 import 'fetchposts.dart';
 class ShowPosts extends StatefulWidget {
@@ -44,21 +45,15 @@ class _ShowPostsState extends State<ShowPosts> {
 
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        new RichText(
-                          text: new TextSpan(
-                            style: new TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),
-                            children: <TextSpan>[
-                              new TextSpan(text: 'From: \t\t\t\t\t\t  ',style: TextStyle(color: Colors.blue,fontSize: 18)),
-                              new TextSpan(text: '${eventss.username} \n\n',style: TextStyle(color: Colors.black,fontSize: 16)),
-                              new TextSpan(text: 'Message: \t\t\t\t\t\t  ',style: TextStyle(color: Colors.blue,fontSize: 18)),
-                              new TextSpan(text: '${eventss.posttext} \n\n',style: TextStyle(color: Colors.black,fontSize: 16)),
-                          //    new TextSpan(text: 'Message \t\t\t\t\t\t  ${eventss.posttext} \n\n',style: TextStyle(color: Colors.blue,fontSize: 18)),
-
-                            ],
-                          ),
+                        ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('from'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                          trailing: Text('${eventss.username}',style: TextStyle(fontSize: 20),),
+                        ),
+                        ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('message'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                          trailing: Text('${eventss.posttext}',style: TextStyle(fontSize: 20),),
                         ),
                       ],
                     ),
@@ -67,7 +62,7 @@ class _ShowPostsState extends State<ShowPosts> {
               },
             );
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );

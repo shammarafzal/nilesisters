@@ -1,4 +1,5 @@
 import 'package:nilesisters/API_Data/pdf.dart';
+import 'package:nilesisters/localization/demo_localization.dart';
 import 'package:nilesisters/screens/pdf_api.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,27 +30,33 @@ class _PdfViewerState extends State<PdfViewer> {
                         children: [
                           Center(child: Text('${pdfs.title}',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 24),),),
                           ListTile(
-                            title: Text('Title',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('title'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text('${pdfs.title}',style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
-                            title: Text('Edition',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('edition'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text('${pdfs.edition}',style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
-                            title: Text('Contect',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('context'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text('${pdfs.contect}',style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
-                            title: Text('Format',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('format'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text(' ${pdfs.format}',style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
-                            title: Text('Page Size',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('page_size'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text(' ${pdfs.pagesize}',style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
-                            title: Text('Page Count',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('page_count'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text(' ${pdfs.pagecount}',style: TextStyle(fontSize: 20),),
                           ),
 
@@ -68,7 +75,8 @@ class _PdfViewerState extends State<PdfViewer> {
                               }
                             },
                             color: Colors.blue,
-                            child: new Text('Download',style: TextStyle(color: Colors.white),),
+                            child: new Text(DemoLocalization.of(context)
+                                .getTranslatedValue('download'),style: TextStyle(color: Colors.white),),
                           ),
                         ],
                       ),
@@ -77,7 +85,7 @@ class _PdfViewerState extends State<PdfViewer> {
                 },
               );
             }
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         ),
       ),

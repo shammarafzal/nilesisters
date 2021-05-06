@@ -15,7 +15,7 @@ class _founderState extends State<founder> {
           elevation: 0.0,
           centerTitle: true,
           backgroundColor: Colors.blue,
-          title: Text('Founder'),
+          title: Text('About Us'),
         ),
         body: ListView(
           children: [

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nilesisters/screens/HomePage.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginDemo extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class _LoginDemoState extends State<LoginDemo> {
   bool _validateEmail = false;
   bool  _validatePassword = false;
   bool emailValid = false;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -23,6 +25,7 @@ class _LoginDemoState extends State<LoginDemo> {
         appBar: AppBar(
           centerTitle: true,
           title: Text("Login"),
+          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -70,6 +73,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     borderRadius: BorderRadius.circular(20)),
                 child: FlatButton(
                   onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
                     setState(() {
                       _email.text.isEmpty ? _validateEmail = true : _validateEmail = false;
                       _password.text.isEmpty ? _validatePassword = true : _validatePassword = false;
@@ -81,6 +85,7 @@ class _LoginDemoState extends State<LoginDemo> {
                           .showSnackBar(SnackBar(content: Text('Email is not Valid')));
                     }
                     if (_email.text != "" &&  _password.text != "" && emailValid != false) {
+                      isLoading = true;
                       var url = Uri.https('nilesisters.codingoverflow.com',
                           '/api/login.php', {"q": "dart"});
                       final response = await http.post(url, body: {
@@ -90,6 +95,8 @@ class _LoginDemoState extends State<LoginDemo> {
                       if (response.statusCode == 200) {
                         final String responseString = response.body;
                         if (responseString == 'Login Successful') {
+                          isLoading = false;
+                          prefs.setBool('isLoggedIn', true);
                           Fluttertoast.showToast(
                             msg: "Login Successfull",
                             toastLength: Toast.LENGTH_SHORT,
@@ -99,6 +106,7 @@ class _LoginDemoState extends State<LoginDemo> {
                             textColor: Colors.white,
                             fontSize: 16.0,
                           );
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -107,6 +115,10 @@ class _LoginDemoState extends State<LoginDemo> {
                                 ),
                               ));
                         } else {
+                          setState(() {
+                            isLoading = false;
+                          });
+
                           Fluttertoast.showToast(
                             msg: "Login Failed",
                             toastLength: Toast.LENGTH_SHORT,
@@ -118,6 +130,9 @@ class _LoginDemoState extends State<LoginDemo> {
                           );
                         }
                       } else {
+                        setState(() {
+                          isLoading = false;
+                        });
                         Fluttertoast.showToast(
                           msg: "API Response Error",
                           toastLength: Toast.LENGTH_SHORT,
@@ -129,6 +144,9 @@ class _LoginDemoState extends State<LoginDemo> {
                         );
                       }
                     } else {
+                      setState(() {
+                        isLoading = false;
+                      });
                       Fluttertoast.showToast(
                         msg: "Check Input Data",
                         toastLength: Toast.LENGTH_SHORT,
@@ -140,7 +158,11 @@ class _LoginDemoState extends State<LoginDemo> {
                       );
                     }
                   },
-                  child: Text(
+                  child: isLoading
+                      ? Center(
+                    child: CircularProgressIndicator( valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),),
+                  )
+                      : Text(
                     'Login',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),

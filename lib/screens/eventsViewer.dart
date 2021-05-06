@@ -1,4 +1,5 @@
 import 'package:nilesisters/API_Data/events.dart';
+import 'package:nilesisters/localization/demo_localization.dart';
 import 'package:nilesisters/screens/events_api.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,28 +37,34 @@ class _EventsViewerState extends State<EventsViewer> {
                         children: [
                           Center(child: Text('${eventss.title}',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 24),),),
                           ListTile(
-                            title: Text('Event Name',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('event_name'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text('${eventss.title}',style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
-                            title: Text('Date',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('date'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text('${eventss.dates}',style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
-                            title: Text('Time',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('time'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text('${eventss.starttime} to ${eventss.endtime}',style: TextStyle(fontSize: 20),),
 
                           ),
                           ListTile(
-                            title: Text('Location',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('location'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text(' ${eventss.location}',style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
-                            title: Text('Admission',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('admission'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text(' ${eventss.fee}',style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
-                            title: Text('Benefits',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            title: Text(DemoLocalization.of(context)
+                                .getTranslatedValue('benefits'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                             trailing: Text(' ${eventss.benifits}',style: TextStyle(fontSize: 20),),
                           ),
                           // new RichText(
@@ -84,7 +91,7 @@ class _EventsViewerState extends State<EventsViewer> {
                 },
               );
             }
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         ),
       ),

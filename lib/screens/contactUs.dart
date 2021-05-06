@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:nilesisters/localization/demo_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 class ContactUs extends StatefulWidget {
@@ -136,7 +137,8 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'Address:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('address'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -149,7 +151,8 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'Phone:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('phone'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -162,7 +165,8 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'Email:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('email'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -239,7 +243,8 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'Address:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('address'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -252,7 +257,8 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'Phone:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('phone'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -265,7 +271,8 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'Email:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('email'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -342,7 +349,8 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'English:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('english'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -355,7 +363,8 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'Spanish:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('spanish'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -400,13 +409,15 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'English:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('english'),
                         style: TextStyle(
                             color: Colors.grey,
                             ),
                       ),
                       trailing: Text(
-                        'Spanish',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('spanish'),
                         style: TextStyle(color: Colors.grey,),
                       ),
                     ),
@@ -423,7 +434,8 @@ class _ContactUsState extends State<ContactUs> {
                   children: [
                     Center(
                       child: Text(
-                        'Social Networks',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('social_networks'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -432,7 +444,8 @@ class _ContactUsState extends State<ContactUs> {
                     ),
                     ListTile(
                       title: Text(
-                        'Website:',
+                        DemoLocalization.of(context)
+                            .getTranslatedValue('website'),
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,

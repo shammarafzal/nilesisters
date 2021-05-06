@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:nilesisters/API_Data/users.dart';
+import 'package:nilesisters/localization/demo_localization.dart';
 import 'package:nilesisters/screens/showuserposts.dart';
 
 class Chat_Screen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _Chat_ScreenState extends State<Chat_Screen> {
   Users user;
   String id;
   String name;
-
+  bool isLoading = false;
   getUsers() async {
     var url = Uri.https(
         'nilesisters.codingoverflow.com', '/api/getusers.php', {"q": "dart"});
@@ -52,7 +53,8 @@ class _Chat_ScreenState extends State<Chat_Screen> {
     return Scaffold(
       body: ListView(children: [
         Container(height: 40,),
-        Text("Send Post",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 28,color: Colors.blue),),
+        Text(DemoLocalization.of(context)
+            .getTranslatedValue('send_post'),textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 28,color: Colors.blue),),
         FutureBuilder(
             future: getUsers(),
             builder: (context, snapshot) {
@@ -74,7 +76,8 @@ class _Chat_ScreenState extends State<Chat_Screen> {
                                   child: TextField(
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: 'Enter something to Post'
+                                      hintText: DemoLocalization.of(context)
+                                          .getTranslatedValue('enter_something')
 
                                     ),
                                     controller: messageTextController,
@@ -86,6 +89,9 @@ class _Chat_ScreenState extends State<Chat_Screen> {
                                 TextButton(
                                   onPressed: () async {
                                     DateTime now = DateTime.now();
+                                    setState(() {
+                                      isLoading = true;
+                                    });
                                     var url = Uri.https(
                                         'nilesisters.codingoverflow.com',
                                         '/api/addpost.php',
@@ -101,6 +107,9 @@ class _Chat_ScreenState extends State<Chat_Screen> {
                                           response.body;
 
                                       if (responseString == 'Posted'){
+                                        setState(() {
+                                          isLoading = false;
+                                        });
                                         Fluttertoast.showToast(
                                           msg: "Posted Successfull",
                                           toastLength: Toast.LENGTH_SHORT,
@@ -113,6 +122,9 @@ class _Chat_ScreenState extends State<Chat_Screen> {
                                         messageTextController.text = '';
                                       }
                                       else{
+                                        setState(() {
+                                          isLoading = false;
+                                        });
                                         Fluttertoast.showToast(
                                           msg: "Post Failed",
                                           toastLength: Toast.LENGTH_SHORT,
@@ -126,7 +138,12 @@ class _Chat_ScreenState extends State<Chat_Screen> {
 
                                     }
                                   },
-                                  child: Text('Send',
+                                  child: isLoading
+                                      ? Center(
+                                    child: CircularProgressIndicator( valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),),
+                                  )
+                                      :  Text(DemoLocalization.of(context)
+                                      .getTranslatedValue('send'),
                                       style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)),
               // style: TextButton.styleFrom(primary: Colors.white,backgroundColor: Colors.blue),
                                 )
@@ -157,7 +174,8 @@ class _Chat_ScreenState extends State<Chat_Screen> {
                     builder: (context) => ShowPosts(),
                   ));
             },
-            child: Text('Show Posts'),
+            child: Text(DemoLocalization.of(context)
+                .getTranslatedValue('show_posts')),
             style: TextButton.styleFrom(primary: Colors.white,backgroundColor: Colors.blue),
           ),
         )

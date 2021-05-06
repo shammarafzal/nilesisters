@@ -18,6 +18,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   String username = 'bhad.biz@gmail.com';
   String password = '28ua3438G!';
   Users user;
+  bool isLoading = false;
   sendMail(String email, String Msg) async {
     final smtpServer = gmail(username, password);
     final message = Message()
@@ -90,6 +91,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           .showSnackBar(SnackBar(content: Text('Email is not Valid')));
                     }
                     if (_email.text != "" && emailValid != false) {
+                      isLoading = true;
                       var url =  Uri.https('nilesisters.codingoverflow.com', '/api/getusers.php', {"q": "dart"});
                       final response = await http.post(url, body: {
                         "email": _email.text,
@@ -98,6 +100,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         final String responseString = response.body;
                         List<dynamic> list = json.decode(responseString);
                         user = Users.fromJson(list[0]);
+                        isLoading = false;
                           Fluttertoast.showToast(
                             msg: "Check Your Email",
                             toastLength: Toast.LENGTH_SHORT,
@@ -110,6 +113,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           sendMail( _email.text,user.password);
                           Navigator.pushNamed(context, 'loginroute');
                       } else {
+                        setState(() {
+                          isLoading = false;
+                        });
                         Fluttertoast.showToast(
                           msg: "API Response Error",
                           toastLength: Toast.LENGTH_SHORT,
@@ -121,6 +127,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         );
                       }
                     } else {
+                      setState(() {
+                        isLoading = false;
+                      });
                       Fluttertoast.showToast(
                         msg: "Check Input Data",
                         toastLength: Toast.LENGTH_SHORT,
@@ -132,7 +141,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       );
                     }
                   },
-                  child: Text(
+                  child: isLoading
+                      ? Center(
+                    child: CircularProgressIndicator( valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),),
+                  )
+                      :Text(
                     'Forgot Password',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
