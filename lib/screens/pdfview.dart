@@ -20,28 +20,39 @@ class _PdfViewerState extends State<PdfViewer> {
                 itemBuilder: (BuildContext context, index ){
                   Pdf pdfs = snapshot.data[index];
                   return Card(
+                    elevation: 5,
                     margin: EdgeInsets.all(10.0),
                     child: Padding(
                       padding: EdgeInsets.all(12.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          new RichText(
-                            text: new TextSpan(
-                              style: new TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black,
-                              ),
-                              children: <TextSpan>[
-                                new TextSpan(text: 'Title \t\t\t\t\t\t  ${pdfs.title} \n\n'),
-                                new TextSpan(text: 'Edition \t\t\t\t\t\t  ${pdfs.edition} \n\n'),
-                                new TextSpan(text: 'Contect \t\t\t\t\t\t  ${pdfs.contect} \n\n'),
-                                new TextSpan(text: 'Format \t\t\t\t\t\t  ${pdfs.format} \n\n'),
-                                new TextSpan(text: 'Page Size \t\t\t\t\t\t  ${pdfs.pagesize} \n\n'),
-                                new TextSpan(text: 'Page Count \t\t\t\t\t\t  ${pdfs.pagecount} \n\n'),
-                              ],
-                            ),
+                          Center(child: Text('${pdfs.title}',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 24),),),
+                          ListTile(
+                            title: Text('Title',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text('${pdfs.title}',style: TextStyle(fontSize: 20),),
                           ),
+                          ListTile(
+                            title: Text('Edition',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text('${pdfs.edition}',style: TextStyle(fontSize: 20),),
+                          ),
+                          ListTile(
+                            title: Text('Contect',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text('${pdfs.contect}',style: TextStyle(fontSize: 20),),
+                          ),
+                          ListTile(
+                            title: Text('Format',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text(' ${pdfs.format}',style: TextStyle(fontSize: 20),),
+                          ),
+                          ListTile(
+                            title: Text('Page Size',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text(' ${pdfs.pagesize}',style: TextStyle(fontSize: 20),),
+                          ),
+                          ListTile(
+                            title: Text('Page Count',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text(' ${pdfs.pagecount}',style: TextStyle(fontSize: 20),),
+                          ),
+
                           new Image.network(
                             '${pdfs.pdfimage}',
                             fit: BoxFit.cover,

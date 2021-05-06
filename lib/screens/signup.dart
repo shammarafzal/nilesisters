@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,7 +9,13 @@ class Signup extends StatefulWidget {
   _SignupState createState() => _SignupState();
 }
 class _SignupState extends State<Signup> {
-  String name,email,password;
+  final _name = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  bool _validateName = false;
+  bool _validateEmail = false;
+  bool  _validatePassword = false;
+  bool emailValid = false;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -32,13 +40,12 @@ class _SignupState extends State<Signup> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextField(
-                  onChanged: (value){
-                    name = value;
-                  },
+                  controller: _name,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Name',
-                    //    hintText: 'Enter valid email id as abc@gmail.com'
+                      hintText: 'Enter Name',
+                    errorText: _validateName ? 'Name Can\'t Be Empty' : null,
                   ),
                 ),
               ),
@@ -48,14 +55,13 @@ class _SignupState extends State<Signup> {
                 //padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextField(
                   keyboardType: TextInputType.emailAddress,
-                  onChanged: (value){
-                    email = value;
-                  },
+                  controller: _email,
                   //  obscureText: true,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Email / Phone',
-                    // hintText: 'Enter secure password'
+                    labelText: 'Email',
+                      hintText: 'Enter valid email id as abc@gmail.com',
+                    errorText: _validateEmail ? 'Email Can\'t Be Empty' : null,
                   ),
                 ),
               ),
@@ -64,14 +70,14 @@ class _SignupState extends State<Signup> {
                     left: 15.0, right: 15.0, top: 15, bottom: 15),
                 //padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextField(
-                  onChanged: (value){
-                    password = value;
-                  },
-                    obscureText: true,
+                  controller: _password,
+                  obscureText: true,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
-                      hintText: 'Enter secure password'),
+                      hintText: 'Enter secure password',
+                        errorText: _validatePassword ? 'Password Can\'t Be Empty' : null,
+                  ),
                 ),
               ),
               Container(
@@ -81,21 +87,30 @@ class _SignupState extends State<Signup> {
                     color: Colors.blue, borderRadius: BorderRadius.circular(20)),
                 child: FlatButton(
                   onPressed: () async {
-                    final String RName = name;
-                    final String RPassword = password;
-                    final String Remail = email;
-                    final String Rpic = "aaa";
-                    if(RName != null && RPassword != null && Remail != null){
-                      var url = Uri.https('nilesisters.codingoverflow.com', '/api/userregistration.php', {"q": "dart"});
+                    setState(() {
+                      _name.text.isEmpty ? _validateName = true : _validateName = false;
+                      _email.text.isEmpty ? _validateEmail = true : _validateEmail = false;
+                      _password.text.isEmpty ? _validatePassword = true : _validatePassword = false;
+
+                    });
+                    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_email.text);
+                    if(emailValid == false){
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text('Email is not Valid')));
+                    }
+                    if(_email.text != "" && _name.text != "" && _password.text != ""  && emailValid != false) {
+                      final String Rpic = "aaa";
+                      var url = Uri.https('nilesisters.codingoverflow.com',
+                          '/api/userregistration.php', {"q": "dart"});
                       final response = await http.post(url, body: {
-                        "email": Remail,
-                        "password": RPassword,
+                        "email": _email.text,
+                        "password": _password.text,
                         "image": Rpic,
-                        "name": RName,
+                        "name": _name.text,
                       });
                       if (response.statusCode == 200) {
                         final String responseString = response.body;
-                        if (responseString == 'Register Successfull'){
+                        if (responseString == 'Register Successfull') {
                           Fluttertoast.showToast(
                             msg: "Register Successfull",
                             toastLength: Toast.LENGTH_SHORT,
@@ -107,7 +122,7 @@ class _SignupState extends State<Signup> {
                           );
                           await Navigator.pushNamed(context, 'loginroute');
                         }
-                        if(responseString == 'Already Registered'){
+                        if (responseString == 'Already Registered') {
                           Fluttertoast.showToast(
                             msg: "Email Already Exist",
                             toastLength: Toast.LENGTH_SHORT,
@@ -118,7 +133,7 @@ class _SignupState extends State<Signup> {
                             fontSize: 16.0,
                           );
                         }
-                        else{
+                        else {
                           Fluttertoast.showToast(
                             msg: "Error",
                             toastLength: Toast.LENGTH_SHORT,
@@ -130,7 +145,7 @@ class _SignupState extends State<Signup> {
                           );
                         }
                       }
-                      else{
+                      else {
                         Fluttertoast.showToast(
                           msg: "API Response Error",
                           toastLength: Toast.LENGTH_SHORT,
@@ -141,11 +156,10 @@ class _SignupState extends State<Signup> {
                           fontSize: 16.0,
                         );
                       }
-
                     }
-                    else {
+                    else{
                       Fluttertoast.showToast(
-                        msg: "Please Fill Fields",
+                        msg: "Check Input Data",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,
@@ -154,6 +168,9 @@ class _SignupState extends State<Signup> {
                         fontSize: 16.0,
                       );
                     }
+
+
+
                   },
                   child:  Text(
                     'Register',
@@ -162,13 +179,23 @@ class _SignupState extends State<Signup> {
                 ),
               ),
               SizedBox(
-                height: 130,
+                height: 60,
               ),
               new GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, 'loginroute');
                 },
-                child: new Text("Already have an account? Login"),
+                child: new RichText(
+                  text: TextSpan(
+                      style: new TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.black,
+                      ),
+                      children:[
+                        TextSpan(text: 'Already have an account? '),
+                        TextSpan(text: 'Login',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)),
+                      ]),
+                ),
               ),
               //Text('Already have an account? Login')
             ],

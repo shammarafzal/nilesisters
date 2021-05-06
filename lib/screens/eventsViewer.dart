@@ -34,23 +34,49 @@ class _EventsViewerState extends State<EventsViewer> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          new RichText(
-                            text: new TextSpan(
-                              style: new TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.black,
-                              ),
-                              children: <TextSpan>[
-                                new TextSpan(text: '${eventss.title} \n\n',style: new TextStyle(fontWeight: FontWeight.bold,fontSize: 18.0)),
-                                new TextSpan(text: 'Events \t\t\t\t\t\t  ${eventss.title} \n\n'),
-                                new TextSpan(text: 'Date \t\t\t\t\t\t  ${eventss.dates} \n\n'),
-                                new TextSpan(text: 'Time \t\t\t\t\t\t  ${eventss.starttime} - ${eventss.endtime}  \n\n'),
-                                new TextSpan(text: 'Location \t\t\t\t\t\t  ${eventss.location} \n\n'),
-                                new TextSpan(text: 'Admission \t\t\t\t\t\t  ${eventss.fee} \n\n'),
-                                new TextSpan(text: 'Benefits \t\t\t\t\t\t  ${eventss.benifits} \n\n'),
-                              ],
-                            ),
+                          Center(child: Text('${eventss.title}',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 24),),),
+                          ListTile(
+                            title: Text('Event Name',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text('${eventss.title}',style: TextStyle(fontSize: 20),),
                           ),
+                          ListTile(
+                            title: Text('Date',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text('${eventss.dates}',style: TextStyle(fontSize: 20),),
+                          ),
+                          ListTile(
+                            title: Text('Time',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text('${eventss.starttime} to ${eventss.endtime}',style: TextStyle(fontSize: 20),),
+
+                          ),
+                          ListTile(
+                            title: Text('Location',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text(' ${eventss.location}',style: TextStyle(fontSize: 20),),
+                          ),
+                          ListTile(
+                            title: Text('Admission',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text(' ${eventss.fee}',style: TextStyle(fontSize: 20),),
+                          ),
+                          ListTile(
+                            title: Text('Benefits',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
+                            trailing: Text(' ${eventss.benifits}',style: TextStyle(fontSize: 20),),
+                          ),
+                          // new RichText(
+                          //   text: new TextSpan(
+                          //     style: new TextStyle(
+                          //       fontSize: 14.0,
+                          //       color: Colors.black,
+                          //     ),
+                          //     children: <TextSpan>[
+                          //       new TextSpan(text: '${eventss.title} \n\n',style: new TextStyle(fontWeight: FontWeight.bold,fontSize: 18.0)),
+                          //       new TextSpan(text: 'Events \t\t\t\t\t\t  ${eventss.title} \n\n'),
+                          //       new TextSpan(text: 'Date \t\t\t\t\t\t  ${eventss.dates} \n\n'),
+                          //       new TextSpan(text: 'Time \t\t\t\t\t\t  ${eventss.starttime} - ${eventss.endtime}  \n\n'),
+                          //       new TextSpan(text: 'Location \t\t\t\t\t\t  ${eventss.location} \n\n'),
+                          //       new TextSpan(text: 'Admission \t\t\t\t\t\t  ${eventss.fee} \n\n'),
+                          //       new TextSpan(text: 'Benefits \t\t\t\t\t\t  ${eventss.benifits} \n\n'),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

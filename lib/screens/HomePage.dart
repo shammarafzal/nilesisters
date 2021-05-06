@@ -18,7 +18,7 @@ import 'package:nilesisters/screens/founder.dart';
 import 'package:nilesisters/screens/staff.dart';
 import 'package:share/share.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_icons/flutter_icons.dart';
 class HomePage extends StatefulWidget {
   final String text;
 
@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(lang.flag),
+
                           Text(lang.name),
                         ],
                       )))
@@ -282,7 +282,7 @@ class _HomePageState extends State<HomePage> {
           index: _selectedIndex,
           children: <Widget>[
             new Home(),
-            new Chat_Screen(),
+            Chat_Screen(text: widget.text),
             new EventsViewer(),
             new mapView(),
             new PdfViewer(),
@@ -307,11 +307,12 @@ class _HomePageState extends State<HomePage> {
               label: 'Map',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.picture_as_pdf),
-              label: 'Pdf',
+              icon: Icon(Icons.backup_table),
+              label: 'Resources',
             ),
           ],
           currentIndex: _selectedIndex,
+          showUnselectedLabels: true,
           selectedItemColor: Colors.amber[800],
           onTap: _onItemTapped,
           unselectedItemColor: Colors.blue,

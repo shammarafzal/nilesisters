@@ -6,6 +6,9 @@ import 'package:nilesisters/API_Data/users.dart';
 import 'package:nilesisters/screens/showuserposts.dart';
 
 class Chat_Screen extends StatefulWidget {
+  final String text;
+
+  Chat_Screen({Key key, @required this.text}) : super(key: key);
   @override
   _Chat_ScreenState createState() => _Chat_ScreenState();
 }
@@ -19,7 +22,7 @@ class _Chat_ScreenState extends State<Chat_Screen> {
     var url = Uri.https(
         'nilesisters.codingoverflow.com', '/api/getusers.php', {"q": "dart"});
     final response = await http.post(url, body: {
-      "email": 'a',
+      "email": widget.text,
     });
     if (response.statusCode == 200) {
       final String responseString = response.body;

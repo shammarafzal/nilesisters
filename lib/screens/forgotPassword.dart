@@ -1,19 +1,42 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:nilesisters/screens/HomePage.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-
-class LoginDemo extends StatefulWidget {
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
+import 'package:nilesisters/API_Data/users.dart';
+class ForgotPassword extends StatefulWidget {
   @override
-  _LoginDemoState createState() => _LoginDemoState();
+  _ForgotPasswordState createState() => _ForgotPasswordState();
 }
 
-class _LoginDemoState extends State<LoginDemo> {
+class _ForgotPasswordState extends State<ForgotPassword> {
   final _email = TextEditingController();
-  final _password = TextEditingController();
   bool _validateEmail = false;
-  bool  _validatePassword = false;
   bool emailValid = false;
+  String username = 'bhad.biz@gmail.com';
+  String password = '28ua3438G!';
+  Users user;
+  sendMail(String email, String Msg) async {
+    final smtpServer = gmail(username, password);
+    final message = Message()
+      ..from = Address(username, 'Nilesisters')
+      ..recipients.add(email)
+      ..subject = ' Password Reset'
+      ..text = 'Hello, \n We\'ve received forgot password request for the <b>NileSisters</b>c'
+      ..html = "<h1>Hello</h1>\n<p>We\'ve received forgot password request for the <b>NileSisters</b>  \n account assosiated with $email. No changes \n have been made to your account yet. \nHere is your password  <b>$Msg</b></p>";
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -22,7 +45,7 @@ class _LoginDemoState extends State<LoginDemo> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
-          title: Text("Login"),
+          title: Text("Forgot Password"),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -37,31 +60,18 @@ class _LoginDemoState extends State<LoginDemo> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: EdgeInsets.all(15),
                 child: TextField(
                   controller: _email,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Email',
-                      hintText: 'Enter valid email id as abc@gmail.com',
+                    border: OutlineInputBorder(),
+                    labelText: 'Email',
+                    hintText: 'Enter valid email id as abc@gmail.com',
                     errorText: _validateEmail ? 'Email Can\'t Be Empty' : null,
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15, bottom: 15),
-                child: TextField(
-                  controller: _password,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                      hintText: 'Enter secure password',
-                    errorText: _validatePassword ? 'Password Can\'t Be Empty' : null,
-                  ),
-                ),
-              ),
+
               Container(
                 height: 50,
                 width: 250,
@@ -72,7 +82,6 @@ class _LoginDemoState extends State<LoginDemo> {
                   onPressed: () async {
                     setState(() {
                       _email.text.isEmpty ? _validateEmail = true : _validateEmail = false;
-                      _password.text.isEmpty ? _validatePassword = true : _validatePassword = false;
 
                     });
                     bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_email.text);
@@ -80,18 +89,17 @@ class _LoginDemoState extends State<LoginDemo> {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text('Email is not Valid')));
                     }
-                    if (_email.text != "" &&  _password.text != "" && emailValid != false) {
-                      var url = Uri.https('nilesisters.codingoverflow.com',
-                          '/api/login.php', {"q": "dart"});
+                    if (_email.text != "" && emailValid != false) {
+                      var url =  Uri.https('nilesisters.codingoverflow.com', '/api/getusers.php', {"q": "dart"});
                       final response = await http.post(url, body: {
                         "email": _email.text,
-                        "password": _password.text,
                       });
                       if (response.statusCode == 200) {
                         final String responseString = response.body;
-                        if (responseString == 'Login Successful') {
+                        List<dynamic> list = json.decode(responseString);
+                        user = Users.fromJson(list[0]);
                           Fluttertoast.showToast(
-                            msg: "Login Successfull",
+                            msg: "Check Your Email",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 1,
@@ -99,24 +107,8 @@ class _LoginDemoState extends State<LoginDemo> {
                             textColor: Colors.white,
                             fontSize: 16.0,
                           );
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(
-                                  text: _email.text,
-                                ),
-                              ));
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: "Login Failed",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                        }
+                          sendMail( _email.text,user.password);
+                          Navigator.pushNamed(context, 'loginroute');
                       } else {
                         Fluttertoast.showToast(
                           msg: "API Response Error",
@@ -141,46 +133,9 @@ class _LoginDemoState extends State<LoginDemo> {
                     }
                   },
                   child: Text(
-                    'Login',
+                    'Forgot Password',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              new GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, 'forgotPassword');
-                },
-                child: new RichText(
-                  text: TextSpan(
-                      style: new TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                      children:[
-                        TextSpan(text: 'Forgot Password',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold)),
-                      ]),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              new GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, 'signup_screen');
-                },
-                child: new RichText(
-                  text: TextSpan(
-                      style: new TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                      children:[
-                        TextSpan(text: 'Do not have an account? '),
-                        TextSpan(text: 'Register',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)),
-                      ]),
                 ),
               ),
             ],

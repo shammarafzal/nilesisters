@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
+import 'package:nilesisters/screens/forgotPassword.dart';
 import 'package:nilesisters/screens/login_screen.dart';
 import 'screens/signup.dart';
 void main() {
@@ -32,6 +33,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           'loginroute': (context)=> LoginDemo(),
           'signup_screen': (context)=>Signup(),
+          'forgotPassword': (context)=>ForgotPassword(),
         } ,
         locale: _locale,
         supportedLocales: [
