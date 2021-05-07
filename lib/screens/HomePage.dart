@@ -10,6 +10,7 @@ import 'package:nilesisters/screens/contactUs.dart';
 import 'package:nilesisters/screens/eventsViewer.dart';
 import 'package:nilesisters/screens/home.dart';
 import 'package:nilesisters/screens/mapView.dart';
+import 'package:nilesisters/screens/mapsViewClass.dart';
 import 'package:nilesisters/screens/pdfview.dart';
 import 'package:nilesisters/screens/privacy.dart';
 import 'package:nilesisters/screens/videosViewer.dart';
@@ -198,7 +199,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                               context,
                               new MaterialPageRoute(
-                                  builder: (context) => new Staff()));
+                                  builder: (context) => new StaffViewer()));
                         },
                         child: ListTile(
                           title: Text(DemoLocalization.of(context)
@@ -284,7 +285,7 @@ class _HomePageState extends State<HomePage> {
             new Home(),
             Chat_Screen(text: widget.text),
             new EventsViewer(),
-            new mapView(),
+            new MapView(),
             new PdfViewer(),
           ],
         ),

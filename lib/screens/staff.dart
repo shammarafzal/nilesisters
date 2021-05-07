@@ -1,51 +1,74 @@
+import 'package:nilesisters/API_Data/pdf.dart';
+import 'package:nilesisters/API_Data/staff.dart';
+import 'package:nilesisters/localization/demo_localization.dart';
+import 'package:nilesisters/screens/pdf_api.dart';
 import 'package:flutter/material.dart';
-class Staff extends StatefulWidget {
+import 'package:nilesisters/screens/staffApi.dart';
+import 'package:url_launcher/url_launcher.dart';
+class StaffViewer extends StatefulWidget {
   @override
-  _StaffState createState() => _StaffState();
+  _StaffViewerState createState() => _StaffViewerState();
 }
-class _StaffState extends State<Staff> {
+class _StaffViewerState extends State<StaffViewer> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => !Navigator.of(context).userGestureInProgress,
-      child: Scaffold(
-        appBar: new AppBar(
-          elevation: 0.0,
-          centerTitle: true,
-          backgroundColor: Colors.blue,
-          title: Text('Staff'),
-        ),
-        body: ListView(
-          children: [
-            Padding(padding: const EdgeInsets.fromLTRB(20.0,20.0,10.0,0.0),
-                child: new Center(
-                  child: Text("Our Refugee Advocates are most Valuable Assets",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold,),
-                  ),
-                ),
-            ),
-            Padding(padding: const EdgeInsets.all(25.0),
-                child: new Center(
-                  child:
-                  new RichText(
-                    text: new TextSpan(
-                      style: new TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                      ),
-                      children: <TextSpan>[
-                        new TextSpan(text: 'Since its foundation in 2001, Nile Sisters Development Initiative ( NSDI ) has made it a priority to involve stakeholders. Our staff is a genuine reflection of this goal. \n\n'),
-                        new TextSpan(text: 'Rebecca Paida \n\n', style: new TextStyle(fontWeight: FontWeight.bold)),
-                        new TextSpan(text: 'MPH CHES Senior Program Manager \n\n'),
-                        new TextSpan(text: 'Patricia Wakhusama, \n\n', style: new TextStyle(fontWeight: FontWeight.bold)),
-                        new TextSpan(text: 'MA Community Engagement Specialist \n\n'),
-                      ],
-                    ),
-                  ),
-                ),
-            ),
-          ],
+    return Scaffold(
+      appBar: new AppBar(
+        elevation: 0.0,
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+        title: Text('Staff'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text('Our Staff',style: TextStyle(fontSize: 26,fontWeight: FontWeight.bold),),
+              ),
+              FutureBuilder(
+                future: fetchStaff(),
+                builder: (context,snapshot){
+                  if(snapshot.hasData){
+                    return GridView.builder(itemCount: snapshot.data.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, index ){
+                        Staff staff = snapshot.data[index];
+                        return Card(
+                          elevation: 5,
+                          child: GridTile(
+                            footer: Container(
+                              color: Colors.white70,
+                              child: SizedBox(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(10,0,0,5),
+                                    child: Column(
+                                      children: [
+                                        Align(alignment: Alignment.topLeft,child: Text(staff.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)),
+                                        Align(alignment: Alignment.topLeft,child: Text(staff.designation,style: TextStyle(fontSize: 20),))
+                                      ],
+                                    ),
+                                  ),
+                                )
+                            ),
+                            child: Image.network(
+                              staff.staffimf,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

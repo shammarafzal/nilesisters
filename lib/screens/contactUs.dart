@@ -92,6 +92,44 @@ class _ContactUsState extends State<ContactUs> {
     }
   }
 
+  _launchInsta1() async {
+    const url =
+        "https://www.instagram.com/womenshealth.nsdi/";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+  _launchInsta2() async {
+    const url =
+        "https://www.instagram.com/learnmoresd/?hl=en";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _launchfb1() async {
+    const url =
+        "https://www.facebook.com/nilesisters";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _launchfb2() async {
+    const url =
+        "https://www.facebook.com/learnmoresd";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     TextStyle linkStyle = TextStyle(color: Colors.blue);
@@ -469,7 +507,7 @@ class _ContactUsState extends State<ContactUs> {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              _launchCallerEnglish();
+                             _launchfb1();
                             },
                           ),
                         ),
@@ -482,7 +520,7 @@ class _ContactUsState extends State<ContactUs> {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              _launchCallerSpanish();
+                              _launchfb2();
                             },
                           ),
                         ),
@@ -501,7 +539,7 @@ class _ContactUsState extends State<ContactUs> {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              _launchCallerEnglish();
+                              _launchInsta1();
                             },
                           ),
                         ),
@@ -514,7 +552,7 @@ class _ContactUsState extends State<ContactUs> {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              _launchCallerSpanish();
+                              _launchInsta2();
                             },
                           ),
                         ),
