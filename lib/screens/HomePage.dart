@@ -9,8 +9,6 @@ import 'package:nilesisters/screens/chat.dart';
 import 'package:nilesisters/screens/contactUs.dart';
 import 'package:nilesisters/screens/eventsViewer.dart';
 import 'package:nilesisters/screens/home.dart';
-import 'package:nilesisters/screens/mapView.dart';
-import 'package:nilesisters/screens/mapsViewClass.dart';
 import 'package:nilesisters/screens/pdfview.dart';
 import 'package:nilesisters/screens/privacy.dart';
 import 'package:nilesisters/screens/videosViewer.dart';
@@ -19,7 +17,9 @@ import 'package:nilesisters/screens/founder.dart';
 import 'package:nilesisters/screens/staff.dart';
 import 'package:share/share.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_icons/flutter_icons.dart';
+
+import 'mapsViewClass.dart';
+
 class HomePage extends StatefulWidget {
   final String text;
 
@@ -285,7 +285,7 @@ class _HomePageState extends State<HomePage> {
             new Home(),
             Chat_Screen(text: widget.text),
             new EventsViewer(),
-            new MapView(),
+            new MapPage(),
             new PdfViewer(),
           ],
         ),

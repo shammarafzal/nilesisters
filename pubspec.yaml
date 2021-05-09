@@ -41,6 +41,7 @@ dependencies:
   mailer: ^5.0.0
   shared_preferences: ^2.0.5
   geolocator: ^7.0.3
+  location: ^4.1.1
   geocoding: ^2.0.0
   flutter_polyline_points: ^1.0.0
   flutter_calendar_carousel: ^2.0.1
@@ -70,6 +71,9 @@ flutter:
     - lib/lang/fr.json
     - lib/lang/am.json
     - lib/lang/sw.json
+    - assets/destination_map_marker.png
+    - assets/driving_pin.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
