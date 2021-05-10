@@ -1,415 +1,186 @@
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:flutter/material.dart';
-import 'package:nilesisters/components/map_pin_pill.dart';
-import 'dart:async';
-
-import 'package:nilesisters/models/pin_pill_info.dart';
+import 'package:nilesisters/screens/map_request.dart';
 
 
-const double CAMERA_ZOOM = 16;
-const double CAMERA_TILT = 15;
-const double CAMERA_BEARING = 30;
-const LatLng SOURCE_LOCATION = LatLng(42.747932, -71.167889);
-const LatLng DEST_LOCATION = LatLng(30.242775954600113, 71.48448407906683);
-
-
-class MapPage extends StatefulWidget {
+class MapSample extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => MapPageState();
+  State<MapSample> createState() => MapSampleState();
 }
 
-class MapPageState extends State<MapPage> {
+class MapSampleState extends State<MapSample> {
+  bool loading = true;
+  final Set<Marker> _markers = {};
+  final Set<Polyline> _polyLines = {};
+  GoogleMapsServices _googleMapsServices = GoogleMapsServices();
+  Set<Polyline> get polyLines => _polyLines;
   Completer<GoogleMapController> _controller = Completer();
-  Set<Marker> _markers = Set<Marker>();
-// for my drawn routes on the map
-  Set<Polyline> _polylines = Set<Polyline>();
-  List<LatLng> polylineCoordinates = [];
-  PolylinePoints polylinePoints;
-  String googleAPIKey = 'AIzaSyB06U2r80on9ZG0p2OD-6Novl4m0SS7N0A';
-// for my custom marker pins
-  BitmapDescriptor sourceIcon;
-  BitmapDescriptor destinationIcon;
-// the user's initial location and current location
-// as it moves
+  static LatLng latLng;
   LocationData currentLocation;
-// a reference to the destination location
-  LocationData destinationLocation;
-// wrapper around the location API
-  Location location;
-  double pinPillPosition = -100;
-  PinInformation currentlySelectedPin = PinInformation(
-      pinPath: '',
-      avatarPath: '',
-      location: LatLng(0, 0),
-      locationName: '',
-      labelColor: Colors.grey);
-  PinInformation sourcePinInfo;
-  PinInformation destinationPinInfo;
+
+
+  // Future<Position> locateUser() async {
+  //   return Geolocator()
+  //       .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  // }
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
+    asyncInitState();
+    // loading = true;
 
-    // create an instance of Location
-    location = new Location();
-    polylinePoints = PolylinePoints();
 
-    // subscribe to changes in the user's location
-    // by "listening" to the location's onLocationChanged event
-    location.onLocationChanged.listen((LocationData cLoc) {
-      // cLoc contains the lat and long of the
-      // current user's position in real time,
-      // so we're holding on to it
-      currentLocation = cLoc;
-      updatePinOnMap();
+  }
+  void asyncInitState() async {
+    await getLocation();
+  }
+  // getUserLocation() async {
+  //   __currentLocation = await locateUser();
+  //   setState(() {
+  //     latLng = LatLng(__currentLocation.latitude, __currentLocation.longitude);
+  //     _onAddMarkerButtonPressed();
+  //   });
+  //   print('center:====== $latLng');
+  // }
+
+
+  getLocation() async {
+
+    var location = new Location();
+    location.onLocationChanged.listen((  currentLocation) {
+
+      print(currentLocation.latitude);
+      print(currentLocation.longitude);
+      setState(() {
+
+        latLng =  LatLng(currentLocation.latitude, currentLocation.longitude);
+      });
+
+      print("getLocation:$latLng");
+      _onAddMarkerButtonPressed();
+      loading = false;
+
     });
-    // set custom marker pins
-    setSourceAndDestinationIcons();
-    // set the initial location
-    setInitialLocation();
   }
 
-  void setSourceAndDestinationIcons() async {
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(devicePixelRatio: 2.0), 'assets/driving_pin.png')
-        .then((onValue) {
-      sourceIcon = onValue;
-    });
 
-    BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.0),
-            'assets/destination_map_marker.png')
-        .then((onValue) {
-      destinationIcon = onValue;
+
+  void _onAddMarkerButtonPressed() {
+    setState(() {
+      _markers.add(Marker(
+        markerId: MarkerId("111"),
+        position: latLng,
+        icon: BitmapDescriptor.defaultMarker,
+        infoWindow: InfoWindow(snippet: "Current Location"),
+      ));
     });
   }
 
-  void setInitialLocation() async {
-    // set the initial location by pulling the user's
-    // current location from the location's getLocation()
-    currentLocation = await location.getLocation();
 
-    // hard-coded destination for this example
-    destinationLocation = LocationData.fromMap({
-      "latitude": DEST_LOCATION.latitude,
-      "longitude": DEST_LOCATION.longitude
-    });
+  void onCameraMove(CameraPosition position) {
+    latLng = position.target;
+  }
+
+  List<LatLng> _convertToLatLng(List points) {
+    List<LatLng> result = <LatLng>[];
+    for (int i = 0; i < points.length; i++) {
+      if (i % 2 != 0) {
+        result.add(LatLng(points[i - 1], points[i]));
+      }
+    }
+    return result;
+  }
+
+  void sendRequest() async {
+    LatLng destination = LatLng(32.75854505072758, -117.07547847055227);
+    String route = await _googleMapsServices.getRouteCoordinates(
+        latLng, destination);
+    createRoute(route);
+    _addMarker(destination,"Nilesisters");
+  }
+
+  void createRoute(String encondedPoly) {
+    _polyLines.add(Polyline(
+        polylineId: PolylineId(latLng.toString()),
+        width: 4,
+        points: _convertToLatLng(_decodePoly(encondedPoly)),
+        color: Colors.red));
+  }
+
+  void _addMarker(LatLng location, String address) {
+    _markers.add(Marker(
+        markerId: MarkerId("112"),
+        position: location,
+        infoWindow: InfoWindow(title: address, snippet: "Development Initiative"),
+        icon: BitmapDescriptor.defaultMarker));
+  }
+
+  List _decodePoly(String poly) {
+    var list = poly.codeUnits;
+    var lList = new List();
+    int index = 0;
+    int len = poly.length;
+    int c = 0;
+    do {
+      var shift = 0;
+      int result = 0;
+
+      do {
+        c = list[index] - 63;
+        result |= (c & 0x1F) << (shift * 5);
+        index++;
+        shift++;
+      } while (c >= 32);
+      if (result & 1 == 1) {
+        result = ~result;
+      }
+      var result1 = (result >> 1) * 0.00001;
+      lList.add(result1);
+    } while (index < len);
+
+    for (var i = 2; i < lList.length; i++) lList[i] += lList[i - 2];
+
+    print(lList.toString());
+
+    return lList;
   }
 
   @override
   Widget build(BuildContext context) {
-    CameraPosition initialCameraPosition = CameraPosition(
-        zoom: CAMERA_ZOOM,
-        tilt: CAMERA_TILT,
-        bearing: CAMERA_BEARING,
-        target: SOURCE_LOCATION);
-    if (currentLocation != null) {
-      initialCameraPosition = CameraPosition(
-          target: LatLng(currentLocation.latitude, currentLocation.longitude),
-          zoom: CAMERA_ZOOM,
-          tilt: CAMERA_TILT,
-          bearing: CAMERA_BEARING);
-    }
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          GoogleMap(
-              myLocationEnabled: true,
-              compassEnabled: true,
-              tiltGesturesEnabled: false,
-              markers: _markers,
-              polylines: _polylines,
-              mapType: MapType.normal,
-              zoomGesturesEnabled: true,
-              initialCameraPosition: initialCameraPosition,
-              onTap: (LatLng loc) {
-                pinPillPosition = -100;
-              },
-              onMapCreated: (GoogleMapController controller) {
-                controller.setMapStyle(Utils.mapStyles);
-                _controller.complete(controller);
-                // my map has completed being created;
-                // i'm ready to show the pins on the map
-                showPinsOnMap();
-              }),
-          MapPinPillComponent(
-              pinPillPosition: pinPillPosition,
-              currentlySelectedPin: currentlySelectedPin)
-        ],
+//    print("getLocation111:$latLng");
+    return new Scaffold(
+
+      body: GoogleMap(
+        polylines: polyLines,
+        markers: _markers,
+        mapType: MapType.normal,
+        initialCameraPosition: CameraPosition(
+          target: latLng,
+          zoom: 14.4746,
+        ),
+        onCameraMove:  onCameraMove,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+      ),
+
+
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: (){
+          sendRequest();
+        },
+        label: Text('Directions'),
+        icon: Icon(Icons.directions),
       ),
     );
   }
-
-  void showPinsOnMap() {
-    // get a LatLng for the source location
-    // from the LocationData currentLocation object
-    var pinPosition =
-        LatLng(currentLocation.latitude, currentLocation.longitude);
-    // get a LatLng out of the LocationData object
-    var destPosition =
-        LatLng(destinationLocation.latitude, destinationLocation.longitude);
-
-    sourcePinInfo = PinInformation(
-        locationName: "Start Location",
-        location: SOURCE_LOCATION,
-        pinPath: "assets/driving_pin.png",
-        avatarPath: "assets/friend1.jpg",
-        labelColor: Colors.blueAccent);
-
-    destinationPinInfo = PinInformation(
-        locationName: "End Location",
-        location: DEST_LOCATION,
-        pinPath: "assets/destination_map_marker.png",
-        avatarPath: "assets/friend2.jpg",
-        labelColor: Colors.purple);
-
-    // add the initial source location pin
-    _markers.add(Marker(
-        markerId: MarkerId('sourcePin'),
-        position: pinPosition,
-        onTap: () {
-          setState(() {
-            currentlySelectedPin = sourcePinInfo;
-            pinPillPosition = 0;
-          });
-        },
-        icon: sourceIcon));
-    // destination pin
-    _markers.add(Marker(
-        markerId: MarkerId('destPin'),
-        position: destPosition,
-        onTap: () {
-          setState(() {
-            currentlySelectedPin = destinationPinInfo;
-            pinPillPosition = 0;
-          });
-        },
-        icon: destinationIcon));
-    // set the route lines on the map from source to destination
-    // for more info follow this tutorial
-    setPolylines();
-  }
-
-  void setPolylines() async {
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleAPIKey,
-      PointLatLng(currentLocation.latitude, currentLocation.longitude),
-      PointLatLng(destinationLocation.latitude, destinationLocation.longitude),
-    );
-
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-
-      setState(() {
-        _polylines.add(Polyline(
-            width: 2, // set the width of the polylines
-            polylineId: PolylineId("poly"),
-            color: Color.fromARGB(255, 40, 122, 198),
-            points: polylineCoordinates));
-      });
-    }
-  }
-
-  void updatePinOnMap() async {
-    // create a new CameraPosition instance
-    // every time the location changes, so the camera
-    // follows the pin as it moves with an animation
-    CameraPosition cPosition = CameraPosition(
-      zoom: CAMERA_ZOOM,
-      tilt: CAMERA_TILT,
-      bearing: CAMERA_BEARING,
-      target: LatLng(currentLocation.latitude, currentLocation.longitude),
-    );
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(cPosition));
-    // do this inside the setState() so Flutter gets notified
-    // that a widget update is due
-    setState(() {
-      // updated position
-      var pinPosition =
-          LatLng(currentLocation.latitude, currentLocation.longitude);
-
-      sourcePinInfo.location = pinPosition;
-
-      // the trick is to remove the marker (by id)
-      // and add it again at the updated location
-      _markers.removeWhere((m) => m.markerId.value == 'sourcePin');
-      _markers.add(Marker(
-          markerId: MarkerId('sourcePin'),
-          onTap: () {
-            setState(() {
-              currentlySelectedPin = sourcePinInfo;
-              pinPillPosition = 0;
-            });
-          },
-          position: pinPosition, // updated position
-          icon: sourceIcon));
-    });
-  }
 }
 
-class Utils {
-  static String mapStyles = '''[
-  {
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#f5f5f5"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#f5f5f5"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#bdbdbd"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#eeeeee"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#e5e5e5"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#ffffff"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dadada"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#e5e5e5"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.station",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#eeeeee"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#c9c9c9"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  }
-]''';
-}
+
+
+
+
+
