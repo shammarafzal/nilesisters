@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'calenderView.dart';
+
 class EventsViewer extends StatefulWidget {
   @override
   _EventsViewerState createState() => _EventsViewerState();
 }
+
 class _EventsViewerState extends State<EventsViewer> {
   @override
   Widget build(BuildContext context) {
@@ -20,16 +22,22 @@ class _EventsViewerState extends State<EventsViewer> {
         throw 'Could not launch $url';
       }
     }
+
     return Scaffold(
       body: Container(
         child: FutureBuilder(
           future: fetchEvents(),
-          builder: (context,snapshot){
-            if(snapshot.hasData){
-              return ListView.builder(itemCount: snapshot.data.length,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
                 shrinkWrap: true,
-                itemBuilder: (BuildContext context, index ){
+                itemBuilder: (BuildContext context, index) {
                   Eventss eventss = snapshot.data[index];
+                  int year = eventss.dates.year;
+                  int month = eventss.dates.month;
+                  int day = eventss.dates.day;
+                  String title = eventss.title;
                   return Card(
                     margin: EdgeInsets.all(10.0),
                     child: Padding(
@@ -37,50 +45,121 @@ class _EventsViewerState extends State<EventsViewer> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Center(child: Text('${eventss.title}',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 24),),),
-                          ListTile(
-                            title: Text(DemoLocalization.of(context)
-                                .getTranslatedValue('event_name'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                            trailing: Text('${eventss.title}',style: TextStyle(fontSize: 20),),
+                          Center(
+                            child: Text(
+                              '${eventss.title}',
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24),
+                            ),
                           ),
                           ListTile(
-                            title: Text(DemoLocalization.of(context)
-                                .getTranslatedValue('date'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                            trailing: Text('${eventss.dates.day}' + '-' +'${eventss.dates.month}' + '-' +'${eventss.dates.year}',style: TextStyle(fontSize: 20),),
+                            title: Text(
+                              DemoLocalization.of(context)
+                                  .getTranslatedValue('event_name'),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                            trailing: Text(
+                              '${eventss.title}',
+                              style: TextStyle(fontSize: 20),
+                            ),
                           ),
                           ListTile(
-                            title: Text(DemoLocalization.of(context)
-                                .getTranslatedValue('time'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                            trailing: Text('${eventss.starttime} to ${eventss.endtime}',style: TextStyle(fontSize: 20),),
-
+                            title: Text(
+                              DemoLocalization.of(context)
+                                  .getTranslatedValue('date'),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                            trailing: Text(
+                              '${eventss.dates.day}' +
+                                  '-' +
+                                  '${eventss.dates.month}' +
+                                  '-' +
+                                  '${eventss.dates.year}',
+                              style: TextStyle(fontSize: 20),
+                            ),
                           ),
                           ListTile(
-                            title: Text(DemoLocalization.of(context)
-                                .getTranslatedValue('location'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                            trailing: Text(' ${eventss.location}',style: TextStyle(fontSize: 20),),
+                            title: Text(
+                              DemoLocalization.of(context)
+                                  .getTranslatedValue('time'),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                            trailing: Text(
+                              '${eventss.starttime} to ${eventss.endtime}',
+                              style: TextStyle(fontSize: 20),
+                            ),
                           ),
                           ListTile(
-                            title: Text(DemoLocalization.of(context)
-                                .getTranslatedValue('admission'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                            trailing: Text(' ${eventss.fee}',style: TextStyle(fontSize: 20),),
+                            title: Text(
+                              DemoLocalization.of(context)
+                                  .getTranslatedValue('location'),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                            trailing: Text(
+                              ' ${eventss.location}',
+                              style: TextStyle(fontSize: 20),
+                            ),
                           ),
                           ListTile(
-                            title: Text(DemoLocalization.of(context)
-                                .getTranslatedValue('benefits'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                            trailing: Text(' ${eventss.benifits}',style: TextStyle(fontSize: 20),),
+                            title: Text(
+                              DemoLocalization.of(context)
+                                  .getTranslatedValue('admission'),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                            trailing: Text(
+                              ' ${eventss.fee}',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          ListTile(
+                            title: Text(
+                              DemoLocalization.of(context)
+                                  .getTranslatedValue('benefits'),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                            trailing: Text(
+                              ' ${eventss.benifits}',
+                              style: TextStyle(fontSize: 20),
+                            ),
                           ),
                           Container(
                             color: Colors.blue,
                             child: TextButton(
-                                child: Text('Show on Calender',style: TextStyle(color: Colors.white),),
+                                child: Text(
+                                  'Show on Calender',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                                 onPressed: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => CalenderView(),
+                                        builder: (context) => DynamicEvent(
+                                            year: year,
+                                            month: month,
+                                            day: day,
+                                            title: title),
                                       ));
-                                }
-                            ),
+                                }),
                           )
                         ],
                       ),

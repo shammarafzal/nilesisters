@@ -1,162 +1,192 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar_carousel/classes/event.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
-import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-class CalenderView extends StatefulWidget {
+class DynamicEvent extends StatefulWidget {
+  final year, month, day, title;
+  DynamicEvent({this.year, this.month, this.day, this.title});
   @override
-  _CalenderViewState createState() => _CalenderViewState();
+  _DynamicEventState createState() => _DynamicEventState();
 }
 
-class _CalenderViewState extends State<CalenderView> {
-  DateTime _currentDate = DateTime.now();
-  DateTime _currentDate2 = DateTime.now();
-  String _currentMonth = DateFormat.yMMM().format(DateTime.now());
-  DateTime _targetDateTime = DateTime.now();
-
-  CalendarCarousel _calendarCarouselNoHeader;
-
-  static Widget _eventIcon = new Container(
-    decoration: new BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(1000)),
-        border: Border.all(color: Colors.blue, width: 2.0)),
-    child: new Icon(
-      Icons.person,
-      color: Colors.amber,
-    ),
-  );
-
-  EventList<Event> _markedDateMap = new EventList<Event>(
-    events: {
-      new DateTime(2021, 5, 14): [
-        new Event(
-          date: new DateTime(2021, 5, 14),
-          title: 'Event 1',
-          icon: _eventIcon,
-          dot: Container(
-            margin: EdgeInsets.symmetric(horizontal: 1.0),
-            color: Colors.red,
-            height: 5.0,
-            width: 5.0,
-          ),
-        ),
-      ],
-    },
-  );
+class _DynamicEventState extends State<DynamicEvent> {
+  CalendarController _controller;
+  Map<DateTime, List<dynamic>> _events;
+  List<dynamic> _selectedEvents;
+  // TextEditingController _eventController;
+  //SharedPreferences prefs;
 
   @override
   void initState() {
-
-    _markedDateMap.addAll(new DateTime(2021, 5, 14), [
-      new Event(
-        date: new DateTime(2021, 5, 14),
-        title: 'Event 1',
-        icon: _eventIcon,
-      ),
-    ]);
     super.initState();
+    _controller = CalendarController();
+    // _eventController = TextEditingController();
+
+
+    _events = {
+      new DateTime(widget.year, widget.month, widget.day): [widget.title]
+    };
+    _selectedEvents = [];
+    prefsData();
+  }
+
+  prefsData() async {
+    //prefs = await SharedPreferences.getInstance();
+    setState(() {
+      // ignore: unnecessary_statements
+      _events;
+    });
+  }
+
+  Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
+    Map<String, dynamic> newMap = {};
+    map.forEach((key, value) {
+      newMap[key.toString()] = map[key];
+    });
+    return newMap;
+  }
+
+  Map<DateTime, dynamic> decodeMap(Map<String, dynamic> map) {
+    Map<DateTime, dynamic> newMap = {};
+    map.forEach((key, value) {
+      newMap[DateTime.parse(key)] = map[key];
+    });
+    return newMap;
   }
 
   @override
   Widget build(BuildContext context) {
-    _calendarCarouselNoHeader = CalendarCarousel<Event>(
-      todayBorderColor: Colors.green,
-      onDayPressed: (DateTime date, List<Event> events) {
-        this.setState(() => _currentDate2 = date);
-        events.forEach((event) => print(event.title));
-      },
-      daysHaveCircularBorder: true,
-      showOnlyCurrentMonthDate: false,
-      weekendTextStyle: TextStyle(
-        color: Colors.red,
-      ),
-      thisMonthDayBorderColor: Colors.grey,
-      weekFormat: false,
-      height: 420.0,
-      selectedDateTime: _currentDate2,
-      targetDateTime: _targetDateTime,
-      customGridViewPhysics: NeverScrollableScrollPhysics(),
-      markedDateCustomShapeBorder:
-      CircleBorder(side: BorderSide(color: Colors.yellow)),
-      markedDateCustomTextStyle: TextStyle(
-        fontSize: 18,
-        color: Colors.blue,
-      ),
-      showHeader: false,
-      todayTextStyle: TextStyle(
-        color: Colors.blue,
-      ),
-
-      todayButtonColor: Colors.yellow,
-      selectedDayTextStyle: TextStyle(
-        color: Colors.yellow,
-      ),
-      inactiveDaysTextStyle: TextStyle(
-        color: Colors.tealAccent,
-        fontSize: 16,
-      ),
-    );
-
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Calendar'),
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
+        title: Align(
+          alignment: Alignment
+              .center,
+          child: Text("Event Calendar"),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              //custom icon
-
-              Container(
-                margin: EdgeInsets.only(
-                  top: 30.0,
-                  bottom: 16.0,
-                  left: 16.0,
-                  right: 16.0,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TableCalendar(
+              events: _events,
+              initialCalendarFormat: CalendarFormat.week,
+              calendarStyle: CalendarStyle(
+                  canEventMarkersOverflow: true,
+                  todayColor: Colors.orange,
+                  selectedColor: Theme.of(context).primaryColor,
+                  todayStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                      color: Colors.white)),
+              headerStyle: HeaderStyle(
+                centerHeaderTitle: true,
+                formatButtonDecoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-                child: new Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: Text(
-                          _currentMonth,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.0,
-                          ),
-                        )),
-                    FlatButton(
-                      child: Text('PREV'),
-                      onPressed: () {
-                        setState(() {
-                          _targetDateTime = DateTime(
-                              _targetDateTime.year, _targetDateTime.month - 1);
-                          _currentMonth =
-                              DateFormat.yMMM().format(_targetDateTime);
-                        });
-                      },
-                    ),
-                    FlatButton(
-                      child: Text('NEXT'),
-                      onPressed: () {
-                        setState(() {
-                          _targetDateTime = DateTime(
-                              _targetDateTime.year, _targetDateTime.month + 1);
-                          _currentMonth =
-                              DateFormat.yMMM().format(_targetDateTime);
-                        });
-                      },
-                    )
-                  ],
-                ),
+                formatButtonTextStyle: TextStyle(color: Colors.white),
+                formatButtonShowsNext: false,
               ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: _calendarCarouselNoHeader,
-              ), //
-            ],
-          ),
-        ));
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              onDaySelected: (date, events, holidays) {
+                setState(() {
+                  _selectedEvents = events;
+                });
+              },
+              builders: CalendarBuilders(
+                selectedDayBuilder: (context, date, events) => Container(
+                    margin: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    )),
+                todayDayBuilder: (context, date, events) => Container(
+                    margin: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Text(
+                      date.day.toString(),
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ),
+              calendarController: _controller,
+            ),
+            ..._selectedEvents.map((event) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: MediaQuery.of(context).size.height / 20,
+                width: MediaQuery.of(context).size.width / 2,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey)),
+                child: Center(
+                    child: Text(
+                      event,
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    )),
+              ),
+            )),
+          ],
+        ),
+      ),
+      /* floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        child: Icon(Icons.add),
+        onPressed: _showAddDialog,
+      ),*/
+    );
   }
+
+/*_showAddDialog() async {
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              backgroundColor: Colors.white70,
+              title: Text("Add Events"),
+              content: TextField(
+                controller: _eventController,
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text(
+                    "Save",
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    if (_eventController.text.isEmpty) return;
+                    setState(() {
+                      if (_events[_controller.selectedDay] != null) {
+                        _events[_controller.selectedDay]
+                            .add('_eventController.text');
+                        //_events['2021,5,28'].add('_eventController.text');
+                      } else {
+                        _events[_controller.selectedDay] = [
+                          "_eventController.text"
+                        ];
+                        print(_events);
+                      }
+                      prefs.setString(
+                          "events", json.encode(encodeMap(_events)));
+                      _eventController.clear();
+                      Navigator.pop(context);
+                    });
+                  },
+                )
+              ],
+            ));
+  }*/
 }
