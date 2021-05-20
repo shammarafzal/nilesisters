@@ -55,6 +55,21 @@ class _ShowPostsState extends State<ShowPosts> {
                               .getTranslatedValue('message'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
                           trailing: Text('${eventss.posttext}',style: TextStyle(fontSize: 20),),
                         ),
+                        ListTile(
+                          title: Container(
+                            child: TextButton(
+                              child: Text('View Comments',style: TextStyle(color: Colors.white),),
+                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+                              onPressed: () {},
+                            ),
+                          ),
+                          trailing: TextButton(
+                            child: Text('Add Comments',style: TextStyle(color: Colors.white),),
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+                            onPressed: () {},
+                            ),
+                        ),
+
                       ],
                     ),
                   ),
@@ -62,7 +77,7 @@ class _ShowPostsState extends State<ShowPosts> {
               },
             );
           }
-          return Center(child: Text('No Posts Found'));
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
