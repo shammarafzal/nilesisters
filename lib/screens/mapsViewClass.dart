@@ -1,186 +1,245 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-import 'package:nilesisters/screens/map_request.dart';
-
-
-class MapSample extends StatefulWidget {
+import 'package:url_launcher/url_launcher.dart';
+class MapPage extends StatefulWidget {
   @override
-  State<MapSample> createState() => MapSampleState();
+  State<StatefulWidget> createState() => MapPageState();
 }
+class MapPageState extends State<MapPage> {
 
-class MapSampleState extends State<MapSample> {
-  bool loading = true;
-  final Set<Marker> _markers = {};
-  final Set<Polyline> _polyLines = {};
-  GoogleMapsServices _googleMapsServices = GoogleMapsServices();
-  Set<Polyline> get polyLines => _polyLines;
+  BitmapDescriptor pinLocationIcon;
+  Set<Marker> _markers = {};
   Completer<GoogleMapController> _controller = Completer();
-  static LatLng latLng;
-  LocationData currentLocation;
-
-
-  // Future<Position> locateUser() async {
-  //   return Geolocator()
-  //       .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  // }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    asyncInitState();
-    // loading = true;
-
-
-  }
-  void asyncInitState() async {
-    await getLocation();
-  }
-  // getUserLocation() async {
-  //   __currentLocation = await locateUser();
-  //   setState(() {
-  //     latLng = LatLng(__currentLocation.latitude, __currentLocation.longitude);
-  //     _onAddMarkerButtonPressed();
-  //   });
-  //   print('center:====== $latLng');
-  // }
-
-
-  getLocation() async {
-
-    var location = new Location();
-    location.onLocationChanged.listen((  currentLocation) {
-
-      print(currentLocation.latitude);
-      print(currentLocation.longitude);
-      setState(() {
-
-        latLng =  LatLng(currentLocation.latitude, currentLocation.longitude);
-      });
-
-      print("getLocation:$latLng");
-      _onAddMarkerButtonPressed();
-      loading = false;
-
-    });
+    setCustomMapPin();
   }
 
-
-
-  void _onAddMarkerButtonPressed() {
-    setState(() {
-      _markers.add(Marker(
-        markerId: MarkerId("111"),
-        position: latLng,
-        icon: BitmapDescriptor.defaultMarker,
-        infoWindow: InfoWindow(snippet: "Current Location"),
-      ));
-    });
-  }
-
-
-  void onCameraMove(CameraPosition position) {
-    latLng = position.target;
-  }
-
-  List<LatLng> _convertToLatLng(List points) {
-    List<LatLng> result = <LatLng>[];
-    for (int i = 0; i < points.length; i++) {
-      if (i % 2 != 0) {
-        result.add(LatLng(points[i - 1], points[i]));
-      }
-    }
-    return result;
-  }
-
-  void sendRequest() async {
-    LatLng destination = LatLng(32.75854505072758, -117.07547847055227);
-    String route = await _googleMapsServices.getRouteCoordinates(
-        latLng, destination);
-    createRoute(route);
-    _addMarker(destination,"Nilesisters");
-  }
-
-  void createRoute(String encondedPoly) {
-    _polyLines.add(Polyline(
-        polylineId: PolylineId(latLng.toString()),
-        width: 4,
-        points: _convertToLatLng(_decodePoly(encondedPoly)),
-        color: Colors.red));
-  }
-
-  void _addMarker(LatLng location, String address) {
-    _markers.add(Marker(
-        markerId: MarkerId("112"),
-        position: location,
-        infoWindow: InfoWindow(title: address, snippet: "Development Initiative"),
-        icon: BitmapDescriptor.defaultMarker));
-  }
-
-  List _decodePoly(String poly) {
-    var list = poly.codeUnits;
-    var lList = new List();
-    int index = 0;
-    int len = poly.length;
-    int c = 0;
-    do {
-      var shift = 0;
-      int result = 0;
-
-      do {
-        c = list[index] - 63;
-        result |= (c & 0x1F) << (shift * 5);
-        index++;
-        shift++;
-      } while (c >= 32);
-      if (result & 1 == 1) {
-        result = ~result;
-      }
-      var result1 = (result >> 1) * 0.00001;
-      lList.add(result1);
-    } while (index < len);
-
-    for (var i = 2; i < lList.length; i++) lList[i] += lList[i - 2];
-
-    print(lList.toString());
-
-    return lList;
+  void setCustomMapPin() async {
+    pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5),
+        'assets/images/location.png');
   }
 
   @override
   Widget build(BuildContext context) {
-//    print("getLocation111:$latLng");
-    return new Scaffold(
+    LatLng pinPosition = LatLng(32.75854907373575, -117.07547638760475);
 
+    // these are the minimum required values to set
+    // the camera position
+    CameraPosition initialLocation = CameraPosition(
+        zoom: 16,
+        bearing: 30,
+        target: pinPosition
+    );
+
+    return Scaffold(
       body: GoogleMap(
-        polylines: polyLines,
-        markers: _markers,
-        mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
-          target: latLng,
-          zoom: 14.4746,
-        ),
-        onCameraMove:  onCameraMove,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
-
-
-      floatingActionButton: FloatingActionButton.extended(
+         // myLocationEnabled: true,
+          compassEnabled: true,
+          markers: _markers,
+          initialCameraPosition: initialLocation,
+          myLocationButtonEnabled: false,
+          mapType: MapType.hybrid,
+          onMapCreated: (GoogleMapController controller) {
+            controller.setMapStyle(Utils.mapStyles);
+            _controller.complete(controller);
+            setState(() {
+              _markers.add(
+                  Marker(
+                      markerId: MarkerId('<MARKER_ID>'),
+                      position: pinPosition,
+                      icon: pinLocationIcon
+                  )
+              );
+            });
+          }),
+      floatingActionButton: FloatingActionButton(
         onPressed: (){
-          sendRequest();
+          MapUtils.openMap(32.75854907373575, -117.07547638760475);
         },
-        label: Text('Directions'),
-        icon: Icon(Icons.directions),
+        child: Icon(Icons.directions),
       ),
     );
   }
 }
 
 
+class MapUtils {
 
+  MapUtils._();
 
-
-
+  static Future<void> openMap(double latitude, double longitude) async {
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+}
+class Utils {
+  static String mapStyles = '''[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#bdbdbd"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#ffffff"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#dadada"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#c9c9c9"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  }
+]''';
+}

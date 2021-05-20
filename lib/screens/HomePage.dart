@@ -285,7 +285,7 @@ class _HomePageState extends State<HomePage> {
             new Home(),
             Chat_Screen(text: widget.text),
             new EventsViewer(),
-            new MapSample(),
+            new MapPage(),
             new PdfViewer(),
           ],
         ),

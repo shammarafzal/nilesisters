@@ -62,7 +62,7 @@ class _ShowPostsState extends State<ShowPosts> {
               },
             );
           }
-          return Center(child: CircularProgressIndicator());
+          return Center(child: Text('No Posts Found'));
         },
       ),
     );
