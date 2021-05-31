@@ -39,7 +39,7 @@ class _VideoViewerState extends State<VideoViewer> {
                 },
               );
             }
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         ),
       ),
