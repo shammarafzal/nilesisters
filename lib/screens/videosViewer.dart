@@ -28,9 +28,9 @@ class _VideoViewerState extends State<VideoViewer> {
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, index ){
                   GetVideos videos = snapshot.data[index];
-
                   return
                     Card(
+                      elevation: 5,
                     child:ChewieListItem(
                     videoPlayerController: VideoPlayerController.network(
                       videos.videourl,
