@@ -44,6 +44,7 @@ dependencies:
   table_calendar: ^2.2.1
   dio: ^4.0.0
   path_provider: ^2.0.1
+  chewie: ^1.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
