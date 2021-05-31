@@ -58,7 +58,7 @@ class _DynamicEventState extends State<DynamicEvent> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         backgroundColor: Colors.blue,
         title: Align(
           alignment: Alignment

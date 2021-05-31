@@ -171,7 +171,7 @@ class _Chat_ScreenState extends State<Chat_Screen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ShowPosts(),
+                    builder: (context) => ShowPosts(userID: id),
                   ));
             },
             child: Text(DemoLocalization.of(context)

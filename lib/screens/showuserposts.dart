@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nilesisters/API_Data/getcomments.dart';
 import 'package:nilesisters/API_Data/getpost.dart';
 import 'package:http/http.dart' as http;
 import 'package:nilesisters/localization/demo_localization.dart';
+import 'package:nilesisters/screens/showcomments.dart';
 import 'dart:convert';
 import 'fetchposts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class ShowPosts extends StatefulWidget {
+  final userID;
+
+  ShowPosts({
+   this.userID,
+});
   @override
   _ShowPostsState createState() => _ShowPostsState();
 }
 
 class _ShowPostsState extends State<ShowPosts> {
+  final _formKey = GlobalKey<FormState>();
   GetPosts getpost;
+  bool isLoading = false;
+  final messageTextController = TextEditingController();
+  String messageText;
   String msg;
   getPosts() async {
     var url =
@@ -23,8 +36,13 @@ class _ShowPostsState extends State<ShowPosts> {
       return null;
     }
   }
+  getComment() async {
+
+
+  }
   @override
   Widget build(BuildContext context) {
+    getComment();
     return Scaffold(
       appBar: AppBar(
         title: Text('Niesisters'),
@@ -60,16 +78,135 @@ class _ShowPostsState extends State<ShowPosts> {
                             child: TextButton(
                               child: Text('View Comments',style: TextStyle(color: Colors.white),),
                               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-                              onPressed: () {},
+                              onPressed: () async{
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                prefs.setString('postid', eventss.postid);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ShowComments(postID: eventss.postid),
+                                    ));
+                              },
                             ),
                           ),
                           trailing: TextButton(
                             child: Text('Add Comments',style: TextStyle(color: Colors.white),),
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Stack(
+                                          overflow: Overflow.visible,
+                                          children: <Widget>[
+                                            Positioned(
+                                              right: -40.0,
+                                              top: -40.0,
+                                              child: InkResponse(
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: CircleAvatar(
+                                                  child: Icon(Icons.close),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              ),
+                                            ),
+                                            Form(
+                                              key: _formKey,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding: EdgeInsets.all(8.0),
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(
+                                                          border: OutlineInputBorder(),
+                                                          hintText: DemoLocalization.of(context)
+                                                              .getTranslatedValue('enter_something')
+
+                                                      ),
+                                                      controller: messageTextController,
+                                                      onChanged: (value) {
+                                                        messageText = value;
+                                                      },
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: RaisedButton(
+                                                      child: Text("Submit"),
+                                                      onPressed: () async {
+                                                        if (_formKey.currentState.validate()) {
+                                                          _formKey.currentState.save();
+                                                        }
+                                                        DateTime now = DateTime.now();
+                                                        setState(() {
+                                                          isLoading = true;
+                                                        });
+                                                        var url = Uri.https(
+                                                            'nilesisters.codingoverflow.com',
+                                                            '/api/addcomments.php',
+                                                            {"q": "dart"});
+                                                        final response = await http.post(url,
+                                                            body: {
+                                                              "userid": widget.userID,
+                                                              "postid": eventss.postid,
+                                                              "comment": messageText,
+                                                              "datetime": now.toString()
+                                                            });
+                                                        if (response.statusCode == 200) {
+                                                          final String responseString =
+                                                              response.body;
+
+                                                          if (responseString == 'Comment Added'){
+                                                            setState(() {
+                                                              isLoading = false;
+                                                            });
+                                                            Fluttertoast.showToast(
+                                                              msg: "Comment Added Successfull",
+                                                              toastLength: Toast.LENGTH_SHORT,
+                                                              gravity: ToastGravity.CENTER,
+                                                              timeInSecForIosWeb: 1,
+                                                              backgroundColor: Colors.red,
+                                                              textColor: Colors.white,
+                                                              fontSize: 16.0,
+                                                            );
+                                                            messageTextController.text = '';
+                                                            Navigator.of(context).pop();
+                                                          }
+                                                          else{
+                                                            setState(() {
+                                                              isLoading = false;
+                                                            });
+                                                            Fluttertoast.showToast(
+                                                              msg: "Failed",
+                                                              toastLength: Toast.LENGTH_SHORT,
+                                                              gravity: ToastGravity.CENTER,
+                                                              timeInSecForIosWeb: 1,
+                                                              backgroundColor: Colors.red,
+                                                              textColor: Colors.white,
+                                                              fontSize: 16.0,
+                                                            );
+                                                          }
+
+                                                        }
+                                                      },
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              });
+                            },
                             ),
                         ),
-
                       ],
                     ),
                   ),
@@ -82,4 +219,5 @@ class _ShowPostsState extends State<ShowPosts> {
       ),
     );
   }
+
 }
