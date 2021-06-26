@@ -10,13 +10,22 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WebView(
-        initialUrl: 'https://nilesisters.org/',
-        onWebViewCreated: (WebViewController webViewController){
-          _controller.complete(webViewController);
-        },
-        javascriptMode: JavascriptMode.unrestricted,
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: ListView(
+           children: [
+             Image.asset('assets/images/nilesisters.png'),
+
+           ],
+        ),
       ),
+      // body: WebView(
+      //   initialUrl: 'https://nilesisters.org/',
+      //   onWebViewCreated: (WebViewController webViewController){
+      //     _controller.complete(webViewController);
+      //   },
+      //   javascriptMode: JavascriptMode.unrestricted,
+      // ),
     );
   }
 }
