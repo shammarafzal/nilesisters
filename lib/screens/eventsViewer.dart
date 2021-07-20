@@ -1,7 +1,7 @@
-import 'package:nilesisters/API_Data/events.dart';
+import 'package:nilesisters/Model/getEvents.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
-import 'package:nilesisters/screens/events_api.dart';
 import 'package:flutter/material.dart';
+import 'package:nilesisters/utils/Utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'calenderView.dart';
@@ -25,19 +25,19 @@ class _EventsViewerState extends State<EventsViewer> {
 
     return Scaffold(
       body: Container(
-        child: FutureBuilder(
-          future: fetchEvents(),
+        child: FutureBuilder<GetEvents>(
+          future:  Utils().fetchEvents(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data.data.length,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, index) {
-                  Eventss eventss = snapshot.data[index];
-                  int year = eventss.dates.year;
-                  int month = eventss.dates.month;
-                  int day = eventss.dates.day;
-                  String title = eventss.title;
+                  // Eventss eventss = snapshot.data[index];
+                  // int year = eventss.dates.year;
+                  // int month = eventss.dates.month;
+                  // int day = eventss.dates.day;
+                  // String title = eventss.title;
                   return Card(
                     margin: EdgeInsets.all(10.0),
                     child: Padding(
@@ -47,7 +47,7 @@ class _EventsViewerState extends State<EventsViewer> {
                         children: [
                           Center(
                             child: Text(
-                              '${eventss.title}',
+                              snapshot.data.data[index].title,
                               style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -64,7 +64,7 @@ class _EventsViewerState extends State<EventsViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              '${eventss.title}',
+                              snapshot.data.data[index].title,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -78,11 +78,7 @@ class _EventsViewerState extends State<EventsViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              '${eventss.dates.day}' +
-                                  '-' +
-                                  '${eventss.dates.month}' +
-                                  '-' +
-                                  '${eventss.dates.year}',
+                              snapshot.data.data[index].date,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -96,7 +92,7 @@ class _EventsViewerState extends State<EventsViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              '${eventss.starttime} to ${eventss.endtime}',
+                              snapshot.data.data[index].time,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -110,7 +106,7 @@ class _EventsViewerState extends State<EventsViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              ' ${eventss.location}',
+                              snapshot.data.data[index].location,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -124,7 +120,7 @@ class _EventsViewerState extends State<EventsViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              ' ${eventss.fee}',
+                              snapshot.data.data[index].fee,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -138,7 +134,7 @@ class _EventsViewerState extends State<EventsViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              ' ${eventss.benifits}',
+                              snapshot.data.data[index].benefits,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -146,7 +142,7 @@ class _EventsViewerState extends State<EventsViewer> {
                             color: Colors.blue,
                             child: TextButton(
                                 child: Text(
-                                  'Show on Calender',
+                                  'Show on Calendar',
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
@@ -154,10 +150,10 @@ class _EventsViewerState extends State<EventsViewer> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => DynamicEvent(
-                                            year: year,
-                                            month: month,
-                                            day: day,
-                                            title: title),
+                                            year: 2021,
+                                            month: 12,
+                                            day: 1,
+                                            title: 'w'),
                                       ));
                                 }),
                           ),
@@ -170,11 +166,11 @@ class _EventsViewerState extends State<EventsViewer> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
-                                  double lat = double.parse(eventss.lat);
-                                  double longg = double.parse(eventss.log);
-                                  print(lat);
-                                  print(longg);
-                                  MapUtils.openMap(lat, longg);
+                                  // // double lat = double.parse(eventss.lat);
+                                  // // double longg = double.parse(eventss.log);
+                                  // print(lat);
+                                  // print(longg);
+                                  // MapUtils.openMap(lat, longg);
                                 }),
                           )
                         ],

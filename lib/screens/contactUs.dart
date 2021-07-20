@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:nilesisters/Model/getContact.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
+import 'package:nilesisters/utils/Utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 class ContactUs extends StatefulWidget {
@@ -157,217 +159,142 @@ class _ContactUsState extends State<ContactUs> {
                 ),
               ),
             ),
-            Card(
-              margin: EdgeInsets.all(10.0),
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Center(
-                      child: Text(
-                        'San Diego Office',
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24),
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        DemoLocalization.of(context)
-                            .getTranslatedValue('address'),
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      trailing: Text(
-                        '5532 El Cajon Blvd, San Diego,\n CA 92115, United States',
-                        //style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        DemoLocalization.of(context)
-                            .getTranslatedValue('phone'),
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      trailing: Text(
-                        '+1 619-265-2959',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        DemoLocalization.of(context)
-                            .getTranslatedValue('email'),
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      trailing: Text(
-                        'info@nilesisters.org',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.blue,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.map,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              _launchSanDiegoMap();
-                            },
+            FutureBuilder<GetContact>(
+                future:  Utils().fetchcontact(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return  ListView.builder(
+                    itemCount: snapshot.data.data.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, index) {
+                      return Card(
+                        margin: EdgeInsets.all(10.0),
+                        child: Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Center(
+                                child: Text(
+                                  snapshot.data.data[index].officeName,
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24),
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  DemoLocalization.of(context)
+                                      .getTranslatedValue('address'),
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                trailing: Text(
+                                  snapshot.data.data[index].address,
+                                  //style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  DemoLocalization.of(context)
+                                      .getTranslatedValue('phone'),
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                trailing: Text(
+                                  snapshot.data.data[index].englishPhone,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  DemoLocalization.of(context)
+                                      .getTranslatedValue('email'),
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                                trailing: Text(
+                                  snapshot.data.data[index].email,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor: Colors.blue,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.map,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () async{
+                                        var url = '${snapshot.data.data[index].address}';
+                                        if (await canLaunch(url)) {
+                                        await launch(url);
+                                        } else {
+                                        throw 'Could not launch $url';
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor: Colors.blue,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.phone,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () async{
+                                        var url = snapshot.data.data[index].englishPhone;
+                                        if (await canLaunch(url)) {
+                                        await launch(url);
+                                        } else {
+                                        throw 'Could not launch $url';
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor: Colors.blue,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.mail,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () async{
+                                        var url = snapshot.data.data[index].email;
+                                        if (await canLaunch(url)) {
+                                        await launch(url);
+                                        } else {
+                                        throw 'Could not launch $url';
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.blue,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.phone,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              _launchSanDiegoCaller();
-                            },
-                          ),
-                        ),
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.blue,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.mail,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              _launchSanDiegoMailer();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              margin: EdgeInsets.all(10.0),
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Glendale Office',
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24),
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        DemoLocalization.of(context)
-                            .getTranslatedValue('address'),
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      trailing: Text(
-                        '100 North Brand Blvd., Suite 219,\n Glendale, CA 91203, United States',
-                       // style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        DemoLocalization.of(context)
-                            .getTranslatedValue('phone'),
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      trailing: Text(
-                        '+1 818-403-5119',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        DemoLocalization.of(context)
-                            .getTranslatedValue('email'),
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      trailing: Text(
-                        'info.la@nilesisters.org',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.blue,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.map,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              _launchGlendaleMap();
-                            },
-                          ),
-                        ),
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.blue,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.phone,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              _launchGlendaleCaller();
-                            },
-                          ),
-                        ),
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.blue,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.mail,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              _launchGlendaleMailer();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+                      );
+                    }
+                    );
+                  }
+                  return Center(
+                   );
+                }
             ),
             Card(
               margin: EdgeInsets.all(10.0),

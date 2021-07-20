@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:nilesisters/API_Data/users.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
 import 'package:nilesisters/screens/showuserposts.dart';
 
@@ -15,36 +14,11 @@ class Chat_Screen extends StatefulWidget {
 }
 
 class _Chat_ScreenState extends State<Chat_Screen> {
-  Users user;
   String id;
   String name;
   bool isLoading = false;
-  getUsers() async {
-    var url = Uri.https(
-        'nilesisters.codingoverflow.com', '/api/getusers.php', {"q": "dart"});
-    final response = await http.post(url, body: {
-      "email": widget.text,
-    });
-    if (response.statusCode == 200) {
-      final String responseString = response.body;
-      List<dynamic> list = json.decode(responseString);
-      user = Users.fromJson(list[0]);
-      id = user.id;
-      name = user.name;
-      return user.id;
-    } else {
-      return null;
-    }
-  }
-
   final messageTextController = TextEditingController();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUsers();
-  }
 
   String messageText;
 
@@ -56,7 +30,7 @@ class _Chat_ScreenState extends State<Chat_Screen> {
         Text(DemoLocalization.of(context)
             .getTranslatedValue('send_post'),textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 28,color: Colors.blue),),
         FutureBuilder(
-            future: getUsers(),
+            // future: getUsers(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Container(

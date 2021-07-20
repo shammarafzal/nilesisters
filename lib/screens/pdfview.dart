@@ -1,9 +1,8 @@
-import 'package:nilesisters/API_Data/pdf.dart';
+import 'package:nilesisters/Model/getResources.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
-import 'package:nilesisters/screens/pdf_api.dart';
 import 'package:flutter/material.dart';
+import 'package:nilesisters/utils/Utils.dart';
 import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -15,9 +14,7 @@ class PdfViewer extends StatefulWidget {
 
 class _PdfViewerState extends State<PdfViewer> {
   bool downloading = false;
-
   String progress = '0';
-
   bool isDownloaded = false;
   String filename = 'test.pdf';
 
@@ -61,9 +58,7 @@ class _PdfViewerState extends State<PdfViewer> {
 
   Future<String> getFilePath(uniqueFileName) async {
     String path = '';
-
     Directory dir = await getApplicationDocumentsDirectory();
-
     path = '${dir.path}/$uniqueFileName';
     Share.shareFiles(['${path}']);
     return path;
@@ -73,15 +68,14 @@ class _PdfViewerState extends State<PdfViewer> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: FutureBuilder(
-          future: fetchPdfs(),
+        child: FutureBuilder<GetResources>(
+          future: Utils().fetchResources(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data.data.length,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, index) {
-                  Pdf pdfs = snapshot.data[index];
                   return Card(
                     elevation: 5,
                     margin: EdgeInsets.all(10.0),
@@ -92,7 +86,7 @@ class _PdfViewerState extends State<PdfViewer> {
                         children: [
                           Center(
                             child: Text(
-                              '${pdfs.title}',
+                              snapshot.data.data[index].title,
                               style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -109,7 +103,7 @@ class _PdfViewerState extends State<PdfViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              '${pdfs.title}',
+                              snapshot.data.data[index].title,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -123,7 +117,7 @@ class _PdfViewerState extends State<PdfViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              '${pdfs.edition}',
+                              snapshot.data.data[index].edition,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -137,7 +131,7 @@ class _PdfViewerState extends State<PdfViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              '${pdfs.contect}',
+                              snapshot.data.data[index].context,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -151,21 +145,7 @@ class _PdfViewerState extends State<PdfViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              ' ${pdfs.format}',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          ListTile(
-                            title: Text(
-                              DemoLocalization.of(context)
-                                  .getTranslatedValue('page_size'),
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            trailing: Text(
-                              ' ${pdfs.pagesize}',
+                              snapshot.data.data[index].format,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -179,17 +159,17 @@ class _PdfViewerState extends State<PdfViewer> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              ' ${pdfs.pagecount}',
+                              snapshot.data.data[index].totalPages,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
                           new Image.network(
-                            '${pdfs.pdfimage}',
+                            Utils().image_base_url+'${snapshot.data.data[index].icon}',
                             fit: BoxFit.cover,
                           ),
                           new RaisedButton(
                             onPressed: () async {
-                              var url = '${pdfs.pdfurl}';
+                              var url = Utils().image_base_url+'${snapshot.data.data[index].file}';
                               downloadFile(url, filename);
                               /*if (await canLaunch(url)) {
                                 await launch(url);

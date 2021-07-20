@@ -1,10 +1,7 @@
-import 'package:nilesisters/API_Data/pdf.dart';
-import 'package:nilesisters/API_Data/staff.dart';
-import 'package:nilesisters/localization/demo_localization.dart';
-import 'package:nilesisters/screens/pdf_api.dart';
+import 'package:nilesisters/Model/getStaff.dart';
 import 'package:flutter/material.dart';
-import 'package:nilesisters/screens/staffApi.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:nilesisters/utils/Utils.dart';
+
 class StaffViewer extends StatefulWidget {
   @override
   _StaffViewerState createState() => _StaffViewerState();
@@ -28,16 +25,15 @@ class _StaffViewerState extends State<StaffViewer> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text('Our Staff',style: TextStyle(fontSize: 26,fontWeight: FontWeight.bold),),
               ),
-              FutureBuilder(
-                future: fetchStaff(),
+              FutureBuilder<GetStaff>(
+                future: Utils().fetchstaff(),
                 builder: (context,snapshot){
                   if(snapshot.hasData){
-                    return GridView.builder(itemCount: snapshot.data.length,
+                    return GridView.builder(itemCount: snapshot.data.data.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2),
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, index ){
-                        Staff staff = snapshot.data[index];
                         return Card(
                           elevation: 5,
                           child: GridTile(
@@ -48,15 +44,15 @@ class _StaffViewerState extends State<StaffViewer> {
                                     padding: const EdgeInsets.fromLTRB(10,0,0,5),
                                     child: Column(
                                       children: [
-                                        Align(alignment: Alignment.topLeft,child: Text(staff.name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)),
-                                        Align(alignment: Alignment.topLeft,child: Text(staff.designation,style: TextStyle(fontSize: 20),))
+                                        Align(alignment: Alignment.topLeft,child: Text(snapshot.data.data[index].name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)),
+                                        Align(alignment: Alignment.topLeft,child: Text(snapshot.data.data[index].designation,style: TextStyle(fontSize: 20),))
                                       ],
                                     ),
                                   ),
                                 )
                             ),
                             child: Image.network(
-                              staff.staffimf,
+                              Utils().image_base_url+'${snapshot.data.data[index].image}',
                               fit: BoxFit.cover,
                             ),
                           ),

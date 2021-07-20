@@ -1,7 +1,5 @@
-import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:nilesisters/API_Data/users.dart';
+import 'package:nilesisters/Model/getUser.dart';
 import 'package:nilesisters/classes/language.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
 import 'package:nilesisters/main.dart';
@@ -12,61 +10,20 @@ import 'package:nilesisters/screens/home.dart';
 import 'package:nilesisters/screens/pdfview.dart';
 import 'package:nilesisters/screens/privacy.dart';
 import 'package:nilesisters/screens/videosViewer.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:nilesisters/screens/founder.dart';
 import 'package:nilesisters/screens/staff.dart';
+import 'package:nilesisters/utils/Utils.dart';
 import 'package:share/share.dart';
-import 'package:http/http.dart' as http;
+
 
 import 'mapsViewClass.dart';
 
 class HomePage extends StatefulWidget {
-  final String text;
-
-  HomePage({Key key, @required this.text}) : super(key: key);
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  Users user;
-  String email;
-
-  String image;
-
-  String name;
-
-  getUsers() async {
-    var url =
-    Uri.https('nilesisters.codingoverflow.com', '/api/getusers.php', {"q": "dart"});
-    final response = await http.post(url, body: {
-      "email": widget.text,
-    });
-    if (response.statusCode == 200) {
-      final String responseString = response.body;
-      List<dynamic> list = json.decode(responseString);
-      user = Users.fromJson(list[0]);
-      email = user.email;
-      image = user.image;
-      name = user.name;
-      return user;
-    } else {
-      return null;
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUsers();
-  }
-
-  final Completer<WebViewController> _controller =
-  Completer<WebViewController>();
-
-//
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -102,9 +59,6 @@ class _HomePageState extends State<HomePage> {
   //
   @override
   Widget build(BuildContext context) {
-    setState(() async* {
-      getUsers();
-    });
     void _changeLanguage(Language language) {
       Locale _temp;
       switch (language.languageCode) {
@@ -170,16 +124,24 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         drawer: new Drawer(
-          child: FutureBuilder(
-              future: getUsers(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView(
+          child: ListView(
                     children: <Widget>[
-                      new UserAccountsDrawerHeader(
-                        accountName: Text(name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                        accountEmail: Text(email),
-                        decoration: new BoxDecoration(color: Colors.blue),
+                      FutureBuilder<GetUser>(
+                        future:  Utils().fetchuser(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return UserAccountsDrawerHeader(
+                              accountName: Text(snapshot.data.user.name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                              accountEmail: Text(snapshot.data.user.email),
+                              decoration: new BoxDecoration(color: Colors.blue),
+                            );
+                          }
+                          return UserAccountsDrawerHeader(
+                            accountName: Text('',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                            accountEmail: Text(''),
+                            decoration: new BoxDecoration(color: Colors.blue),
+                          );
+                        }
                       ),
                       InkWell(
                         onTap: () {
@@ -273,20 +235,17 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ],
-                  );
-                }
-                return Container();
-              }
+                  )
           ),
-        ),
         body: new IndexedStack(
           index: _selectedIndex,
           children: <Widget>[
             new Home(),
-            Chat_Screen(text: widget.text),
+            Chat_Screen(text: ''),
+            new PdfViewer(),
             new EventsViewer(),
             new MapPage(),
-            new PdfViewer(),
+
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -300,6 +259,10 @@ class _HomePageState extends State<HomePage> {
               label: 'Community',
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.backup_table),
+              label: 'Resources',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.event),
               label: 'Events',
             ),
@@ -307,10 +270,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.map),
               label: 'Map',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.backup_table),
-              label: 'Resources',
-            ),
+
           ],
           currentIndex: _selectedIndex,
           showUnselectedLabels: true,

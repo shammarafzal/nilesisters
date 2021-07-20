@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-import 'package:nilesisters/API_Data/users.dart';
 class ForgotPassword extends StatefulWidget {
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();
@@ -17,7 +16,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   bool emailValid = false;
   String username = 'bhad.biz@gmail.com';
   String password = '28ua3438G!';
-  Users user;
+
   bool isLoading = false;
   sendMail(String email, String Msg) async {
     final smtpServer = gmail(username, password);
@@ -99,7 +98,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       if (response.statusCode == 200) {
                         final String responseString = response.body;
                         List<dynamic> list = json.decode(responseString);
-                        user = Users.fromJson(list[0]);
+
                         isLoading = false;
                           Fluttertoast.showToast(
                             msg: "Check Your Email",
@@ -110,7 +109,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             textColor: Colors.white,
                             fontSize: 16.0,
                           );
-                          sendMail( _email.text,user.password);
+                         // sendMail( _email.text,user.password);
                           Navigator.pushNamed(context, 'loginroute');
                       } else {
                         setState(() {

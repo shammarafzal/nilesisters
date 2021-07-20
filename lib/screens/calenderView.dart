@@ -71,8 +71,12 @@ class _DynamicEventState extends State<DynamicEvent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TableCalendar(
+              availableCalendarFormats: const {
+                CalendarFormat.month: '',
+
+              },
               events: _events,
-              initialCalendarFormat: CalendarFormat.week,
+             // initialCalendarFormat: CalendarFormat.week,
               calendarStyle: CalendarStyle(
                   canEventMarkersOverflow: true,
                   todayColor: Colors.orange,

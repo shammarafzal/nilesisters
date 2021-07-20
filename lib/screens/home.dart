@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:nilesisters/API_Data/getHome.dart';
 import 'package:nilesisters/screens/SizeConfig.dart';
-import 'package:nilesisters/screens/pdf_api.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 class Home extends StatefulWidget {
   @override
@@ -17,7 +16,6 @@ class _HomeState extends State<Home> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: FutureBuilder(
-          future: fetchHome(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -28,11 +26,11 @@ class _HomeState extends State<Home> {
                   return Column(
                     children: [
                       Image.network(
-                        ''+ hm.image,
+                        '',
                         height: 300,
                         width: SizeConfig.screenWidth * 1,
                       ),
-                      Text(hm.news, style: TextStyle(fontSize: 16),)
+                      Text('', style: TextStyle(fontSize: 16),)
                     ],
                   );
                 },
@@ -46,13 +44,7 @@ class _HomeState extends State<Home> {
           },
         ),
       ),
-      // body: WebView(
-      //   initialUrl: 'https://nilesisters.org/',
-      //   onWebViewCreated: (WebViewController webViewController){
-      //     _controller.complete(webViewController);
-      //   },
-      //   javascriptMode: JavascriptMode.unrestricted,
-      // ),
+
     );
   }
 }

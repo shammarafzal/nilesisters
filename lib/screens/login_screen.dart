@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nilesisters/screens/HomePage.dart';
-import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nilesisters/utils/Utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'alertDialog.dart';
 
 class LoginDemo extends StatefulWidget {
   @override
@@ -12,8 +11,6 @@ class LoginDemo extends StatefulWidget {
 class _LoginDemoState extends State<LoginDemo> {
   final _email = TextEditingController();
   final _password = TextEditingController();
-  bool _validateEmail = false;
-  bool  _validatePassword = false;
   bool emailValid = false;
   bool isLoading = false;
   @override
@@ -47,7 +44,6 @@ class _LoginDemoState extends State<LoginDemo> {
                       border: OutlineInputBorder(),
                       labelText: 'Email',
                       hintText: 'Enter valid email id as abc@gmail.com',
-                    errorText: _validateEmail ? 'Email Can\'t Be Empty' : null,
                   ),
                 ),
               ),
@@ -61,7 +57,6 @@ class _LoginDemoState extends State<LoginDemo> {
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                       hintText: 'Enter secure password',
-                    errorText: _validatePassword ? 'Password Can\'t Be Empty' : null,
                   ),
                 ),
               ),
@@ -73,89 +68,41 @@ class _LoginDemoState extends State<LoginDemo> {
                     borderRadius: BorderRadius.circular(20)),
                 child: FlatButton(
                   onPressed: () async {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    setState(() {
-                      _email.text.isEmpty ? _validateEmail = true : _validateEmail = false;
-                      _password.text.isEmpty ? _validatePassword = true : _validatePassword = false;
-
-                    });
-                    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_email.text);
-                    if(emailValid == false){
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text('Email is not Valid')));
-                    }
-                    if (_email.text != "" &&  _password.text != "" && emailValid != false) {
+                    final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                    bool emailValid = RegExp(
+                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(_email.text);
+                    if (_email.text == "") {
+                      alertScreen()
+                          .showAlertDialog(context, "Please Enter Email");
+                    } else if (emailValid == false) {
+                      alertScreen().showAlertDialog(
+                          context, "Please Enter Valid Email");
+                    } else if (_password.text == "") {
+                      alertScreen().showAlertDialog(
+                          context, "Please Enter Password");
+                    } else if (_password.text.length <= 7) {
+                      alertScreen().showAlertDialog(
+                          context, "Please Length Must Greater than 8");
+                    } else {
                       isLoading = true;
-                      var url = Uri.https('nilesisters.codingoverflow.com',
-                          '/api/login.php', {"q": "dart"});
-                      final response = await http.post(url, body: {
-                        "email": _email.text,
-                        "password": _password.text,
-                      });
-                      if (response.statusCode == 200) {
-                        final String responseString = response.body;
-                        if (responseString == 'Login Successful') {
-                          isLoading = false;
-                          prefs.setBool('isLoggedIn', true);
-                          Fluttertoast.showToast(
-                            msg: "Login Successfull",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(
-                                  text: _email.text,
-                                ),
-                              ));
-                        } else {
-                          setState(() {
-                            isLoading = false;
-                          });
-
-                          Fluttertoast.showToast(
-                            msg: "Login Failed",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                        }
-                      } else {
+                      var response = await Utils().login(_email.text, _password.text);
+                      if(response['status'] == false ){
                         setState(() {
                           isLoading = false;
                         });
-                        Fluttertoast.showToast(
-                          msg: "API Response Error",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
+                        alertScreen().showAlertDialog(context, response['message']);
                       }
-                    } else {
-                      setState(() {
-                        isLoading = false;
-                      });
-                      Fluttertoast.showToast(
-                        msg: "Check Input Data",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
+                      else{
+                        setState(() {
+                          isLoading = false;
+                        });
+                        prefs.setBool('isLoggedIn', true);
+                        prefs.setString('token', response['token']);
+                        prefs.setInt('id', response['user']['id']);
+                        await alertScreen().showSigninAlertDialog(context, "Login Successfully");
+                      }
                     }
                   },
                   child: isLoading

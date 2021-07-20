@@ -45,7 +45,7 @@ class MapPageState extends State<MapPage> {
           myLocationButtonEnabled: false,
           mapType: MapType.hybrid,
           onMapCreated: (GoogleMapController controller) {
-            controller.setMapStyle(Utils.mapStyles);
+            controller.setMapStyle(UtilsW.mapStyles);
             _controller.complete(controller);
             setState(() {
               _markers.add(
@@ -81,7 +81,7 @@ class MapUtils {
     }
   }
 }
-class Utils {
+class UtilsW {
   static String mapStyles = '''[
   {
     "elementType": "geometry",

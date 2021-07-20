@@ -1,8 +1,6 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:nilesisters/API_Data/videos.dart';
-import 'package:nilesisters/screens/video_api.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:nilesisters/Model/getVideos.dart';
+import 'package:nilesisters/utils/Utils.dart';
 import 'package:video_player/video_player.dart';
 import 'chewie_list_item.dart';
 class VideoViewer extends StatefulWidget {
@@ -20,20 +18,20 @@ class _VideoViewerState extends State<VideoViewer> {
         title: Text('Videos'),
       ),
       body: Container(
-        child: FutureBuilder(
-          future: fetchVideos(),
+        child: FutureBuilder<GetVideos>(
+          future: Utils().fetchvideos(),
           builder: (context,snapshot){
             if(snapshot.hasData){
-              return ListView.builder(itemCount: snapshot.data.length,
+              return ListView.builder(
+                itemCount: snapshot.data.data.length,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, index ){
-                  GetVideos videos = snapshot.data[index];
                   return
                     Card(
                       elevation: 5,
                     child:ChewieListItem(
                     videoPlayerController: VideoPlayerController.network(
-                      videos.videourl,
+                      Utils().image_base_url+'${snapshot.data.data[index].file}',
                     ),
                   ));
                 },
