@@ -137,8 +137,8 @@ class _HomePageState extends State<HomePage> {
                             );
                           }
                           return UserAccountsDrawerHeader(
-                            accountName: Text('',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                            accountEmail: Text(''),
+                            accountName: Text('s',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                            accountEmail: Text('w'),
                             decoration: new BoxDecoration(color: Colors.blue),
                           );
                         }
@@ -241,7 +241,7 @@ class _HomePageState extends State<HomePage> {
           index: _selectedIndex,
           children: <Widget>[
             new Home(),
-            Chat_Screen(text: ''),
+            Chat_Screen(),
             new PdfViewer(),
             new EventsViewer(),
             new MapPage(),

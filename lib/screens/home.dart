@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:nilesisters/API_Data/getHome.dart';
 import 'package:nilesisters/screens/SizeConfig.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 class Home extends StatefulWidget {
@@ -22,7 +21,6 @@ class _HomeState extends State<Home> {
                 itemCount: 1,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, index) {
-                  GetHomePage hm = snapshot.data[index];
                   return Column(
                     children: [
                       Image.network(

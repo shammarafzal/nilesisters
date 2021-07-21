@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:nilesisters/screens/login_screen.dart';
 import 'package:nilesisters/utils/Utils.dart';
 
 import 'alertDialog.dart';
-class ForgotPassword extends StatefulWidget {
+class NewPassword extends StatefulWidget {
+  final token;
+  NewPassword({this.token});
   @override
-  _ForgotPasswordState createState() => _ForgotPasswordState();
+  _NewPasswordState createState() => _NewPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
-  final _email = TextEditingController();
+class _NewPasswordState extends State<NewPassword> {
+  final _password = TextEditingController();
+  final _confirmPassword = TextEditingController();
   bool isLoading = false;
 
   @override
@@ -19,7 +23,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
-          title: Text("Forgot Password"),
+          title: Text("New Password"),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -34,13 +38,28 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 15, bottom: 0),
                 child: TextField(
-                  controller: _email,
+                  controller: _password,
+                  obscureText: true,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Email',
-                    hintText: 'Enter valid email id as abc@gmail.com',
+                    labelText: 'Password',
+                    hintText: 'Enter secure password',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 15, bottom: 15),
+                child: TextField(
+                  controller: _confirmPassword,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Confirm Password',
+                    hintText: 'Enter secure password',
                   ),
                 ),
               ),
@@ -53,16 +72,24 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     borderRadius: BorderRadius.circular(20)),
                 child: FlatButton(
                   onPressed: () async {
-                    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_email.text);
-                    if(_email.text == ""){
-                      alertScreen().showAlertDialog(context, "Please Enter Email");
+                    if(_password.text == ""){
+                      alertScreen().showAlertDialog(context, "Please Enter Password");
                     }
-                    else if(emailValid == false){
-                      alertScreen().showAlertDialog(context, "Please Enter Valid Email");
+                    else if(_password.text.length <= 7 ){
+                      alertScreen().showAlertDialog(context, "Password Length Must Greater than 8");
+                    }
+                    else if(_confirmPassword.text == ""){
+                      alertScreen().showAlertDialog(context, "Please Enter Confirm Password");
+                    }
+                    else if(_confirmPassword.text.length <= 7 ){
+                      alertScreen().showAlertDialog(context, "Confirm Password Length Must Greater than 8");
+                    }
+                    else if(_password.text != _confirmPassword.text){
+                      alertScreen().showAlertDialog(context, "Password Doesn't Match");
                     }
                     else{
                       isLoading = true;
-                      var response = await Utils().forgot(_email.text);
+                      var response = await Utils().resetPassword(widget.token, _password.text, _confirmPassword.text);
                       if(response['status'] == false){
                         setState(() {
                           isLoading = false;
@@ -73,7 +100,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         setState(() {
                           isLoading = false;
                         });
-                        await alertScreen().showForgotAlertDialog(context, "Please check your email!!!");
+                        alertScreen().showSignupAlertDialog(context, response['message']);
                       }
                     }
                   },

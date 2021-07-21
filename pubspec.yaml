@@ -45,6 +45,7 @@ dependencies:
   dio: ^4.0.0
   path_provider: ^2.0.1
   chewie: ^1.2.0
+  pin_code_text_field: ^1.8.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

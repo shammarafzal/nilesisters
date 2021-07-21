@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:nilesisters/Settings/customColors.dart';
 import 'package:nilesisters/screens/HomePage.dart';
 import 'package:nilesisters/screens/login_screen.dart';
+import 'package:nilesisters/screens/verifyToken.dart';
 
 
 class alertScreen{
@@ -82,12 +83,12 @@ class alertScreen{
   }
   showForgotAlertDialog(BuildContext context,String msg) {
     Timer timer = Timer(Duration(milliseconds: 1000), (){
-      // Navigator.push(
-      //   context,
-      //   new MaterialPageRoute(
-      //     builder: (context) => new PinVerify(),
-      //   ),
-      // );
+      Navigator.push(
+        context,
+        new MaterialPageRoute(
+          builder: (context) => new VerifyToken(),
+        ),
+      );
     });
     showDialog(
         context: context,

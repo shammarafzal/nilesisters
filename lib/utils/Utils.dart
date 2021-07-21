@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:nilesisters/Model/getAbout.dart';
+import 'package:nilesisters/Model/getComments.dart';
 import 'package:nilesisters/Model/getContact.dart';
 import 'package:nilesisters/Model/getEvents.dart';
+import 'package:nilesisters/Model/getPosts.dart';
 import 'package:nilesisters/Model/getResources.dart';
 import 'package:nilesisters/Model/getStaff.dart';
 import 'package:nilesisters/Model/getUser.dart';
@@ -10,8 +12,8 @@ import 'package:nilesisters/Model/getVideos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Utils {
-  final String baseUrl = '127.0.0.1:8000';
-  var image_base_url = 'http://127.0.0.1:8000/storage/';
+  final String baseUrl = 'nilesisters.codingoverflow.com';
+  var image_base_url = 'http://nilesisters.codingoverflow.com/storage/';
   register(String name, String email, String password,String confirm_password) async {
     var url = Uri.http(baseUrl,
         '/api/register', {"q": "dart"});
@@ -212,6 +214,7 @@ class Utils {
     final response = await http.get(url,headers: {
       'Authorization': 'Bearer $token',
     });
+    print(response.body);
     return GetUser.fromJson(jsonDecode(response.body));
   }
   Future<GetAbout> fetchabout() async {
@@ -249,5 +252,88 @@ class Utils {
       'Authorization': 'Bearer $token',
     });
     return GetContact.fromJson(jsonDecode(response.body));
+  }
+  sendPost(String post_text) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = Uri.http(baseUrl,
+        '/api/sendpost', {"q": "dart"});
+    final response = await http.post(url, body: {
+      "post": post_text,
+    },headers: {
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else if (response.statusCode == 400) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else if (response.statusCode == 404) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else if (response.statusCode == 500) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else{
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+  }
+  Future<GetPosts> fetchposts() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = Uri.http(baseUrl, '/api/viewposts', {"q": "dart"});
+    final response = await http.get(url,headers: {
+      'Authorization': 'Bearer $token',
+    });
+    return GetPosts.fromJson(jsonDecode(response.body));
+  }
+  sendComment(String comment_text, String post_id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = Uri.http(baseUrl,
+        '/api/sendcomment', {"q": "dart"});
+    final response = await http.post(url, body: {
+      "comment": comment_text,
+      "post_id": post_id
+    },headers: {
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else if (response.statusCode == 400) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else if (response.statusCode == 404) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else if (response.statusCode == 500) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else{
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+  }
+  Future<GetComments> fetchcomments(String post_id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = Uri.http(baseUrl, '/api/viewcomments', {"q": "dart"});
+    final response = await http.post(url,body: {
+      "post_id": post_id
+    },headers: {
+      'Authorization': 'Bearer $token',
+    });
+    return GetComments.fromJson(jsonDecode(response.body));
   }
 }

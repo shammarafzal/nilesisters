@@ -23,6 +23,10 @@ class _founderState extends State<founder> {
                 future:  Utils().fetchabout(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                  return ListView.builder(
+                  itemCount: snapshot.data.data.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, index) {
                     return ListView(
                       children: [
                         Padding(
@@ -31,7 +35,8 @@ class _founderState extends State<founder> {
                             radius: 60.0,
                             backgroundColor: Colors.grey,
                             child: Image.network(
-                              Utils().image_base_url+'${snapshot.data.data[0].image}',
+                              Utils().image_base_url +
+                                  '${snapshot.data.data[index].image}',
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -43,7 +48,8 @@ class _founderState extends State<founder> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 "Elizabeth Lou",
-                                style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 17.0,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -55,9 +61,10 @@ class _founderState extends State<founder> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                snapshot.data.data[0].description,
+                                snapshot.data.data[index].description,
                                 style:
-                                TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal),
+                                TextStyle(fontSize: 14.0,
+                                    fontWeight: FontWeight.normal),
                               ),
                             ),
                           ),
@@ -69,7 +76,8 @@ class _founderState extends State<founder> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 "Our Mission",
-                                style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 17.0,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -81,10 +89,11 @@ class _founderState extends State<founder> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                  snapshot.data.data[0].mission,
+                                snapshot.data.data[index].mission,
                                 //   textAlign: TextAlign.center,
                                 style:
-                                TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal),
+                                TextStyle(fontSize: 14.0,
+                                    fontWeight: FontWeight.normal),
                               ),
                             ),
                           ),
@@ -96,7 +105,8 @@ class _founderState extends State<founder> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 "Our History",
-                                style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 17.0,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
@@ -108,16 +118,19 @@ class _founderState extends State<founder> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                snapshot.data.data[0].history,
+                                snapshot.data.data[index].history,
                                 //textAlign: TextAlign.center,
                                 style:
-                                TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal),
+                                TextStyle(fontSize: 14.0,
+                                    fontWeight: FontWeight.normal),
                               ),
                             ),
                           ),
                         ),
                       ],
                     );
+                  }
+                  );
                   }
                   return Center(
                         child: Text('w'),

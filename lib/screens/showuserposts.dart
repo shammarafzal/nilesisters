@@ -1,97 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:nilesisters/API_Data/getcomments.dart';
-import 'package:nilesisters/API_Data/getpost.dart';
-import 'package:http/http.dart' as http;
+import 'package:nilesisters/Model/getPosts.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
 import 'package:nilesisters/screens/showcomments.dart';
-import 'dart:convert';
-import 'fetchposts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-class ShowPosts extends StatefulWidget {
-  final userID;
+import 'package:nilesisters/utils/Utils.dart';
 
-  ShowPosts({
-   this.userID,
-});
+import 'alertDialog.dart';
+
+class ShowPosts extends StatefulWidget {
   @override
   _ShowPostsState createState() => _ShowPostsState();
 }
 
 class _ShowPostsState extends State<ShowPosts> {
   final _formKey = GlobalKey<FormState>();
-  GetPosts getpost;
   bool isLoading = false;
   final messageTextController = TextEditingController();
-  String messageText;
-  String msg;
-  getPosts() async {
-    var url =
-    Uri.https('nilesisters.codingoverflow.com', '/api/getposts.php', {"q": "dart"});
-    final response = await http.post(url);
-    if (response.statusCode == 200) {
-      final String responseString = response.body;
-      return json.decode(responseString);
-    } else {
-      return null;
-    }
-  }
-  getComment() async {
 
-
-  }
   @override
   Widget build(BuildContext context) {
-    getComment();
     return Scaffold(
       appBar: AppBar(
         title: Text('Niesisters'),
       ),
-      body: FutureBuilder(
-        future: fetchPosts(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            return ListView.builder(itemCount: snapshot.data.length,
+      body: FutureBuilder<GetPosts>(
+        future: Utils().fetchposts(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data.data.length,
               shrinkWrap: true,
-              itemBuilder: (BuildContext context, index ){
-                GetPosts eventss = snapshot.data[index];
+              itemBuilder: (BuildContext context, index) {
                 return Card(
                   margin: EdgeInsets.all(10.0),
                   child: Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Column(
-
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         ListTile(
-                          title: Text(DemoLocalization.of(context)
-                              .getTranslatedValue('from'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                          trailing: Text('${eventss.username}',style: TextStyle(fontSize: 20),),
+                          title: Text(
+                            DemoLocalization.of(context)
+                                .getTranslatedValue('from'),
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                          trailing: Text(
+                            snapshot.data.user.name,
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
                         ListTile(
-                          title: Text(DemoLocalization.of(context)
-                              .getTranslatedValue('message'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                          trailing: Text('${eventss.posttext}',style: TextStyle(fontSize: 20),),
+                          title: Text(
+                            DemoLocalization.of(context)
+                                .getTranslatedValue('message'),
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                          trailing: Text(
+                            snapshot.data.data[index].post,
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ),
                         ListTile(
                           title: Container(
                             child: TextButton(
-                              child: Text('View Comments',style: TextStyle(color: Colors.white),),
-                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
-                              onPressed: () async{
-                                SharedPreferences prefs = await SharedPreferences.getInstance();
-                                prefs.setString('postid', eventss.postid);
+                              child: Text(
+                                'View Comments',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.blue)),
+                              onPressed: () async {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ShowComments(postID: eventss.postid),
+                                      builder: (context) =>
+                                          ShowComments(postID: snapshot.data.data[index].id),
                                     ));
                               },
                             ),
                           ),
                           trailing: TextButton(
-                            child: Text('Add Comments',style: TextStyle(color: Colors.white),),
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
+                            child: Text(
+                              'Add Comments',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.blue)),
                             onPressed: () {
                               setState(() {
                                 showDialog(
@@ -120,78 +121,51 @@ class _ShowPostsState extends State<ShowPosts> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: <Widget>[
                                                   Padding(
-                                                    padding: EdgeInsets.all(8.0),
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
                                                     child: TextFormField(
                                                       decoration: InputDecoration(
-                                                          border: OutlineInputBorder(),
-                                                          hintText: DemoLocalization.of(context)
-                                                              .getTranslatedValue('enter_something')
-
-                                                      ),
-                                                      controller: messageTextController,
-                                                      onChanged: (value) {
-                                                        messageText = value;
-                                                      },
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                          hintText: DemoLocalization
+                                                                  .of(context)
+                                                              .getTranslatedValue(
+                                                                  'enter_something')),
+                                                      controller:
+                                                          messageTextController,
                                                     ),
                                                   ),
                                                   Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: RaisedButton(
                                                       child: Text("Submit"),
                                                       onPressed: () async {
-                                                        if (_formKey.currentState.validate()) {
-                                                          _formKey.currentState.save();
+                                                        if (_formKey
+                                                            .currentState
+                                                            .validate()) {
+                                                          _formKey.currentState
+                                                              .save();
                                                         }
-                                                        DateTime now = DateTime.now();
-                                                        setState(() {
+                                                        if(messageTextController.text == ""){
+                                                          alertScreen().showAlertDialog(context, "Please Enter Comment Text");
+                                                        }
+                                                        else{
                                                           isLoading = true;
-                                                        });
-                                                        var url = Uri.https(
-                                                            'nilesisters.codingoverflow.com',
-                                                            '/api/addcomments.php',
-                                                            {"q": "dart"});
-                                                        final response = await http.post(url,
-                                                            body: {
-                                                              "userid": widget.userID,
-                                                              "postid": eventss.postid,
-                                                              "comment": messageText,
-                                                              "datetime": now.toString()
-                                                            });
-                                                        if (response.statusCode == 200) {
-                                                          final String responseString =
-                                                              response.body;
-
-                                                          if (responseString == 'Comment Added'){
+                                                          var response = await Utils().sendComment(messageTextController.text, snapshot.data.data[index].id.toString());
+                                                          if(response['status'] == false){
                                                             setState(() {
                                                               isLoading = false;
                                                             });
-                                                            Fluttertoast.showToast(
-                                                              msg: "Comment Added Successfull",
-                                                              toastLength: Toast.LENGTH_SHORT,
-                                                              gravity: ToastGravity.CENTER,
-                                                              timeInSecForIosWeb: 1,
-                                                              backgroundColor: Colors.red,
-                                                              textColor: Colors.white,
-                                                              fontSize: 16.0,
-                                                            );
-                                                            messageTextController.text = '';
-                                                            Navigator.of(context).pop();
+                                                            alertScreen().showAlertDialog(context, response['message']);
                                                           }
                                                           else{
                                                             setState(() {
                                                               isLoading = false;
                                                             });
-                                                            Fluttertoast.showToast(
-                                                              msg: "Failed",
-                                                              toastLength: Toast.LENGTH_SHORT,
-                                                              gravity: ToastGravity.CENTER,
-                                                              timeInSecForIosWeb: 1,
-                                                              backgroundColor: Colors.red,
-                                                              textColor: Colors.white,
-                                                              fontSize: 16.0,
-                                                            );
+                                                            await alertScreen().showAlertDialog(context, response['message']);
                                                           }
-
                                                         }
                                                       },
                                                     ),
@@ -205,7 +179,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                     });
                               });
                             },
-                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -219,5 +193,4 @@ class _ShowPostsState extends State<ShowPosts> {
       ),
     );
   }
-
 }

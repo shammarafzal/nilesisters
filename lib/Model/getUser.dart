@@ -45,7 +45,7 @@ class User {
   String email;
   dynamic phone;
   dynamic image;
-  int isAdmin;
+  String isAdmin;
   DateTime createdAt;
   DateTime updatedAt;
 
