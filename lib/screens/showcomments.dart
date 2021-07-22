@@ -36,7 +36,7 @@ class _ShowCommentsState extends State<ShowComments> {
                         ListTile(
                           title: Text(DemoLocalization.of(context)
                               .getTranslatedValue('from'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                          trailing: Text(snapshot.data.user.name,style: TextStyle(fontSize: 20),),
+                          trailing: Text(snapshot.data.data[index].user.name,style: TextStyle(fontSize: 20),),
                         ),
                         ListTile(
                           title: Text(DemoLocalization.of(context)

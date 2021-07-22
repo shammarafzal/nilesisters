@@ -12,23 +12,19 @@ class GetPosts {
   GetPosts({
     this.status,
     this.data,
-    this.user,
   });
 
   bool status;
   List<Datum> data;
-  User user;
 
   factory GetPosts.fromJson(Map<String, dynamic> json) => GetPosts(
     status: json["status"],
     data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-    user: User.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    "user": user.toJson(),
   };
 }
 
@@ -40,6 +36,7 @@ class Datum {
     this.userId,
     this.createdAt,
     this.updatedAt,
+    this.user,
   });
 
   int id;
@@ -48,6 +45,7 @@ class Datum {
   String userId;
   DateTime createdAt;
   DateTime updatedAt;
+  User user;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
@@ -56,6 +54,7 @@ class Datum {
     userId: json["user_id"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
+    user: User.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -65,6 +64,7 @@ class Datum {
     "user_id": userId,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
+    "user": user.toJson(),
   };
 }
 

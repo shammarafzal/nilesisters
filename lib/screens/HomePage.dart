@@ -8,6 +8,7 @@ import 'package:nilesisters/screens/contact.dart';
 import 'package:nilesisters/screens/contactUs.dart';
 import 'package:nilesisters/screens/eventsViewer.dart';
 import 'package:nilesisters/screens/home.dart';
+import 'package:nilesisters/screens/login_screen.dart';
 import 'package:nilesisters/screens/pdfview.dart';
 import 'package:nilesisters/screens/privacy.dart';
 import 'package:nilesisters/screens/videosViewer.dart';
@@ -15,6 +16,7 @@ import 'package:nilesisters/screens/founder.dart';
 import 'package:nilesisters/screens/staff.dart';
 import 'package:nilesisters/utils/Utils.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 import 'mapsViewClass.dart';
@@ -236,11 +238,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {
+                        onTap: () async {
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          prefs.remove("isLoggedIn");
                           Navigator.push(
                               context,
                               new MaterialPageRoute(
-                                  builder: (context) => new MyApp()));
+                                  builder: (context) => new LoginDemo()));
                         },
                         child: ListTile(
                           title: Text(DemoLocalization.of(context)

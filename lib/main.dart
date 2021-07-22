@@ -3,10 +3,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
+import 'package:nilesisters/screens/HomePage.dart';
 import 'package:nilesisters/screens/forgotPassword.dart';
 import 'package:nilesisters/screens/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/signup.dart';
-void main() {
+var isLoggedIn;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var prefs = await SharedPreferences.getInstance();
+   isLoggedIn = (prefs.getBool('isLoggedIn') == null)
+      ? false
+      : prefs.getBool('isLoggedIn');
+
   HttpOverrides.global = new MyHttpOverrides();
   runApp(MyApp());
 }
@@ -29,11 +38,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: 'loginroute',
+        initialRoute: isLoggedIn ? 'homePage' : 'loginroute',
         routes: {
           'loginroute': (context)=> LoginDemo(),
           'signup_screen': (context)=>Signup(),
           'forgotPassword': (context)=>ForgotPassword(),
+          'homePage' : (context)=>HomePage(),
         } ,
         locale: _locale,
         supportedLocales: [

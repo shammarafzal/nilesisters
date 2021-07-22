@@ -47,7 +47,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                 fontSize: 20),
                           ),
                           trailing: Text(
-                            snapshot.data.user.name,
+                            snapshot.data.data[index].user.name,
                             style: TextStyle(fontSize: 20),
                           ),
                         ),
