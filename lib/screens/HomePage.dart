@@ -4,6 +4,7 @@ import 'package:nilesisters/classes/language.dart';
 import 'package:nilesisters/localization/demo_localization.dart';
 import 'package:nilesisters/main.dart';
 import 'package:nilesisters/screens/chat.dart';
+import 'package:nilesisters/screens/contact.dart';
 import 'package:nilesisters/screens/contactUs.dart';
 import 'package:nilesisters/screens/eventsViewer.dart';
 import 'package:nilesisters/screens/home.dart';
@@ -180,6 +181,19 @@ class _HomePageState extends State<HomePage> {
                           title: Text(DemoLocalization.of(context)
                               .getTranslatedValue('contact_us')),
                           leading: Icon(Icons.contact_phone, color: Colors.blue),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new Contact()));
+                        },
+                        child: ListTile(
+                          title: Text(DemoLocalization.of(context)
+                              .getTranslatedValue('message_us')),
+                          leading: Icon(Icons.message, color: Colors.blue),
                         ),
                       ),
                       InkWell(

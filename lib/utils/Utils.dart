@@ -346,4 +346,29 @@ class Utils {
     });
     return GetHome.fromJson(jsonDecode(response.body));
   }
+  contact(String name, String email, String message) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = Uri.http(baseUrl,
+        '/api/contactus', {"q": "dart"});
+    final response = await http.post(url, body: {
+      "name": name,
+      "email": email,
+      "message": message,
+    },headers: {
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else if (response.statusCode == 500) {
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+    else{
+      final String responseString = response.body;
+      return jsonDecode(responseString);
+    }
+  }
 }

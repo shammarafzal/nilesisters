@@ -33,11 +33,7 @@ class _EventsViewerState extends State<EventsViewer> {
                 itemCount: snapshot.data.data.length,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, index) {
-                  // Eventss eventss = snapshot.data[index];
-                  // int year = eventss.dates.year;
-                  // int month = eventss.dates.month;
-                  // int day = eventss.dates.day;
-                  // String title = eventss.title;
+                  var date = snapshot.data.data[index].date.split('-');
                   return Card(
                     margin: EdgeInsets.all(10.0),
                     child: Padding(
@@ -150,29 +146,29 @@ class _EventsViewerState extends State<EventsViewer> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => DynamicEvent(
-                                            year: 2021,
-                                            month: 12,
-                                            day: 1,
-                                            title: 'w'),
+                                            year: int.parse(date[2]),
+                                            month: int.parse(date[1]),
+                                            day: int.parse(date[0]),
+                                            title: snapshot.data.data[index].title),
                                       ));
                                 }),
                           ),
                           SizedBox(height: 5,),
-                          Container(
-                            color: Colors.blue,
-                            child: TextButton(
-                                child: Text(
-                                  'Show on Map',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: () {
-                                  // // double lat = double.parse(eventss.lat);
-                                  // // double longg = double.parse(eventss.log);
-                                  // print(lat);
-                                  // print(longg);
-                                  // MapUtils.openMap(lat, longg);
-                                }),
-                          )
+                          // Container(
+                          //   color: Colors.blue,
+                          //   child: TextButton(
+                          //       child: Text(
+                          //         'Show on Map',
+                          //         style: TextStyle(color: Colors.white),
+                          //       ),
+                          //       onPressed: () {
+                          //         // // double lat = double.parse(eventss.lat);
+                          //         // // double longg = double.parse(eventss.log);
+                          //         // print(lat);
+                          //         // print(longg);
+                          //         // MapUtils.openMap(lat, longg);
+                          //       }),
+                          // )
                         ],
                       ),
                     ),
