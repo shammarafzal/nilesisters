@@ -1,68 +1,68 @@
 // To parse this JSON data, do
 //
-//     final getAbout = getAboutFromJson(jsonString);
+//     final getHome = getHomeFromJson(jsonString);
 
 import 'dart:convert';
 
-GetAbout getAboutFromJson(String str) => GetAbout.fromJson(json.decode(str));
+GetHome getHomeFromJson(String str) => GetHome.fromJson(json.decode(str));
 
-String getAboutToJson(GetAbout data) => json.encode(data.toJson());
+String getHomeToJson(GetHome data) => json.encode(data.toJson());
 
-class GetAbout {
-  GetAbout({
+class GetHome {
+  GetHome({
     this.status,
     this.data,
   });
 
   bool status;
-  Data data;
+  List<Datum> data;
 
-  factory GetAbout.fromJson(Map<String, dynamic> json) => GetAbout(
+  factory GetHome.fromJson(Map<String, dynamic> json) => GetHome(
     status: json["status"],
-    data: Data.fromJson(json["data"]),
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": data.toJson(),
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
-class Data {
-  Data({
+class Datum {
+  Datum({
     this.id,
+    this.title,
     this.image,
     this.description,
-    this.mission,
-    this.history,
+    this.category,
     this.createdAt,
     this.updatedAt,
   });
 
   int id;
+  String title;
   String image;
   String description;
-  String mission;
-  String history;
+  String category;
   DateTime createdAt;
   DateTime updatedAt;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
+    title: json["title"],
     image: json["image"],
     description: json["description"],
-    mission: json["mission"],
-    history: json["history"],
+    category: json["category"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "title": title,
     "image": image,
     "description": description,
-    "mission": mission,
-    "history": history,
+    "category": category,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
   };

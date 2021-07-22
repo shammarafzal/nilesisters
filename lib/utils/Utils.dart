@@ -4,6 +4,7 @@ import 'package:nilesisters/Model/getAbout.dart';
 import 'package:nilesisters/Model/getComments.dart';
 import 'package:nilesisters/Model/getContact.dart';
 import 'package:nilesisters/Model/getEvents.dart';
+import 'package:nilesisters/Model/getHome.dart';
 import 'package:nilesisters/Model/getPosts.dart';
 import 'package:nilesisters/Model/getResources.dart';
 import 'package:nilesisters/Model/getStaff.dart';
@@ -335,5 +336,14 @@ class Utils {
       'Authorization': 'Bearer $token',
     });
     return GetComments.fromJson(jsonDecode(response.body));
+  }
+  Future<GetHome> fetchhome() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = Uri.http(baseUrl, '/api/homepage', {"q": "dart"});
+    final response = await http.get(url,headers: {
+      'Authorization': 'Bearer $token',
+    });
+    return GetHome.fromJson(jsonDecode(response.body));
   }
 }
