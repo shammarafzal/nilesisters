@@ -98,12 +98,7 @@ class _Chat_ScreenState extends State<Chat_Screen> {
             ),
             child: TextButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ShowPosts(),
-                  ),
-                );
+                Navigator.of(context).pop();
               },
               child: Text(DemoLocalization.of(context)
                   .getTranslatedValue('show_posts')),

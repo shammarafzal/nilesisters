@@ -3,7 +3,6 @@ import 'package:nilesisters/Model/getUser.dart';
 import 'package:nilesisters/classes/language.dart';
 import 'package:nilesisters/Localization/demo_localization.dart';
 import 'package:nilesisters/main.dart';
-import 'package:nilesisters/screens/BottomNavBar/Post/chat.dart';
 import 'package:nilesisters/screens/Drawer/ContactUs/contact.dart';
 import 'package:nilesisters/screens/Drawer/OurContact/contactUs.dart';
 import 'package:nilesisters/screens/BottomNavBar/Events/eventsViewer.dart';
@@ -20,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 import 'BottomNavBar/Maps/mapsViewClass.dart';
+import 'BottomNavBar/Post/showuserposts.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -260,7 +260,7 @@ class _HomePageState extends State<HomePage> {
           index: _selectedIndex,
           children: <Widget>[
             new Home(),
-            Chat_Screen(),
+            ShowPosts(),
             new PdfViewer(),
             new EventsViewer(),
             new MapPage(),

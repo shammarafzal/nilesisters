@@ -1,6 +1,7 @@
 import 'package:nilesisters/Model/getResources.dart';
 import 'package:nilesisters/Localization/demo_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:nilesisters/screens/BottomNavBar/Resources/viewResource.dart';
 import 'package:nilesisters/utils/Utils.dart';
 import 'package:share/share.dart';
 import 'package:dio/dio.dart';
@@ -181,6 +182,22 @@ class _PdfViewerState extends State<PdfViewer> {
                             child: new Text(
                               DemoLocalization.of(context)
                                   .getTranslatedValue('download'),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          RaisedButton(
+                            onPressed: () async {
+                              var url = Utils().image_base_url+'${snapshot.data.data[index].file}';
+                              Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                  builder: (context) => new ViewPDF(url: url),
+                                ),
+                              );
+                            },
+                            color: Colors.blue,
+                            child: new Text(
+                              'View Resource',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),

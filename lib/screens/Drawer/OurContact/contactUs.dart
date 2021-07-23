@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nilesisters/Model/getContact.dart';
 import 'package:nilesisters/Localization/demo_localization.dart';
+import 'package:nilesisters/Settings/SizeConfig.dart';
 import 'package:nilesisters/utils/Utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+
+import 'contactDetails.dart';
 
 class ContactUs extends StatefulWidget {
   @override
@@ -168,125 +171,141 @@ class _ContactUsState extends State<ContactUs> {
                     itemCount: snapshot.data.data.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, index) {
-                      return Card(
-                        margin: EdgeInsets.all(10.0),
-                        child: Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Center(
-                                child: Text(
-                                  snapshot.data.data[index].officeName,
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24),
+                      return InkWell(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                              builder: (context) => new ContactDetails(office_name: snapshot.data.data[index].officeName, address: snapshot.data.data[index].address, phone: snapshot.data.data[index].englishPhone, email: snapshot.data.data[index].email,),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          margin: EdgeInsets.all(10.0),
+                          child: Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    snapshot.data.data[index].officeName,
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24),
+                                  ),
                                 ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  DemoLocalization.of(context)
-                                      .getTranslatedValue('address'),
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                                trailing: Text(
-                                  snapshot.data.data[index].address,
-                                  //style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  DemoLocalization.of(context)
-                                      .getTranslatedValue('phone'),
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                                trailing: Text(
-                                  snapshot.data.data[index].englishPhone,
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  DemoLocalization.of(context)
-                                      .getTranslatedValue('email'),
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                                trailing: Text(
-                                  snapshot.data.data[index].email,
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: Colors.blue,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.map,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: () async{
-                                        var url = '${snapshot.data.data[index].address}';
-                                        if (await canLaunch(url)) {
-                                        await launch(url);
-                                        } else {
-                                        throw 'Could not launch $url';
-                                        }
-                                      },
+                                ListTile(
+                                  title: Text(
+                                    DemoLocalization.of(context)
+                                        .getTranslatedValue('address'),
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  trailing: Container(
+                                    width: SizeConfig.screenWidth * 0.5,
+                                    child: Text(
+                                      snapshot.data.data[index].address,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                      // softWrap: false,
+                                      style: TextStyle(fontSize: 20),
                                     ),
                                   ),
-                                  CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: Colors.blue,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.phone,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: () async{
-                                        var url = snapshot.data.data[index].englishPhone;
-                                        if (await canLaunch(url)) {
-                                        await launch(url);
-                                        } else {
-                                        throw 'Could not launch $url';
-                                        }
-                                      },
-                                    ),
+                                ),
+                                ListTile(
+                                  title: Text(
+                                    DemoLocalization.of(context)
+                                        .getTranslatedValue('phone'),
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
                                   ),
-                                  CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: Colors.blue,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.mail,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: () async{
-                                        var url = snapshot.data.data[index].email;
-                                        if (await canLaunch(url)) {
-                                        await launch(url);
-                                        } else {
-                                        throw 'Could not launch $url';
-                                        }
-                                      },
-                                    ),
+                                  trailing: Text(
+                                    snapshot.data.data[index].englishPhone,
+                                    style: TextStyle(fontSize: 16),
                                   ),
-                                ],
-                              ),
-                            ],
+                                ),
+                                ListTile(
+                                  title: Text(
+                                    DemoLocalization.of(context)
+                                        .getTranslatedValue('email'),
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  trailing: Text(
+                                    snapshot.data.data[index].email,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 25,
+                                      backgroundColor: Colors.blue,
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.map,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () async{
+                                          var url = '${snapshot.data.data[index].address}';
+                                          if (await canLaunch(url)) {
+                                          await launch(url);
+                                          } else {
+                                          throw 'Could not launch $url';
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    CircleAvatar(
+                                      radius: 25,
+                                      backgroundColor: Colors.blue,
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.phone,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () async{
+                                          var url = snapshot.data.data[index].englishPhone;
+                                          if (await canLaunch(url)) {
+                                          await launch(url);
+                                          } else {
+                                          throw 'Could not launch $url';
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    CircleAvatar(
+                                      radius: 25,
+                                      backgroundColor: Colors.blue,
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.mail,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () async{
+                                          var url = snapshot.data.data[index].email;
+                                          if (await canLaunch(url)) {
+                                          await launch(url);
+                                          } else {
+                                          throw 'Could not launch $url';
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
