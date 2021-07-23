@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:nilesisters/Model/getUser.dart';
 import 'package:nilesisters/classes/language.dart';
-import 'package:nilesisters/localization/demo_localization.dart';
+import 'package:nilesisters/Localization/demo_localization.dart';
 import 'package:nilesisters/main.dart';
-import 'package:nilesisters/screens/chat.dart';
-import 'package:nilesisters/screens/contact.dart';
-import 'package:nilesisters/screens/contactUs.dart';
-import 'package:nilesisters/screens/eventsViewer.dart';
-import 'package:nilesisters/screens/home.dart';
-import 'package:nilesisters/screens/login_screen.dart';
-import 'package:nilesisters/screens/pdfview.dart';
-import 'package:nilesisters/screens/privacy.dart';
-import 'package:nilesisters/screens/videosViewer.dart';
-import 'package:nilesisters/screens/founder.dart';
-import 'package:nilesisters/screens/staff.dart';
+import 'package:nilesisters/screens/BottomNavBar/Post/chat.dart';
+import 'package:nilesisters/screens/Drawer/ContactUs/contact.dart';
+import 'package:nilesisters/screens/Drawer/OurContact/contactUs.dart';
+import 'package:nilesisters/screens/BottomNavBar/Events/eventsViewer.dart';
+import 'package:nilesisters/screens/BottomNavBar/News/home.dart';
+import 'package:nilesisters/screens/Auth/login_screen.dart';
+import 'package:nilesisters/screens/BottomNavBar/Resources/pdfview.dart';
+import 'package:nilesisters/screens/Drawer/PrivacyPolicy/privacy.dart';
+import 'package:nilesisters/screens/Drawer/Videos/videosViewer.dart';
+import 'package:nilesisters/screens/Drawer/About/founder.dart';
+import 'package:nilesisters/screens/Drawer/Staff/staff.dart';
 import 'package:nilesisters/utils/Utils.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-import 'mapsViewClass.dart';
+import 'BottomNavBar/Maps/mapsViewClass.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,6 +27,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);

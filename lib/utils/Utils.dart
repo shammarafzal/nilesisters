@@ -215,7 +215,6 @@ class Utils {
     final response = await http.get(url,headers: {
       'Authorization': 'Bearer $token',
     });
-    print(response.body);
     return GetUser.fromJson(jsonDecode(response.body));
   }
   Future<GetAbout> fetchabout() async {

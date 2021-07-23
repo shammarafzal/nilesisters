@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:nilesisters/localization/demo_localization.dart';
+import 'package:nilesisters/Localization/demo_localization.dart';
 import 'package:nilesisters/screens/HomePage.dart';
-import 'package:nilesisters/screens/forgotPassword.dart';
-import 'package:nilesisters/screens/login_screen.dart';
+import 'package:nilesisters/screens/Auth/forgotPassword.dart';
+import 'package:nilesisters/screens/Auth/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/signup.dart';
+import 'screens/Auth/signup.dart';
 var isLoggedIn;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
