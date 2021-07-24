@@ -45,17 +45,17 @@ class _NewsDetailsState extends State<NewsDetails> {
                   leading: new Text(widget.news_detail_name,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16.0)),
-                  trailing: Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: new Text(
-                      widget.news_detail_category,
-                      style: TextStyle(
-                        color: CustomColors().redicon,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  // trailing: Padding(
+                  //   padding: const EdgeInsets.only(top: 10),
+                  //   child: new Text("\n"+
+                  //     widget.news_detail_category,
+                  //     style: TextStyle(
+                  //       color: CustomColors().redicon,
+                  //       fontSize: 20,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
               ),
             ),
@@ -81,7 +81,7 @@ class _NewsDetailsState extends State<NewsDetails> {
               Padding(padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
                 child: new Text('News Category', style: TextStyle(color: CustomColors().grey)),),
               Padding(padding: EdgeInsets.all(5.0),
-                child: new Text(widget.news_detail_category, style: TextStyle(color:CustomColors().secondaryColor),), )
+                child: new Text(widget.news_detail_category, style: TextStyle(color:CustomColors().redicon),), )
             ],
           ),
           Row(

@@ -134,12 +134,15 @@ class _DynamicEventState extends State<DynamicEvent> {
                     color: Colors.white,
                     border: Border.all(color: Colors.grey)),
                 child: Center(
-                    child: Text(
-                      event,
-                      style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        event,
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
                     )),
               ),
             )),

@@ -28,15 +28,11 @@ class _founderState extends State<founder> {
                   return ListView(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 30.0),
-                            child: new CircleAvatar(
-                              radius: 60.0,
-                              backgroundColor: Colors.grey,
-                              child: Image.network(
-                                Utils().image_base_url +
-                                    '${snapshot.data.data.image}',
-                                fit: BoxFit.cover,
-                              ),
+                            padding: const EdgeInsets.all(30.0),
+                            child: Image.network(
+                              Utils().image_base_url +
+                                  '${snapshot.data.data.image}',
+                              fit: BoxFit.cover,
                             ),
                           ),
                           Padding(
@@ -45,7 +41,7 @@ class _founderState extends State<founder> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "Elizabeth Lou",
+                                  "Background",
                                   style: TextStyle(fontSize: 17.0,
                                       fontWeight: FontWeight.bold),
                                 ),

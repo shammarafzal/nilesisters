@@ -61,17 +61,25 @@ class _HomeState extends State<Home> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.0)),
-                              trailing: Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: new Text(
-                                  snapshot.data.data[index].category,
-                                  style: TextStyle(
-                                    color: CustomColors().redicon,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+                              // trailing: Container(
+                              //   decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.circular(5),
+                              //     color: Colors.grey
+                              //   ),
+                              //   //color: Colors.grey,
+                              //   child: Padding(
+                              //     padding: const EdgeInsets.all(2.0),
+                              //     child: new Text(
+                              //       snapshot.data.data[index].category,
+                              //       style: TextStyle(
+                              //         color: CustomColors().redicon,
+                              //         fontSize: 20,
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+
                             ),
                           ),
                         ),

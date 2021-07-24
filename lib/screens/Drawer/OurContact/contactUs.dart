@@ -244,66 +244,66 @@ class _ContactUsState extends State<ContactUs> {
                                     style: TextStyle(fontSize: 16),
                                   ),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor: Colors.blue,
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.map,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () async{
-                                          var url = '${snapshot.data.data[index].address}';
-                                          if (await canLaunch(url)) {
-                                          await launch(url);
-                                          } else {
-                                          throw 'Could not launch $url';
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor: Colors.blue,
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.phone,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () async{
-                                          var url = snapshot.data.data[index].englishPhone;
-                                          if (await canLaunch(url)) {
-                                          await launch(url);
-                                          } else {
-                                          throw 'Could not launch $url';
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor: Colors.blue,
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.mail,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () async{
-                                          var url = snapshot.data.data[index].email;
-                                          if (await canLaunch(url)) {
-                                          await launch(url);
-                                          } else {
-                                          throw 'Could not launch $url';
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment
+                                //       .spaceBetween,
+                                //   children: [
+                                //     CircleAvatar(
+                                //       radius: 25,
+                                //       backgroundColor: Colors.blue,
+                                //       child: IconButton(
+                                //         icon: Icon(
+                                //           Icons.map,
+                                //           color: Colors.white,
+                                //         ),
+                                //         onPressed: () async{
+                                //           var url = '${snapshot.data.data[index].address}';
+                                //           if (await canLaunch(url)) {
+                                //           await launch(url);
+                                //           } else {
+                                //           throw 'Could not launch $url';
+                                //           }
+                                //         },
+                                //       ),
+                                //     ),
+                                //     CircleAvatar(
+                                //       radius: 25,
+                                //       backgroundColor: Colors.blue,
+                                //       child: IconButton(
+                                //         icon: Icon(
+                                //           Icons.phone,
+                                //           color: Colors.white,
+                                //         ),
+                                //         onPressed: () async{
+                                //           var url = snapshot.data.data[index].englishPhone;
+                                //           if (await canLaunch(url)) {
+                                //           await launch(url);
+                                //           } else {
+                                //           throw 'Could not launch $url';
+                                //           }
+                                //         },
+                                //       ),
+                                //     ),
+                                //     CircleAvatar(
+                                //       radius: 25,
+                                //       backgroundColor: Colors.blue,
+                                //       child: IconButton(
+                                //         icon: Icon(
+                                //           Icons.mail,
+                                //           color: Colors.white,
+                                //         ),
+                                //         onPressed: () async{
+                                //           var url = snapshot.data.data[index].email;
+                                //           if (await canLaunch(url)) {
+                                //           await launch(url);
+                                //           } else {
+                                //           throw 'Could not launch $url';
+                                //           }
+                                //         },
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
                               ],
                             ),
                           ),
