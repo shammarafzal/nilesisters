@@ -47,6 +47,7 @@
   "name": "Nom",
   "send_message": "envoyer le message",
   "view_comments": "Voir les commentaires",
-  "add_comments": "Ajoutez des commentaires"
+  "add_comments": "Ajoutez des commentaires",
+  "details": "Details"
 
 }

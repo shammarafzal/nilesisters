@@ -2,6 +2,7 @@
 //
 //     final getEvents = getEventsFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 GetEvents getEventsFromJson(String str) => GetEvents.fromJson(json.decode(str));
@@ -10,8 +11,8 @@ String getEventsToJson(GetEvents data) => json.encode(data.toJson());
 
 class GetEvents {
   GetEvents({
-    this.status,
-    this.data,
+    @required this.status,
+    @required this.data,
   });
 
   bool status;
@@ -30,16 +31,17 @@ class GetEvents {
 
 class Datum {
   Datum({
-    this.id,
-    this.title,
-    this.date,
-    this.time,
-    this.location,
-    this.fee,
-    this.benefits,
-    this.details,
-    this.createdAt,
-    this.updatedAt,
+    @required this.id,
+    @required this.title,
+    @required this.date,
+    @required this.time,
+    @required this.location,
+    @required this.fee,
+    @required this.benefits,
+    @required this.details,
+    @required this.file,
+    @required this.createdAt,
+    @required this.updatedAt,
   });
 
   int id;
@@ -50,6 +52,7 @@ class Datum {
   String fee;
   String benefits;
   String details;
+  String file;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -62,6 +65,7 @@ class Datum {
     fee: json["fee"],
     benefits: json["benefits"],
     details: json["details"],
+    file: json["file"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
   );
@@ -75,6 +79,7 @@ class Datum {
     "fee": fee,
     "benefits": benefits,
     "details": details,
+    "file": file,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
   };

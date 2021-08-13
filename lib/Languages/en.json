@@ -47,5 +47,6 @@
   "name": "Name",
   "send_message": "Send Message",
   "view_comments": "View Comments",
-  "add_comments": "Add Comments"
+  "add_comments": "Add Comments",
+  "details": "Details"
 }

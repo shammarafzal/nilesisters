@@ -35,13 +35,13 @@ class _EventsViewerState extends State<EventsViewer> {
                 itemCount: snapshot.data.data.length,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, index) {
-                  var date = snapshot.data.data[index].date.split('-');
+                  var date = snapshot.data.data[index].date.split('/');
                   return InkWell(
                     onTap: (){
                       Navigator.push(
                         context,
                         new MaterialPageRoute(
-                          builder: (context) => new EventDetail(title: snapshot.data.data[index].title, benefits: snapshot.data.data[index].benefits, date: snapshot.data.data[index].date, time: snapshot.data.data[index].time, location: snapshot.data.data[index].location, fee: snapshot.data.data[index].fee,),
+                          builder: (context) => new EventDetail(title: snapshot.data.data[index].title, benefits: snapshot.data.data[index].benefits, date: snapshot.data.data[index].date, time: snapshot.data.data[index].time, location: snapshot.data.data[index].location, fee: snapshot.data.data[index].fee, details: snapshot.data.data[index].details,),
                         ),
                       );
                     },
@@ -155,13 +155,37 @@ class _EventsViewerState extends State<EventsViewer> {
                               trailing: Container(
                                 width: SizeConfig.screenWidth * 0.5,
                                 child: Text(
-                                  snapshot.data.data[index].benefits,
+                                  "${snapshot.data.data[index].benefits}",
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.end,
                                   // softWrap: false,
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
+                            ),
+                            ListTile(
+                              title: Text(
+                                DemoLocalization.of(context)
+                                    .getTranslatedValue('details'),
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              trailing: Container(
+                                width: SizeConfig.screenWidth * 0.5,
+                                child: Text(
+                                  '${snapshot.data.data[index].details}',
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.end,
+                                  // softWrap: false,
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                            ),
+                            new Image.network(
+                              Utils().image_base_url+'${snapshot.data.data[index].file}',
+                              fit: BoxFit.cover,
                             ),
                             Container(
                               color: Colors.blue,

@@ -8,6 +8,7 @@ class EventDetail extends StatefulWidget {
   final time;
   final location;
   final fee;
+  final details;
   EventDetail(
       {
         this.title,
@@ -16,6 +17,7 @@ class EventDetail extends StatefulWidget {
         this.time,
         this.location,
         this.fee,
+        this.details
       });
 
   @override
@@ -42,6 +44,11 @@ class _EventDetailState extends State<EventDetail> {
           ListTile(
             title: new Text('Benefits'),
             subtitle: new Text(widget.benefits),
+          ),
+          Divider(),
+          ListTile(
+            title: new Text('Details'),
+            subtitle: new Text(widget.details),
           ),
           Divider(),
           Row(
