@@ -390,7 +390,13 @@ class _ContactUsState extends State<ContactUs> {
                         // style: TextStyle(fontSize: 16),
                       ),
                     ),
-
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                       Text('SD', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),textAlign: TextAlign.right,),
+                        Text('L.M', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),textAlign: TextAlign.left,)
+                      ],
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -423,6 +429,13 @@ class _ContactUsState extends State<ContactUs> {
                       ],
                     ),
                     Container(height: 10,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('NS', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),textAlign: TextAlign.right,),
+                        Text('L.M', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),textAlign: TextAlign.left,)
+                      ],
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
