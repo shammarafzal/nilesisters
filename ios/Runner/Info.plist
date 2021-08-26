@@ -33,7 +33,7 @@
 	</dict>
 	<key>NSExceptionDomains</key>
 	<dict>
-		<key>http://nilesisters.codingoverflow.com/</key>
+		<key>http://nilesisters.spphotography.info/</key>
 		<dict>
 			<key>NSExceptionAllowsInsecureHTTPLoads</key>
 			<true/>

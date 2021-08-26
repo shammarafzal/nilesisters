@@ -13,8 +13,8 @@ import 'package:nilesisters/Model/getVideos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Utils {
-  final String baseUrl = 'nilesisters.codingoverflow.com';
-  var image_base_url = 'http://nilesisters.codingoverflow.com/storage/';
+  final String baseUrl = 'nilesisters.spphotography.info';
+  var image_base_url = 'http://nilesisters.spphotography.info/storage/';
   register(String name, String email, String password,String confirm_password) async {
     var url = Uri.http(baseUrl,
         '/api/register', {"q": "dart"});
