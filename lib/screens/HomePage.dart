@@ -213,17 +213,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Divider(),
-                      InkWell(
-                        onTap: () {
-                          Share.share(
-                              'https://play.google.com/store/apps/details?id=com.codingoverflow.nilesisters');
-                        },
-                        child: ListTile(
-                          title: Text(DemoLocalization.of(context)
-                              .getTranslatedValue('share')),
-                          leading: Icon(Icons.share, color: Colors.blue),
-                        ),
-                      ),
+
                       InkWell(
                         onTap: () {
                           Navigator.push(

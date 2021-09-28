@@ -2,6 +2,7 @@
 //
 //     final getVideos = getVideosFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 GetVideos getVideosFromJson(String str) => GetVideos.fromJson(json.decode(str));
@@ -10,8 +11,8 @@ String getVideosToJson(GetVideos data) => json.encode(data.toJson());
 
 class GetVideos {
   GetVideos({
-    this.status,
-    this.data,
+    @required this.status,
+    @required this.data,
   });
 
   bool status;
@@ -30,23 +31,23 @@ class GetVideos {
 
 class Datum {
   Datum({
-    this.id,
-    this.title,
-    this.file,
-    this.createdAt,
-    this.updatedAt,
+    @required this.id,
+    @required this.title,
+    @required this.link,
+    @required this.createdAt,
+    @required this.updatedAt,
   });
 
   int id;
   String title;
-  String file;
+  String link;
   DateTime createdAt;
   DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     title: json["title"],
-    file: json["file"],
+    link: json["link"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
   );
@@ -54,7 +55,7 @@ class Datum {
   Map<String, dynamic> toJson() => {
     "id": id,
     "title": title,
-    "file": file,
+    "link": link,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
   };

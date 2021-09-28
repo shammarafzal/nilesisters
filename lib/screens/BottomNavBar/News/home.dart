@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
                                 news_detail_image: Utils().image_base_url +
                                     '${snapshot.data.data[index].image}',
                                 news_detail_date:
-                                    '${snapshot.data.data[index].createdAt.day}-${snapshot.data.data[index].createdAt.month}-${snapshot.data.data[index].createdAt.year}',
+                                    '${snapshot.data.data[index].createdAt.day}/${snapshot.data.data[index].createdAt.month}/${snapshot.data.data[index].createdAt.year}',
                               ),
                             ),
                           );

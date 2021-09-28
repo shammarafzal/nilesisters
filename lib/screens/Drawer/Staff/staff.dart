@@ -47,8 +47,8 @@ class _StaffViewerState extends State<StaffViewer> {
                                     padding: const EdgeInsets.fromLTRB(10,0,0,5),
                                     child: Column(
                                       children: [
-                                        Align(alignment: Alignment.topLeft,child: Text(snapshot.data.data[index].name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)),
-                                        Align(alignment: Alignment.topLeft,child: Text(snapshot.data.data[index].designation,style: TextStyle(fontSize: 20),))
+                                        Align(alignment: Alignment.topLeft,child: Text(snapshot.data.data[index].name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),)),
+                                        Align(alignment: Alignment.topLeft,child: Text(snapshot.data.data[index].designation,style: TextStyle(fontSize: 16),))
                                       ],
                                     ),
                                   ),
