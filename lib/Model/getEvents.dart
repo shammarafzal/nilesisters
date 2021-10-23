@@ -40,6 +40,8 @@ class Datum {
     @required this.benefits,
     @required this.details,
     @required this.file,
+    @required this.addressLatitude,
+    @required this.addressLongitude,
     @required this.createdAt,
     @required this.updatedAt,
   });
@@ -53,6 +55,8 @@ class Datum {
   String benefits;
   String details;
   String file;
+  String addressLatitude;
+  String addressLongitude;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -66,6 +70,8 @@ class Datum {
     benefits: json["benefits"],
     details: json["details"],
     file: json["file"],
+    addressLatitude: json["address_latitude"],
+    addressLongitude: json["address_longitude"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
   );
@@ -80,6 +86,8 @@ class Datum {
     "benefits": benefits,
     "details": details,
     "file": file,
+    "address_latitude": addressLatitude,
+    "address_longitude": addressLongitude,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
   };

@@ -5,12 +5,14 @@ import 'package:video_player/video_player.dart';
 import 'chewie_list_item.dart';
 import 'package:nilesisters/Localization/demo_localization.dart';
 import 'package:nilesisters/Settings/customColors.dart';
+import 'package:url_launcher/url_launcher.dart';
 class VideoViewer extends StatefulWidget {
   @override
   _VideoViewerState createState() => _VideoViewerState();
 }
 
 class _VideoViewerState extends State<VideoViewer> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +31,14 @@ class _VideoViewerState extends State<VideoViewer> {
                     itemCount: snapshot.data.data.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, index) {
+                      _launchURL() async {
+                        final url = snapshot.data.data[index].link;
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      }
                       return Column(
                         children: [
                           Padding(padding: EdgeInsets.only(top:30)),
@@ -46,7 +56,11 @@ class _VideoViewerState extends State<VideoViewer> {
                               Padding(padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
                                 child: new Text('Video Link', style: TextStyle(color: CustomColors().grey)),),
                               Padding(padding: EdgeInsets.all(5.0),
-                                child: new Text(snapshot.data.data[index].link, style: TextStyle(color:CustomColors().secondaryColor),), )
+                                child: InkWell(
+                                    onTap: (){
+                                     _launchURL();
+                                    },
+                                    child: new Text(snapshot.data.data[index].link, style: TextStyle(color:CustomColors().secondaryColor),)), )
                             ],
                           ),
                           Divider(height:2),
