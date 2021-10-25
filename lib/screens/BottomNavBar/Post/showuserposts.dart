@@ -159,11 +159,14 @@ class _ShowPostsState extends State<ShowPosts> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
-                                                      child: RaisedButton(
+                                                      child: TextButton(
+                                                        style: ButtonStyle(
+                                                            backgroundColor:
+                                                            MaterialStateProperty.all(Colors.blue)),
                                                         child: Text(DemoLocalization
                                                             .of(context)
                                                             .getTranslatedValue(
-                                                            'send')),
+                                                            'send'), style: TextStyle(color: Colors.white)),
                                                         onPressed: () async {
                                                           if (_formKey
                                                               .currentState
@@ -182,15 +185,18 @@ class _ShowPostsState extends State<ShowPosts> {
                                                                 isLoading = false;
                                                               });
                                                               alertScreen().showAlertDialog(context, response['message']);
+                                                              // Navigator.of(context).pop();
                                                             }
                                                             else{
                                                               setState(() {
                                                                 isLoading = false;
                                                               });
                                                               await alertScreen().showAlertDialog(context, response['message']);
+                                                              // Navigator.of(context).pop();
                                                             }
                                                           }
                                                         },
+
                                                       ),
                                                     )
                                                   ],

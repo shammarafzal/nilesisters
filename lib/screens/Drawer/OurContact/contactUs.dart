@@ -80,7 +80,7 @@ class _ContactUsState extends State<ContactUs> {
 
 
   _launchCallerEnglish() async {
-    const url = "tel:18007352922";
+    const url = "tel:+18007352922";
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -89,7 +89,7 @@ class _ContactUsState extends State<ContactUs> {
   }
 
   _launchCallerSpanish() async {
-    const url = "tel:18008553000";
+    const url = "tel:+18008553000";
     if (await canLaunch(url)) {
       await launch(url);
     } else {

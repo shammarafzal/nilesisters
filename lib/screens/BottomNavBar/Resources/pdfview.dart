@@ -17,7 +17,7 @@ class _PdfViewerState extends State<PdfViewer> {
   bool downloading = false;
   String progress = '0';
   bool isDownloaded = false;
-  String filename = 'test.pdf';
+  String filename = 'nilesisters.pdf';
 
   Future<void> downloadFile(uri, fileName) async {
     setState(() {
@@ -172,11 +172,6 @@ class _PdfViewerState extends State<PdfViewer> {
                             onPressed: () async {
                               var url = Utils().image_base_url+'${snapshot.data.data[index].file}';
                               downloadFile(url, filename);
-                              /*if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                throw 'Could not launch $url';
-                              }*/
                             },
                             color: Colors.blue,
                             child: new Text(

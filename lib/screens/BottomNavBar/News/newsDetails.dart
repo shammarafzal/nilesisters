@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nilesisters/Settings/customColors.dart';
+import 'package:nilesisters/Settings/SizeConfig.dart';
 
 class NewsDetails extends StatefulWidget {
   final news_detail_name;
@@ -24,6 +25,7 @@ class _NewsDetailsState extends State<NewsDetails> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       appBar: new AppBar(
         elevation: 0.0,
@@ -42,20 +44,9 @@ class _NewsDetailsState extends State<NewsDetails> {
               footer: new Container(
                 color: CustomColors().offwhite,
                 child: ListTile(
-                  leading: new Text(widget.news_detail_name,
+                  leading:  SizedBox(width: SizeConfig.screenWidth*0.8, child: Text(widget.news_detail_name,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16.0)),
-                  // trailing: Padding(
-                  //   padding: const EdgeInsets.only(top: 10),
-                  //   child: new Text("\n"+
-                  //     widget.news_detail_category,
-                  //     style: TextStyle(
-                  //       color: CustomColors().redicon,
-                  //       fontSize: 20,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
+                          fontWeight: FontWeight.bold, fontSize: 16.0)),)
                 ),
               ),
             ),
@@ -72,7 +63,7 @@ class _NewsDetailsState extends State<NewsDetails> {
               Padding(padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
                 child: new Text('News Title', style: TextStyle(color: CustomColors().grey)),),
               Padding(padding: EdgeInsets.all(5.0),
-                child: new Text(widget.news_detail_name, style: TextStyle(color: CustomColors().secondaryColor),), )
+                child:  SizedBox(width: SizeConfig.screenWidth*0.6, child: Text(widget.news_detail_name, style: TextStyle(color: CustomColors().secondaryColor),),) )
 
             ],
           ),

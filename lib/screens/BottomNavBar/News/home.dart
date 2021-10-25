@@ -57,29 +57,11 @@ class _HomeState extends State<Home> {
                           footer: new Container(
                             color: Colors.white70,
                             child: ListTile(
-                              leading: new Text(snapshot.data.data[index].title,
+                              leading:
+                              SizedBox(width: SizeConfig.screenWidth*0.8, child: Text(snapshot.data.data[index].title,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16.0)),
-                              // trailing: Container(
-                              //   decoration: BoxDecoration(
-                              //     borderRadius: BorderRadius.circular(5),
-                              //     color: Colors.grey
-                              //   ),
-                              //   //color: Colors.grey,
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.all(2.0),
-                              //     child: new Text(
-                              //       snapshot.data.data[index].category,
-                              //       style: TextStyle(
-                              //         color: CustomColors().redicon,
-                              //         fontSize: 20,
-                              //         fontWeight: FontWeight.bold,
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
-
+                                      fontSize: 16.0)),)
                             ),
                           ),
                         ),
