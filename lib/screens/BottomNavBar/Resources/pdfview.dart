@@ -3,7 +3,6 @@ import 'package:nilesisters/Localization/demo_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:nilesisters/screens/BottomNavBar/Resources/viewResource.dart';
 import 'package:nilesisters/utils/Utils.dart';
-import 'package:share/share.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -17,7 +16,7 @@ class _PdfViewerState extends State<PdfViewer> {
   bool downloading = false;
   String progress = '0';
   bool isDownloaded = false;
-  String filename = 'nilesisters.pdf';
+
 
   Future<void> downloadFile(uri, fileName) async {
     setState(() {
@@ -43,6 +42,12 @@ class _PdfViewerState extends State<PdfViewer> {
           setState(() {
             isDownloaded = true;
           });
+          Navigator.push(
+            context,
+            new MaterialPageRoute(
+              builder: (context) => new PDFScreen(path: savePath,),
+            ),
+          );
         } else if (double.parse(progress) < 100) {}
       },
       deleteOnError: true,
@@ -61,7 +66,6 @@ class _PdfViewerState extends State<PdfViewer> {
     String path = '';
     Directory dir = await getApplicationDocumentsDirectory();
     path = '${dir.path}/$uniqueFileName';
-    Share.shareFiles(['${path}']);
     return path;
   }
 
@@ -168,27 +172,10 @@ class _PdfViewerState extends State<PdfViewer> {
                             Utils().image_base_url+'${snapshot.data.data[index].icon}',
                             fit: BoxFit.cover,
                           ),
-                          new RaisedButton(
-                            onPressed: () async {
-                              var url = Utils().image_base_url+'${snapshot.data.data[index].file}';
-                              downloadFile(url, filename);
-                            },
-                            color: Colors.blue,
-                            child: new Text(
-                              DemoLocalization.of(context)
-                                  .getTranslatedValue('download'),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
                           RaisedButton(
                             onPressed: () async {
                               var url = Utils().image_base_url+'${snapshot.data.data[index].file}';
-                              Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                  builder: (context) => new ViewPDF(url: url),
-                                ),
-                              );
+                              downloadFile(url, snapshot.data.data[index].title);
                             },
                             color: Colors.blue,
                             child: new Text(

@@ -1,44 +1,93 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:share/share.dart';
+class PDFScreen extends StatefulWidget {
+  final String path;
 
+  PDFScreen({Key key, this.path}) : super(key: key);
 
-class ViewPDF extends StatefulWidget {
-  final url;
-  ViewPDF({
-   this.url
-  });
-  @override
-  _ViewPDFState createState() => _ViewPDFState();
+  _PDFScreenState createState() => _PDFScreenState();
 }
 
-class _ViewPDFState extends State<ViewPDF> {
-  bool _isLoading = true;
-  PDFDocument document;
-  @override
-  void initState() {
-    super.initState();
-    loadDocument();
-  }
-  loadDocument() async {
-    document = await PDFDocument.fromURL(widget.url);
-
-    setState(() => _isLoading = false);
-  }
+class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
+  final Completer<PDFViewController> _controller =
+  Completer<PDFViewController>();
+  int pages = 0;
+  int currentPage = 0;
+  bool isReady = false;
+  String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Resource View'),
-        ),
-        body: Center(
-          child: _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : PDFViewer(
-            document: document,
-            zoomSteps: 1,
+      appBar: AppBar(
+        title: Text("Document"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {
+              Share.shareFiles(['${widget.path}']);
+            },
           ),
-        ),
+        ],
+      ),
+      body: Stack(
+        children: <Widget>[
+          PDFView(
+            filePath: widget.path,
+            enableSwipe: true,
+            swipeHorizontal: true,
+            autoSpacing: false,
+            pageFling: true,
+            pageSnap: true,
+            defaultPage: currentPage,
+            fitPolicy: FitPolicy.BOTH,
+            preventLinkNavigation:
+            false, // if set to true the link is handled in flutter
+            onRender: (_pages) {
+              setState(() {
+                pages = _pages;
+                isReady = true;
+              });
+            },
+            onError: (error) {
+              setState(() {
+                errorMessage = error.toString();
+              });
+              print(error.toString());
+            },
+            onPageError: (page, error) {
+              setState(() {
+                errorMessage = '$page: ${error.toString()}';
+              });
+              print('$page: ${error.toString()}');
+            },
+            onViewCreated: (PDFViewController pdfViewController) {
+              _controller.complete(pdfViewController);
+            },
+            onLinkHandler: (String uri) {
+              print('goto uri: $uri');
+            },
+            onPageChanged: (int page, int total) {
+              print('page change: $page/$total');
+              setState(() {
+                currentPage = page;
+              });
+            },
+          ),
+          errorMessage.isEmpty
+              ? !isReady
+              ? Center(
+            child: CircularProgressIndicator(),
+          )
+              : Container()
+              : Center(
+            child: Text(errorMessage),
+          )
+        ],
+      ),
     );
   }
 }
