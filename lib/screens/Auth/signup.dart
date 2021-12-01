@@ -153,18 +153,21 @@ class _SignupState extends State<Signup> {
               ),
               new GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, 'loginroute');
+                  Navigator.of(context).pushReplacementNamed('loginroute');
                 },
-                child: new RichText(
-                  text: TextSpan(
-                      style: new TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                      children:[
-                        TextSpan(text: 'Already have an account? '),
-                        TextSpan(text: 'Login',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)),
-                      ]),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: new RichText(
+                    text: TextSpan(
+                        style: new TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.black,
+                        ),
+                        children:[
+                          TextSpan(text: 'Already have an account? '),
+                          TextSpan(text: 'Login',style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold)),
+                        ]),
+                  ),
                 ),
               ),
               //Text('Already have an account? Login')

@@ -57,12 +57,7 @@ class alertScreen{
   }
   showSigninAlertDialog(BuildContext context,String msg) {
     Timer timer = Timer(Duration(milliseconds: 1000), (){
-      Navigator.push(
-        context,
-        new MaterialPageRoute(
-          builder: (context) => new HomePage(),
-        ),
-      );
+      Navigator.of(context).pushReplacementNamed('homePage');
     });
     showDialog(
         context: context,

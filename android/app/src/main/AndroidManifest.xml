@@ -3,7 +3,7 @@
     package="org.nilesisters.nilesisters">
    <application
         android:label="nilesisters"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="true">
        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB06U2r80on9ZG0p2OD-6Novl4m0SS7N0A" />
         <activity

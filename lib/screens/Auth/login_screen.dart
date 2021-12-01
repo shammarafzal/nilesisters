@@ -120,7 +120,7 @@ class _LoginDemoState extends State<LoginDemo> {
               ),
               new GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, 'forgotPassword');
+                  Navigator.of(context).pushReplacementNamed('forgotPassword');
                 },
                 child: new RichText(
                   text: TextSpan(
@@ -138,7 +138,7 @@ class _LoginDemoState extends State<LoginDemo> {
               ),
               new GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, 'signup_screen');
+                  Navigator.of(context).pushReplacementNamed('signup_screen');
                 },
                 child: new RichText(
                   text: TextSpan(
