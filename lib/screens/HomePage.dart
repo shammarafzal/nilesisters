@@ -41,15 +41,15 @@ class _HomePageState extends State<HomePage> {
       style: optionStyle,
     ),
     Text(
-      'Index 2: Events',
+      'Index 3: Events',
       style: optionStyle,
     ),
     Text(
-      'Index 2: Map',
+      'Index 4: Map',
       style: optionStyle,
     ),
     Text(
-      'Index 2: Resources',
+      'Index 5: Resources',
       style: optionStyle,
     ),
   ];
