@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       style: optionStyle,
     ),
     Text(
-      'Index 2: Pdf',
+      'Index 2: Resources',
       style: optionStyle,
     ),
   ];
