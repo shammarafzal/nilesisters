@@ -4,9 +4,9 @@ import 'package:nilesisters/Localization/demo_localization.dart';
 import 'package:nilesisters/screens/BottomNavBar/Post/showcomments.dart';
 import 'package:nilesisters/screens/BottomNavBar/Post/viewFullMessage.dart';
 import 'package:nilesisters/utils/Utils.dart';
-import '../../AlertDialog/alertDialog.dart';
 import 'package:nilesisters/Settings/SizeConfig.dart';
-
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'dart:async';
 import 'chat.dart';
 
 class ShowPosts extends StatefulWidget {
@@ -16,16 +16,13 @@ class ShowPosts extends StatefulWidget {
 
 class _ShowPostsState extends State<ShowPosts> {
   final _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
+  Timer _timer;
   final messageTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Niesisters'),
-      // ),
       body: FutureBuilder<GetPosts>(
         future: Utils().fetchposts(),
         builder: (context, snapshot) {
@@ -174,26 +171,52 @@ class _ShowPostsState extends State<ShowPosts> {
                                                             _formKey.currentState
                                                                 .save();
                                                           }
-                                                          if(messageTextController.text == ""){
-                                                            alertScreen().showAlertDialog(context, "Please Enter Comment Text");
-                                                          }
+
                                                           else{
-                                                            isLoading = true;
-                                                            var response = await Utils().sendComment(messageTextController.text, snapshot.data.data[index].id.toString());
-                                                            if(response['status'] == false){
-                                                              setState(() {
-                                                                isLoading = false;
-                                                              });
-                                                              alertScreen().showAlertDialog(context, response['message']);
-                                                              // Navigator.of(context).pop();
+
+                                                            try {
+                                                              await EasyLoading.show(
+                                                                status: 'loading...',
+                                                                maskType: EasyLoadingMaskType.black,
+                                                              );
+                                                              var response = await Utils().sendComment(
+                                                                  messageTextController.text, snapshot.data.data[index].id.toString()
+                                                              );
+
+                                                              if (response['status'] == false) {
+                                                                _timer?.cancel();
+                                                                await EasyLoading.showError(
+                                                                    response['message']);
+                                                              } else {
+                                                                _timer?.cancel();
+                                                                await EasyLoading.showSuccess(
+                                                                    response['message']);
+                                                                // Navigator.of(context).pop();
+                                                              }
                                                             }
-                                                            else{
-                                                              setState(() {
-                                                                isLoading = false;
-                                                              });
-                                                              await alertScreen().showAlertDialog(context, response['message']);
-                                                              // Navigator.of(context).pop();
+                                                            catch(e){
+                                                              _timer?.cancel();
+                                                              await EasyLoading.showError(
+                                                                  'Something Went Wrong');
                                                             }
+
+
+                                                            // isLoading = true;
+                                                            // var response = await Utils().sendComment(messageTextController.text, snapshot.data.data[index].id.toString());
+                                                            // if(response['status'] == false){
+                                                            //   setState(() {
+                                                            //     isLoading = false;
+                                                            //   });
+                                                            //   alertScreen().showAlertDialog(context, response['message']);
+                                                            //   // Navigator.of(context).pop();
+                                                            // }
+                                                            // else{
+                                                            //   setState(() {
+                                                            //     isLoading = false;
+                                                            //   });
+                                                            //   await alertScreen().showAlertDialog(context, response['message']);
+                                                            //   // Navigator.of(context).pop();
+                                                            // }
                                                           }
                                                         },
 

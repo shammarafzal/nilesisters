@@ -1,13 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nilesisters/Localization/demo_localization.dart';
-import 'package:nilesisters/screens/HomePage.dart';
-import 'package:nilesisters/screens/Auth/forgotPassword.dart';
-import 'package:nilesisters/screens/Auth/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/Auth/signup.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
+import 'Routes/route.dart';
+
 var isLoggedIn;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +17,22 @@ Future<void> main() async {
 
   HttpOverrides.global = new MyHttpOverrides();
   runApp(MyApp());
+  configLoading();
+}
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
 }
 class MyApp extends StatefulWidget {
   static void setLocale(BuildContext context, Locale locale){
@@ -36,15 +51,11 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+        builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
-        initialRoute: isLoggedIn ? 'homePage' : 'loginroute',
-        routes: {
-          'loginroute': (context)=> LoginDemo(),
-          'signup_screen': (context)=>Signup(),
-          'forgotPassword': (context)=>ForgotPassword(),
-          'homePage' : (context)=>HomePage(),
-        } ,
+        initialRoute: isLoggedIn ? '/home_page' : '/login',
+        getPages: Routes.routes,
         locale: _locale,
         supportedLocales: [
           Locale('en','US'),

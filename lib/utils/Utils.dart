@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:nilesisters/Model/getAbout.dart';
 import 'package:nilesisters/Model/getComments.dart';
@@ -15,7 +16,38 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Utils {
   final String baseUrl = 'nilesisters.spphotography.info';
   var image_base_url = 'http://nilesisters.spphotography.info/storage/';
-  register(String name, String email, String password,String confirm_password) async {
+
+
+
+  register(
+      String name,
+      String email,
+      String password,
+      String confirm_password,
+      String phone,
+      File imagePath,
+      ) async {
+    var request = http.MultipartRequest(
+        "POST",
+        Uri.parse(
+          "http://nilesisters.spphotography.info/api/register",
+        ));
+
+    request.fields["name"] = name;
+    request.fields["email"] = email;
+    request.fields["password"] = password;
+    request.fields["password_confirmation"] = confirm_password;
+    request.fields["phone"] = phone;
+    var imagePath_f = await http.MultipartFile.fromPath("image", imagePath.path);
+    request.files.add(imagePath_f);
+    var response = await request.send();
+    var responseData = await response.stream.toBytes();
+    var decode = String.fromCharCodes(responseData);
+    return jsonDecode(decode);
+  }
+
+
+  registerIm(String name, String email, String password,String confirm_password) async {
     var url = Uri.http(baseUrl,
         '/api/register', {"q": "dart"});
     final response = await http.post(url, body: {

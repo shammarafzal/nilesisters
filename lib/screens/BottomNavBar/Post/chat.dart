@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nilesisters/Localization/demo_localization.dart';
-import 'package:nilesisters/screens/BottomNavBar/Post/showuserposts.dart';
 import 'package:nilesisters/utils/Utils.dart';
-
-import '../../AlertDialog/alertDialog.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'dart:async';
 
 class Chat_Screen extends StatefulWidget {
   @override
@@ -11,7 +10,7 @@ class Chat_Screen extends StatefulWidget {
 }
 
 class _Chat_ScreenState extends State<Chat_Screen> {
-  bool isLoading = false;
+  Timer _timer;
   final messageTextController = TextEditingController();
 
   @override
@@ -49,34 +48,34 @@ class _Chat_ScreenState extends State<Chat_Screen> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          if(messageTextController.text == ""){
-                            alertScreen().showAlertDialog(context, "Please Enter Post Text");
+                          print('sas');
+                          try {
+                            await EasyLoading.show(
+                              status: 'loading...',
+                              maskType: EasyLoadingMaskType.black,
+                            );
+                            var response = await Utils().sendPost(
+                                messageTextController.text
+                            );
+
+                            if (response['status'] == false) {
+                              _timer?.cancel();
+                              await EasyLoading.showError(
+                                  response['message']);
+                            } else {
+                              _timer?.cancel();
+                              await EasyLoading.showSuccess(
+                                  response['message']);
+                              // Navigator.of(context).pop();
+                            }
                           }
-                          else{
-                            isLoading = true;
-                            var response = await Utils().sendPost(messageTextController.text);
-                            if(response['status'] == false){
-                              setState(() {
-                                isLoading = false;
-                              });
-                              alertScreen().showAlertDialog(context, response['message']);
-                            }
-                            else{
-                              setState(() {
-                                isLoading = false;
-                              });
-                              await alertScreen().showAlertDialog(context, response['message']);
-                            }
+                          catch(e){
+                            _timer?.cancel();
+                            await EasyLoading.showError(
+                                'Something Went Wrong');
                           }
                         },
-                        child: isLoading
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.blue),
-                                ),
-                              )
-                            : Text(
+                        child: Text(
                                 DemoLocalization.of(context)
                                     .getTranslatedValue('send'),
                                 style: TextStyle(

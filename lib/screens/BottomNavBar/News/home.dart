@@ -36,6 +36,8 @@ class _HomeState extends State<Home> {
                               builder: (context) => new NewsDetails(
                                 news_detail_name:
                                     snapshot.data.data[index].title,
+                                news_detail_link:
+                                snapshot.data.data[index].newsLink,
                                 news_detail_text:
                                     snapshot.data.data[index].description,
                                 news_detail_category:

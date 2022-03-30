@@ -1,6 +1,7 @@
 import 'package:nilesisters/Model/getResources.dart';
 import 'package:nilesisters/Localization/demo_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:nilesisters/Settings/SizeConfig.dart';
 import 'package:nilesisters/screens/BottomNavBar/Resources/viewResource.dart';
 import 'package:nilesisters/utils/Utils.dart';
 import 'package:dio/dio.dart';
@@ -107,9 +108,14 @@ class _PdfViewerState extends State<PdfViewer> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20),
                             ),
-                            trailing: Text(
-                              snapshot.data.data[index].title,
-                              style: TextStyle(fontSize: 20),
+                            trailing: Container(
+                              width: SizeConfig.screenWidth * 0.5,
+                              child: Text(
+                                snapshot.data.data[index].title,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.end,
+                                style: TextStyle(fontSize: 20),
+                              ),
                             ),
                           ),
                           ListTile(

@@ -70,5 +70,9 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Photo Library Access to Upload User Image</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera Access to Upload User Image</string>
 </dict>
 </plist>

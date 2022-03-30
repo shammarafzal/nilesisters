@@ -91,7 +91,7 @@ class _EventsViewerState extends State<EventsViewer> {
                                     fontSize: 20),
                               ),
                               trailing: Text(
-                                snapshot.data.data[index].date,
+                                date[1]+'/'+date[0]+'/'+date[2],
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),

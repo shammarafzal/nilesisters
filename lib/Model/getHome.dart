@@ -35,6 +35,7 @@ class Datum {
     this.image,
     this.description,
     this.category,
+    this.newsLink,
     this.createdAt,
     this.updatedAt,
   });
@@ -44,6 +45,7 @@ class Datum {
   String image;
   String description;
   String category;
+  String newsLink;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -53,6 +55,7 @@ class Datum {
     image: json["image"],
     description: json["description"],
     category: json["category"],
+    newsLink: json["news_link"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
   );
@@ -63,6 +66,7 @@ class Datum {
     "image": image,
     "description": description,
     "category": category,
+    "news_link": newsLink,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
   };

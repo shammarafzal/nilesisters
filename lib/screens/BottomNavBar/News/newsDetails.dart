@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nilesisters/Settings/customColors.dart';
 import 'package:nilesisters/Settings/SizeConfig.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetails extends StatefulWidget {
   final news_detail_name;
@@ -8,6 +9,7 @@ class NewsDetails extends StatefulWidget {
   final news_detail_text;
   final news_detail_image;
   final news_detail_date;
+  final news_detail_link;
   NewsDetails(
       {
         this.news_detail_name,
@@ -15,6 +17,7 @@ class NewsDetails extends StatefulWidget {
         this.news_detail_text,
         this.news_detail_image,
         this.news_detail_date,
+        this.news_detail_link,
       });
 
   @override
@@ -22,7 +25,14 @@ class NewsDetails extends StatefulWidget {
 }
 
 class _NewsDetailsState extends State<NewsDetails> {
-
+  _launchLink() async {
+    var url = "${widget.news_detail_link}";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -81,6 +91,19 @@ class _NewsDetailsState extends State<NewsDetails> {
                 child: new Text('News Date', style: TextStyle(color: CustomColors().grey)),),
               Padding(padding: EdgeInsets.all(5.0),
                 child: new Text(widget.news_detail_date, style: TextStyle(color:CustomColors().secondaryColor),), )
+            ],
+          ),
+          Row(
+            children: [
+              Padding(padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+                child: new Text('News Link', style: TextStyle(color: CustomColors().grey)),),
+              InkWell(
+                onTap: () async{
+
+                },
+                child: Padding(padding: EdgeInsets.all(5.0),
+                  child: new Text(widget.news_detail_link, style: TextStyle(color:CustomColors().secondaryColor),), ),
+              )
             ],
           ),
         ],

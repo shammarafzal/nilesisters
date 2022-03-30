@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:nilesisters/Model/getUser.dart';
 import 'package:nilesisters/classes/language.dart';
@@ -7,14 +9,13 @@ import 'package:nilesisters/screens/Drawer/ContactUs/contact.dart';
 import 'package:nilesisters/screens/Drawer/OurContact/contactUs.dart';
 import 'package:nilesisters/screens/BottomNavBar/Events/eventsViewer.dart';
 import 'package:nilesisters/screens/BottomNavBar/News/home.dart';
-import 'package:nilesisters/screens/Auth/login_screen.dart';
 import 'package:nilesisters/screens/BottomNavBar/Resources/pdfview.dart';
 import 'package:nilesisters/screens/Drawer/PrivacyPolicy/privacy.dart';
 import 'package:nilesisters/screens/Drawer/Videos/videosViewer.dart';
 import 'package:nilesisters/screens/Drawer/About/founder.dart';
 import 'package:nilesisters/screens/Drawer/Staff/staff.dart';
 import 'package:nilesisters/utils/Utils.dart';
-import 'package:share/share.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -27,7 +28,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
+  Timer _timer;
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -135,14 +136,29 @@ class _HomePageState extends State<HomePage> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return UserAccountsDrawerHeader(
+                              currentAccountPicture: GestureDetector(
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.black,
+                                  backgroundImage: NetworkImage(
+                                      Utils().image_base_url+'${snapshot.data.user.image}'),
+                                ),
+                              ),
                               accountName: Text(snapshot.data.user.name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                               accountEmail: Text(snapshot.data.user.email),
                               decoration: new BoxDecoration(color: Colors.blue),
+
                             );
                           }
                           return UserAccountsDrawerHeader(
-                            accountName: Text('s',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                            accountEmail: Text('w'),
+                            currentAccountPicture: GestureDetector(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.black,
+                                backgroundImage: NetworkImage(
+                                    'https://himdeve.eu/wp-content/uploads/2019/04/logo_retina.png'),
+                              ),
+                            ),
+                            accountName: Text('Nilesisters Default',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                            accountEmail: Text('nilesistesdefault'),
                             decoration: new BoxDecoration(color: Colors.blue),
                           );
                         }
@@ -230,12 +246,35 @@ class _HomePageState extends State<HomePage> {
                       ),
                       InkWell(
                         onTap: () async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.remove("isLoggedIn");
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new LoginDemo()));
+                          SharedPreferences prefs = await SharedPreferences
+                              .getInstance();
+                          try {
+                            _timer?.cancel();
+                            await EasyLoading.showSuccess('Successfuly Logged Out');
+                              prefs.remove("token");
+                              prefs.remove("isLoggedIn");
+                              Navigator.of(context).pushReplacementNamed('/login');
+                            // var response =
+                            // await Utils().logout();
+                            // print(response);
+                            // if (response['status'] == false) {
+                            //   _timer?.cancel();
+                            //   await EasyLoading.showError(
+                            //       response['message']);
+                            // } else {
+                            //   _timer?.cancel();
+                            //   await EasyLoading.showSuccess(
+                            //       response['message']);
+                            //   prefs.remove("token");
+                            //   prefs.remove("isLoggedIn");
+                            //   Navigator.of(context).pushReplacementNamed('/login');
+                            // }
+                          }
+                          catch (e) {
+                            _timer?.cancel();
+                            await EasyLoading.showError(
+                                e.toString());
+                          }
                         },
                         child: ListTile(
                           title: Text(DemoLocalization.of(context)
