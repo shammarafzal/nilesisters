@@ -91,7 +91,7 @@ class _EventsViewerState extends State<EventsViewer> {
                                     fontSize: 20),
                               ),
                               trailing: Text(
-                                date[1]+'/'+date[0]+'/'+date[2],
+                                date[0]+'/'+date[1]+'/'+date[2],
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
@@ -201,8 +201,8 @@ class _EventsViewerState extends State<EventsViewer> {
                                         MaterialPageRoute(
                                           builder: (context) => DynamicEvent(
                                               year: int.parse(date[2]),
-                                              month: int.parse(date[1]),
-                                              day: int.parse(date[0]),
+                                              month: int.parse(date[0]),
+                                              day: int.parse(date[1]),
                                               title: snapshot.data.data[index].title),
                                         ));
                                   }),

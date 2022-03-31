@@ -70,11 +70,15 @@ class _EventDetailState extends State<EventDetail> {
           ),
           Divider(),
           Row(
+             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-                child: new Text('Location', style: TextStyle(color: CustomColors().grey)),),
-              Padding(padding: EdgeInsets.all(5.0),
-                child: new Text(widget.location, style: TextStyle(color: CustomColors().secondaryColor),), )
+              Expanded(
+                child: Padding(padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+                  child: new Text('Location', style: TextStyle(color: CustomColors().grey)),),
+              ),
+              Expanded(
+              child: Padding(padding: EdgeInsets.all(5.0),
+                child: new Text(widget.location, style: TextStyle(color: CustomColors().secondaryColor),), ))
             ],
           ),
           Divider(),

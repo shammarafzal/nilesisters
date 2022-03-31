@@ -26,7 +26,7 @@ class NewsDetails extends StatefulWidget {
 
 class _NewsDetailsState extends State<NewsDetails> {
   _launchLink() async {
-    var url = "${widget.news_detail_link}";
+    final url = widget.news_detail_link;
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -99,6 +99,8 @@ class _NewsDetailsState extends State<NewsDetails> {
                 child: new Text('News Link', style: TextStyle(color: CustomColors().grey)),),
               InkWell(
                 onTap: () async{
+                  _launchLink();
+
 
                 },
                 child: Padding(padding: EdgeInsets.all(5.0),
