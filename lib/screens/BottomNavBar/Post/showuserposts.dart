@@ -165,15 +165,6 @@ class _ShowPostsState extends State<ShowPosts> {
                                                             .getTranslatedValue(
                                                             'send'), style: TextStyle(color: Colors.white)),
                                                         onPressed: () async {
-                                                          if (_formKey
-                                                              .currentState
-                                                              .validate()) {
-                                                            _formKey.currentState
-                                                                .save();
-                                                          }
-
-                                                          else{
-
                                                             try {
                                                               await EasyLoading.show(
                                                                 status: 'loading...',
@@ -191,7 +182,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                                                 _timer?.cancel();
                                                                 await EasyLoading.showSuccess(
                                                                     response['message']);
-                                                                // Navigator.of(context).pop();
+                                                                Navigator.of(context).pop();
                                                               }
                                                             }
                                                             catch(e){
@@ -199,25 +190,6 @@ class _ShowPostsState extends State<ShowPosts> {
                                                               await EasyLoading.showError(
                                                                   'Something Went Wrong');
                                                             }
-
-
-                                                            // isLoading = true;
-                                                            // var response = await Utils().sendComment(messageTextController.text, snapshot.data.data[index].id.toString());
-                                                            // if(response['status'] == false){
-                                                            //   setState(() {
-                                                            //     isLoading = false;
-                                                            //   });
-                                                            //   alertScreen().showAlertDialog(context, response['message']);
-                                                            //   // Navigator.of(context).pop();
-                                                            // }
-                                                            // else{
-                                                            //   setState(() {
-                                                            //     isLoading = false;
-                                                            //   });
-                                                            //   await alertScreen().showAlertDialog(context, response['message']);
-                                                            //   // Navigator.of(context).pop();
-                                                            // }
-                                                          }
                                                         },
 
                                                       ),

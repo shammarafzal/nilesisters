@@ -48,7 +48,6 @@ class _Chat_ScreenState extends State<Chat_Screen> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          print('sas');
                           try {
                             await EasyLoading.show(
                               status: 'loading...',
@@ -66,7 +65,7 @@ class _Chat_ScreenState extends State<Chat_Screen> {
                               _timer?.cancel();
                               await EasyLoading.showSuccess(
                                   response['message']);
-                              // Navigator.of(context).pop();
+                              Navigator.of(context).pop();
                             }
                           }
                           catch(e){
