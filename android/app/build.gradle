@@ -37,8 +37,8 @@ android {
         applicationId "org.nilesisters.nilesisters"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 13
-        versionName "1.1.2"
+        versionCode 16
+        versionName "1.1.5"
 //        versionCode flutterVersionCode.toInteger()
 //        versionName flutterVersionName
     }

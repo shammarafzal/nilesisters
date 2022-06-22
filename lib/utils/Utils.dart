@@ -25,7 +25,6 @@ class Utils {
       String password,
       String confirm_password,
       String phone,
-      File imagePath,
       ) async {
     var request = http.MultipartRequest(
         "POST",
@@ -38,8 +37,6 @@ class Utils {
     request.fields["password"] = password;
     request.fields["password_confirmation"] = confirm_password;
     request.fields["phone"] = phone;
-    var imagePath_f = await http.MultipartFile.fromPath("image", imagePath.path);
-    request.files.add(imagePath_f);
     var response = await request.send();
     var responseData = await response.stream.toBytes();
     var decode = String.fromCharCodes(responseData);

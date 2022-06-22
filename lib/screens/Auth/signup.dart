@@ -38,17 +38,17 @@ class _SignupState extends State<Signup> {
                     child: Image.asset('assets/images/nilesisters.png')),
               ),
             ),
-            SizedBox(height: 15.0),
-            IconButton(
-                onPressed: () async {
-                  final picker = ImagePicker();
-                  var image =
-                  await picker.getImage(source: ImageSource.gallery);
-                  if (image != null) {
-                    imagePath = File(image.path);
-                  }
-                },
-                icon: Icon(Icons.arrow_circle_up)),
+            // SizedBox(height: 15.0),
+            // IconButton(
+            //     onPressed: () async {
+            //       final picker = ImagePicker();
+            //       var image =
+            //       await picker.getImage(source: ImageSource.gallery);
+            //       if (image != null) {
+            //         imagePath = File(image.path);
+            //       }
+            //     },
+            //     icon: Icon(Icons.arrow_circle_up)),
             SizedBox(
               height: 15.0,
             ),
@@ -134,7 +134,6 @@ class _SignupState extends State<Signup> {
                         _password.text,
                         _confirmpassword.text,
                         _phone.text,
-                        imagePath,
                     );
 
                     if (response['status'] == false) {

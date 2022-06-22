@@ -207,22 +207,22 @@ class _EventsViewerState extends State<EventsViewer> {
                                         ));
                                   }),
                             ),
-                            SizedBox(height: 5,),
-                            Container(
-                              color: Colors.blue,
-                              child: TextButton(
-                                  child: Text(
-                                    'Show on Map',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  onPressed: () {
-                                    double lat = double.parse(snapshot.data.data[index].addressLatitude);
-                                    double longg = double.parse(snapshot.data.data[index].addressLongitude);
-                                    print(lat);
-                                    print(longg);
-                                    MapUtils.openMap(lat, longg);
-                                  }),
-                            )
+                            // SizedBox(height: 5,),
+                            // Container(
+                            //   color: Colors.blue,
+                            //   child: TextButton(
+                            //       child: Text(
+                            //         'Show on Map',
+                            //         style: TextStyle(color: Colors.white),
+                            //       ),
+                            //       onPressed: () {
+                            //         double lat = double.parse(snapshot.data.data[index].addressLatitude);
+                            //         double longg = double.parse(snapshot.data.data[index].addressLongitude);
+                            //         print(lat);
+                            //         print(longg);
+                            //         MapUtils.openMap(lat, longg);
+                            //       }),
+                            // )
                           ],
                         ),
                       ),
