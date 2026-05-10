@@ -2,23 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:nilesisters/Settings/customColors.dart';
 
 class EventDetail extends StatefulWidget {
-  final title;
-  final benefits;
-  final date;
-  final time;
-  final location;
-  final fee;
-  final details;
-  EventDetail(
-      {
-        this.title,
-        this.benefits,
-        this.date,
-        this.time,
-        this.location,
-        this.fee,
-        this.details
-      });
+  final String title;
+  final String benefits;
+  final String date;
+  final String time;
+  final String location;
+  final String fee;
+  final String details;
+
+  const EventDetail({
+    super.key,
+    required this.title,
+    required this.benefits,
+    required this.date,
+    required this.time,
+    required this.location,
+    required this.fee,
+    required this.details,
+  });
 
   @override
   _EventDetailState createState() => _EventDetailState();

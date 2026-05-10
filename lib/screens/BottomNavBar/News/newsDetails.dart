@@ -4,21 +4,22 @@ import 'package:nilesisters/Settings/SizeConfig.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetails extends StatefulWidget {
-  final news_detail_name;
-  final news_detail_category;
-  final news_detail_text;
-  final news_detail_image;
-  final news_detail_date;
-  final news_detail_link;
-  NewsDetails(
-      {
-        this.news_detail_name,
-        this.news_detail_category,
-        this.news_detail_text,
-        this.news_detail_image,
-        this.news_detail_date,
-        this.news_detail_link,
-      });
+  final String news_detail_name;
+  final String news_detail_category;
+  final String news_detail_text;
+  final String news_detail_image;
+  final String news_detail_date;
+  final String news_detail_link;
+
+  const NewsDetails({
+    super.key,
+    required this.news_detail_name,
+    required this.news_detail_category,
+    required this.news_detail_text,
+    required this.news_detail_image,
+    required this.news_detail_date,
+    required this.news_detail_link,
+  });
 
   @override
   _NewsDetailsState createState() => _NewsDetailsState();

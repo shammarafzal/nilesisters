@@ -10,7 +10,7 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final _email = TextEditingController();
-  Timer _timer;
+  Timer? _timer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +49,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               decoration: BoxDecoration(
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(20)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () async {
                   await EasyLoading.show(
                     status: 'loading...',

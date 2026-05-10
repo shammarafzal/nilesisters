@@ -6,18 +6,18 @@ class DemoLocalization{
   final Locale locale;
   DemoLocalization(this.locale);
   static DemoLocalization of(BuildContext context) {
-    return Localizations.of<DemoLocalization>(context, DemoLocalization);
+    return Localizations.of<DemoLocalization>(context, DemoLocalization)!;
   }
-  Map<String,String> _localizedValues;
+  late Map<String,String> _localizedValues;
 
   Future load() async{
     String jsonStringValues  =
     await rootBundle.loadString('lib/Languages/${locale.languageCode}.json');
-    Map<String,dynamic> mapppedJson = json.decode(jsonStringValues);
+    Map<String,dynamic> mapppedJson = json.decode(jsonStringValues) as Map<String, dynamic>;
     _localizedValues = mapppedJson.map((key, value) => MapEntry(key, value.toString()));
   }
   String getTranslatedValue(String key){
-    return _localizedValues[key];
+    return _localizedValues[key] ?? key;
   }
   static const LocalizationsDelegate<DemoLocalization> delegate = _DemoLocalizationDelagate();
 }
@@ -29,7 +29,7 @@ class _DemoLocalizationDelagate extends LocalizationsDelegate<DemoLocalization>{
   }
   @override
   Future<DemoLocalization> load(Locale locale) async {
-    DemoLocalization localization = new DemoLocalization(locale);
+    DemoLocalization localization = DemoLocalization(locale);
     await localization.load();
     return localization;
   }

@@ -13,7 +13,7 @@ class _ContactState extends State<Contact> {
   final _name = TextEditingController();
   final _email = TextEditingController();
   final _message = TextEditingController();
-  Timer _timer;
+  Timer? _timer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +79,7 @@ class _ContactState extends State<Contact> {
               width: 250,
               decoration: BoxDecoration(
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () async {
 
                   try {

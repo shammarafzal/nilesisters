@@ -7,17 +7,15 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'Routes/route.dart';
 
-var isLoggedIn;
+bool isLoggedIn = false;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var prefs = await SharedPreferences.getInstance();
-   isLoggedIn = (prefs.getBool('isLoggedIn') == null)
-      ? false
-      : prefs.getBool('isLoggedIn');
+  isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
   HttpOverrides.global = new MyHttpOverrides();
-  runApp(MyApp());
   configLoading();
+  runApp(MyApp());
 }
 void configLoading() {
   EasyLoading.instance
@@ -30,20 +28,20 @@ void configLoading() {
     ..backgroundColor = Colors.green
     ..indicatorColor = Colors.yellow
     ..textColor = Colors.yellow
-    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..maskColor = Colors.blue.withValues(alpha: 0.5)
     ..userInteractions = true
     ..dismissOnTap = false;
 }
 class MyApp extends StatefulWidget {
   static void setLocale(BuildContext context, Locale locale){
-    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
-    state.setLocale(locale);
+    final state = context.findAncestorStateOfType<_MyAppState>();
+    state?.setLocale(locale);
   }
   @override
   _MyAppState createState() => _MyAppState();
 }
 class _MyAppState extends State<MyApp> {
-  Locale _locale;
+  Locale? _locale;
   void setLocale(Locale locale){
     setState(() {
       _locale = locale;
@@ -57,7 +55,7 @@ class _MyAppState extends State<MyApp> {
         initialRoute: isLoggedIn ? '/home_page' : '/login',
         getPages: Routes.routes,
         locale: _locale,
-        supportedLocales: [
+        supportedLocales: const [
           Locale('en','US'),
           Locale('fa','IR'),
           Locale('ar','SA'),
@@ -67,17 +65,15 @@ class _MyAppState extends State<MyApp> {
           Locale('am','ET'),
 
         ],
-        localizationsDelegates: [
+        localizationsDelegates: const [
           DemoLocalization.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
         localeListResolutionCallback: (deviceLocale, supportedLocales){
-          if (_locale == null) {
-            return supportedLocales.first;
-          }
-        }
+          return _locale ?? supportedLocales.first;
+        },
     );
   }
 }
@@ -85,7 +81,7 @@ class _MyAppState extends State<MyApp> {
 
 class MyHttpOverrides extends HttpOverrides{
   @override
-  HttpClient createHttpClient(SecurityContext context){
+  HttpClient createHttpClient(SecurityContext? context){
     return super.createHttpClient(context)
       ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }

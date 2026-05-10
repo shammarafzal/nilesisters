@@ -13,11 +13,11 @@ class NewPassword extends StatefulWidget {
 class _NewPasswordState extends State<NewPassword> {
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
-  Timer _timer;
+  Timer? _timer;
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context).settings.arguments as Map;
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -69,7 +69,7 @@ class _NewPasswordState extends State<NewPassword> {
               decoration: BoxDecoration(
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(20)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () async {
 
                   try {
@@ -80,7 +80,7 @@ class _NewPasswordState extends State<NewPassword> {
                     var response = await Utils().resetPassword(
                         _password.text,
                         _confirmPassword.text,
-                        arguments['token']
+                        arguments['token'] as String
                     );
 
                     if (response['status'] == false) {

@@ -5,9 +5,10 @@ import 'package:nilesisters/Settings/SizeConfig.dart';
 import 'package:nilesisters/screens/BottomNavBar/Post/viewFullMessage.dart';
 import 'package:nilesisters/utils/Utils.dart';
 class ShowComments extends StatefulWidget {
-  final postID;
-  ShowComments({
-    this.postID,
+  final int postID;
+  const ShowComments({
+    super.key,
+    required this.postID,
   });
   @override
   _ShowCommentsState createState() => _ShowCommentsState();
@@ -25,7 +26,8 @@ class _ShowCommentsState extends State<ShowComments> {
         future: Utils().fetchcomments(widget.postID.toString()),
         builder: (context,snapshot){
           if(snapshot.hasData){
-            return ListView.builder(itemCount: snapshot.data.data.length,
+            final comments = snapshot.data!;
+            return ListView.builder(itemCount: comments.data.length,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, index ){
                 return InkWell(
@@ -33,7 +35,7 @@ class _ShowCommentsState extends State<ShowComments> {
                     Navigator.push(
                       context,
                       new MaterialPageRoute(
-                        builder: (context) => new ViewFullMessage(user_name: snapshot.data.data[index].user.name, post_date: snapshot.data.data[index].createdAt.toString(), post_text: snapshot.data.data[index].comment,),
+                        builder: (context) => new ViewFullMessage(user_name: comments.data[index].user.name, post_date: comments.data[index].createdAt.toString(), post_text: comments.data[index].comment,),
                       ),
                     );
                   },
@@ -47,7 +49,7 @@ class _ShowCommentsState extends State<ShowComments> {
                           ListTile(
                             title: Text(DemoLocalization.of(context)
                                 .getTranslatedValue('from'),style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 20),),
-                            trailing: Text(snapshot.data.data[index].user.name,style: TextStyle(fontSize: 20),),
+                            trailing: Text(comments.data[index].user.name,style: TextStyle(fontSize: 20),),
                           ),
                           ListTile(
                             title: Text(DemoLocalization.of(context)
@@ -55,7 +57,7 @@ class _ShowCommentsState extends State<ShowComments> {
                             trailing: Container(
                               width: SizeConfig.screenWidth * 0.5,
                               child: Text(
-                                snapshot.data.data[index].comment,
+                                comments.data[index].comment,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.end,
                                 // softWrap: false,

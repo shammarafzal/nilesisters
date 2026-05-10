@@ -1,16 +1,17 @@
-import 'package:nilesisters/Model/getResources.dart';
-import 'package:nilesisters/Localization/demo_localization.dart';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:nilesisters/Localization/demo_localization.dart';
+import 'package:nilesisters/Model/getResources.dart';
 import 'package:nilesisters/Settings/SizeConfig.dart';
 import 'package:nilesisters/screens/BottomNavBar/Resources/viewResource.dart';
 import 'package:nilesisters/utils/Utils.dart';
-import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 
 class PdfViewer extends StatefulWidget {
   @override
-  _PdfViewerState createState() => _PdfViewerState();
+  State<PdfViewer> createState() => _PdfViewerState();
 }
 
 class _PdfViewerState extends State<PdfViewer> {
@@ -18,25 +19,20 @@ class _PdfViewerState extends State<PdfViewer> {
   String progress = '0';
   bool isDownloaded = false;
 
-
-  Future<void> downloadFile(uri, fileName) async {
+  Future<void> downloadFile(String uri, String fileName) async {
     setState(() {
       downloading = true;
     });
 
-    String savePath = await getFilePath(fileName);
+    final savePath = await getFilePath(fileName);
+    final dio = Dio();
 
-    Dio dio = Dio();
-
-    dio.download(
+    await dio.download(
       uri,
       savePath,
       onReceiveProgress: (rcv, total) {
-        print(
-            'received: ${rcv.toStringAsFixed(0)} out of total: ${total.toStringAsFixed(0)}');
-
         setState(() {
-          progress = ((rcv / total) * 100).toStringAsFixed(0);
+          progress = total == 0 ? '0' : ((rcv / total) * 100).toStringAsFixed(0);
         });
 
         if (progress == '100') {
@@ -45,160 +41,146 @@ class _PdfViewerState extends State<PdfViewer> {
           });
           Navigator.push(
             context,
-            new MaterialPageRoute(
-              builder: (context) => new PDFScreen(path: savePath,),
+            MaterialPageRoute(
+              builder: (context) => PDFScreen(path: savePath),
             ),
           );
-        } else if (double.parse(progress) < 100) {}
+        }
       },
       deleteOnError: true,
-    ).then((_) {
-      setState(() {
-        if (progress == '100') {
-          isDownloaded = true;
-        }
+    );
 
-        downloading = false;
-      });
+    setState(() {
+      downloading = false;
+      if (progress == '100') {
+        isDownloaded = true;
+      }
     });
   }
 
-  Future<String> getFilePath(uniqueFileName) async {
-    String path = '';
-    Directory dir = await getApplicationDocumentsDirectory();
-    path = '${dir.path}/$uniqueFileName';
-    return path;
+  Future<String> getFilePath(String uniqueFileName) async {
+    final dir = await getApplicationDocumentsDirectory();
+    return '${dir.path}/$uniqueFileName';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: FutureBuilder<GetResources>(
-          future: Utils().fetchResources(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data.data.length,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, index) {
-                  return Card(
-                    elevation: 5,
-                    margin: EdgeInsets.all(10.0),
-                    child: Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Center(
-                            child: Text(
-                              snapshot.data.data[index].title,
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24),
-                            ),
-                          ),
-                          ListTile(
-                            title: Text(
-                              DemoLocalization.of(context)
-                                  .getTranslatedValue('title'),
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            trailing: Container(
-                              width: SizeConfig.screenWidth * 0.5,
-                              child: Text(
-                                snapshot.data.data[index].title,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.end,
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ),
-                          ),
-                          ListTile(
-                            title: Text(
-                              DemoLocalization.of(context)
-                                  .getTranslatedValue('edition'),
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            trailing: Text(
-                              snapshot.data.data[index].edition,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          ListTile(
-                            title: Text(
-                              DemoLocalization.of(context)
-                                  .getTranslatedValue('context'),
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            trailing: Text(
-                              snapshot.data.data[index].context,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          ListTile(
-                            title: Text(
-                              DemoLocalization.of(context)
-                                  .getTranslatedValue('format'),
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            trailing: Text(
-                              snapshot.data.data[index].format,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          ListTile(
-                            title: Text(
-                              DemoLocalization.of(context)
-                                  .getTranslatedValue('page_count'),
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            trailing: Text(
-                              snapshot.data.data[index].totalPages,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          new Image.network(
-                            Utils().image_base_url+'${snapshot.data.data[index].icon}',
-                            fit: BoxFit.cover,
-                          ),
-                          RaisedButton(
-                            onPressed: () async {
-                              var url = Utils().image_base_url+'${snapshot.data.data[index].file}';
-                              downloadFile(url, snapshot.data.data[index].title);
-                            },
+      body: FutureBuilder<GetResources>(
+        future: Utils().fetchResources(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final resources = snapshot.data!;
+          return ListView.builder(
+            itemCount: resources.data.length,
+            itemBuilder: (BuildContext context, index) {
+              final resource = resources.data[index];
+              return Card(
+                elevation: 5,
+                margin: const EdgeInsets.all(10.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Center(
+                        child: Text(
+                          resource.title,
+                          style: const TextStyle(
                             color: Colors.blue,
-                            child: new Text(
-                              'View Resource',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                      ListTile(
+                        title: Text(
+                          DemoLocalization.of(context).getTranslatedValue('title'),
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        trailing: SizedBox(
+                          width: SizeConfig.screenWidth * 0.5,
+                          child: Text(
+                            resource.title,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          DemoLocalization.of(context).getTranslatedValue('edition'),
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        trailing: Text(resource.edition, style: const TextStyle(fontSize: 20)),
+                      ),
+                      ListTile(
+                        title: Text(
+                          DemoLocalization.of(context).getTranslatedValue('context'),
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        trailing: Text(resource.context, style: const TextStyle(fontSize: 20)),
+                      ),
+                      ListTile(
+                        title: Text(
+                          DemoLocalization.of(context).getTranslatedValue('format'),
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        trailing: Text(resource.format, style: const TextStyle(fontSize: 20)),
+                      ),
+                      ListTile(
+                        title: Text(
+                          DemoLocalization.of(context).getTranslatedValue('page_count'),
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        trailing: Text(resource.totalPages, style: const TextStyle(fontSize: 20)),
+                      ),
+                      Image.network(
+                        '${Utils().image_base_url}${resource.icon}',
+                        fit: BoxFit.cover,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final url = '${Utils().image_base_url}${resource.file}';
+                          await downloadFile(url, resource.title);
+                        },
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                        child: const Text(
+                          'View Resource',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
-            }
-            return Center(child: CircularProgressIndicator());
-          },
-        ),
+            },
+          );
+        },
       ),
     );
   }

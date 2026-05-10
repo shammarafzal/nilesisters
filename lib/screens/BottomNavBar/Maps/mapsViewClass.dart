@@ -8,9 +8,9 @@ class MapPage extends StatefulWidget {
 }
 class MapPageState extends State<MapPage> {
 
-  BitmapDescriptor pinLocationIcon;
-  Set<Marker> _markers = {};
-  Completer<GoogleMapController> _controller = Completer();
+  BitmapDescriptor? pinLocationIcon;
+  final Set<Marker> _markers = {};
+  final Completer<GoogleMapController> _controller = Completer();
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class MapPageState extends State<MapPage> {
                   Marker(
                       markerId: MarkerId('<MARKER_ID>'),
                       position: pinPosition,
-                      icon: pinLocationIcon
+                      icon: pinLocationIcon ?? BitmapDescriptor.defaultMarker
                   )
               );
             });

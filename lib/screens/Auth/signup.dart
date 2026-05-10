@@ -16,8 +16,8 @@ class _SignupState extends State<Signup> {
   final _password = TextEditingController();
   final _confirmpassword = TextEditingController();
   final _phone = TextEditingController();
-  Timer _timer;
-  File imagePath;
+  Timer? _timer;
+  File? imagePath;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,7 +121,7 @@ class _SignupState extends State<Signup> {
               width: 250,
               decoration: BoxDecoration(
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () async {
                   try {
                     await EasyLoading.show(

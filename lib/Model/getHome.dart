@@ -10,16 +10,16 @@ String getHomeToJson(GetHome data) => json.encode(data.toJson());
 
 class GetHome {
   GetHome({
-    this.status,
-    this.data,
+    required this.status,
+    required this.data,
   });
 
-  bool status;
-  List<Datum> data;
+  final bool status;
+  final List<Datum> data;
 
   factory GetHome.fromJson(Map<String, dynamic> json) => GetHome(
-    status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    status: json["status"] as bool,
+    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -30,34 +30,34 @@ class GetHome {
 
 class Datum {
   Datum({
-    this.id,
-    this.title,
-    this.image,
-    this.description,
-    this.category,
-    this.newsLink,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.title,
+    required this.image,
+    required this.description,
+    required this.category,
+    required this.newsLink,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String title;
-  String image;
-  String description;
-  String category;
-  String newsLink;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final int id;
+  final String title;
+  final String image;
+  final String description;
+  final String category;
+  final String newsLink;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    title: json["title"],
-    image: json["image"],
-    description: json["description"],
-    category: json["category"],
-    newsLink: json["news_link"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    id: json["id"] as int,
+    title: json["title"] as String,
+    image: json["image"] as String,
+    description: json["description"] as String,
+    category: json["category"] as String,
+    newsLink: json["news_link"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
   );
 
   Map<String, dynamic> toJson() => {

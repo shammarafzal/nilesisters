@@ -16,7 +16,7 @@ class ShowPosts extends StatefulWidget {
 
 class _ShowPostsState extends State<ShowPosts> {
   final _formKey = GlobalKey<FormState>();
-  Timer _timer;
+  Timer? _timer;
   final messageTextController = TextEditingController();
 
   @override
@@ -27,8 +27,9 @@ class _ShowPostsState extends State<ShowPosts> {
         future: Utils().fetchposts(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            final posts = snapshot.data!;
             return ListView.builder(
-              itemCount: snapshot.data.data.length,
+              itemCount: posts.data.length,
               // shrinkWrap: true,
               itemBuilder: (BuildContext context, index) {
                 return InkWell(
@@ -36,7 +37,7 @@ class _ShowPostsState extends State<ShowPosts> {
                     Navigator.push(
                       context,
                       new MaterialPageRoute(
-                        builder: (context) => new ViewFullMessage(user_name: snapshot.data.data[index].user.name, post_date: snapshot.data.data[index].createdAt.toString(), post_text: snapshot.data.data[index].post,),
+                        builder: (context) => new ViewFullMessage(user_name: posts.data[index].user.name, post_date: posts.data[index].createdAt.toString(), post_text: posts.data[index].post,),
                       ),
                     );
                   },
@@ -56,7 +57,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                   fontSize: 20),
                             ),
                             trailing: Text(
-                              snapshot.data.data[index].user.name,
+                              posts.data[index].user.name,
                               style: TextStyle(fontSize: 20),
                             ),
                           ),
@@ -72,7 +73,7 @@ class _ShowPostsState extends State<ShowPosts> {
                             trailing: Container(
                               width: SizeConfig.screenWidth * 0.5,
                               child: Text(
-                                snapshot.data.data[index].post,
+                                posts.data[index].post,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.end,
                                 // softWrap: false,
@@ -91,12 +92,12 @@ class _ShowPostsState extends State<ShowPosts> {
                                 style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all(Colors.blue)),
-                                onPressed: () async {
+                                      onPressed: () async {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            ShowComments(postID: snapshot.data.data[index].id),
+                                            ShowComments(postID: posts.data[index].id),
                                       ));
                                 },
                               ),
@@ -171,7 +172,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                                                 maskType: EasyLoadingMaskType.black,
                                                               );
                                                               var response = await Utils().sendComment(
-                                                                  messageTextController.text, snapshot.data.data[index].id.toString()
+                                                                  messageTextController.text, posts.data[index].id.toString()
                                                               );
 
                                                               if (response['status'] == false) {

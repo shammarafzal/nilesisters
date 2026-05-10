@@ -10,16 +10,16 @@ String getAboutToJson(GetAbout data) => json.encode(data.toJson());
 
 class GetAbout {
   GetAbout({
-    this.status,
-    this.data,
+    required this.status,
+    required this.data,
   });
 
-  bool status;
-  Data data;
+  final bool status;
+  final Data data;
 
   factory GetAbout.fromJson(Map<String, dynamic> json) => GetAbout(
-    status: json["status"],
-    data: Data.fromJson(json["data"]),
+    status: json["status"] as bool,
+    data: Data.fromJson(json["data"] as Map<String, dynamic>),
   );
 
   Map<String, dynamic> toJson() => {
@@ -30,31 +30,31 @@ class GetAbout {
 
 class Data {
   Data({
-    this.id,
-    this.image,
-    this.description,
-    this.mission,
-    this.history,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.image,
+    required this.description,
+    required this.mission,
+    required this.history,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String image;
-  String description;
-  String mission;
-  String history;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final int id;
+  final String image;
+  final String description;
+  final String mission;
+  final String history;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"],
-    image: json["image"],
-    description: json["description"],
-    mission: json["mission"],
-    history: json["history"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    id: json["id"] as int,
+    image: json["image"] as String,
+    description: json["description"] as String,
+    mission: json["mission"] as String,
+    history: json["history"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
   );
 
   Map<String, dynamic> toJson() => {

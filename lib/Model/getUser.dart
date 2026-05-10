@@ -10,16 +10,16 @@ String getUserToJson(GetUser data) => json.encode(data.toJson());
 
 class GetUser {
   GetUser({
-    this.status,
-    this.user,
+    required this.status,
+    required this.user,
   });
 
-  String status;
-  User user;
+  final String status;
+  final User user;
 
   factory GetUser.fromJson(Map<String, dynamic> json) => GetUser(
-    status: json["status"],
-    user: User.fromJson(json["user"]),
+    status: json["status"] as String,
+    user: User.fromJson(json["user"] as Map<String, dynamic>),
   );
 
   Map<String, dynamic> toJson() => {
@@ -30,34 +30,34 @@ class GetUser {
 
 class User {
   User({
-    this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.image,
-    this.isAdmin,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.image,
+    required this.isAdmin,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String name;
-  String email;
-  dynamic phone;
-  dynamic image;
-  String isAdmin;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final int id;
+  final String name;
+  final String email;
+  final dynamic phone;
+  final dynamic image;
+  final String isAdmin;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    name: json["name"],
-    email: json["email"],
+    id: json["id"] as int,
+    name: json["name"] as String,
+    email: json["email"] as String,
     phone: json["phone"],
     image: json["image"],
-    isAdmin: json["is_admin"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    isAdmin: json["is_admin"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
   );
 
   Map<String, dynamic> toJson() => {

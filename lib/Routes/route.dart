@@ -25,10 +25,6 @@ class Routes{
       page: () => HomePage(),
     ),
     GetPage(
-      name: '/forgot_password',
-      page: () => ForgotPassword(),
-    ),
-    GetPage(
       name: '/verify_token',
       page: () => VerifyToken(),
     ),

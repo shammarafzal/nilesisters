@@ -12,7 +12,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _email = TextEditingController();
   final _password = TextEditingController();
-  Timer _timer;
+  Timer? _timer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +64,7 @@ class _LoginState extends State<Login> {
               decoration: BoxDecoration(
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(20)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () async {
 
                   final SharedPreferences prefs =
@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
             ),
             new GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed('forgot_password');
+                Navigator.of(context).pushNamed('/forgot_password');
               },
               child: new RichText(
                 text: TextSpan(

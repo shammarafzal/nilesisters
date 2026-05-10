@@ -10,16 +10,16 @@ String getCommentsToJson(GetComments data) => json.encode(data.toJson());
 
 class GetComments {
   GetComments({
-    this.status,
-    this.data,
+    required this.status,
+    required this.data,
   });
 
-  bool status;
-  List<Datum> data;
+  final bool status;
+  final List<Datum> data;
 
   factory GetComments.fromJson(Map<String, dynamic> json) => GetComments(
-    status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    status: json["status"] as bool,
+    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -30,31 +30,31 @@ class GetComments {
 
 class Datum {
   Datum({
-    this.id,
-    this.comment,
-    this.postId,
-    this.userId,
-    this.createdAt,
-    this.updatedAt,
-    this.user,
+    required this.id,
+    required this.comment,
+    required this.postId,
+    required this.userId,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.user,
   });
 
-  int id;
-  String comment;
-  String postId;
-  String userId;
-  DateTime createdAt;
-  DateTime updatedAt;
-  User user;
+  final int id;
+  final String comment;
+  final String postId;
+  final String userId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final User user;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    comment: json["comment"],
-    postId: json["post_id"],
-    userId: json["user_id"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-    user: User.fromJson(json["user"]),
+    id: json["id"] as int,
+    comment: json["comment"] as String,
+    postId: json["post_id"] as String,
+    userId: json["user_id"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
+    user: User.fromJson(json["user"] as Map<String, dynamic>),
   );
 
   Map<String, dynamic> toJson() => {
@@ -70,34 +70,34 @@ class Datum {
 
 class User {
   User({
-    this.id,
-    this.name,
-    this.email,
-    this.phone,
-    this.image,
-    this.isAdmin,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.image,
+    required this.isAdmin,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String name;
-  String email;
-  dynamic phone;
-  dynamic image;
-  String isAdmin;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final int id;
+  final String name;
+  final String email;
+  final dynamic phone;
+  final dynamic image;
+  final String isAdmin;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    name: json["name"],
-    email: json["email"],
+    id: json["id"] as int,
+    name: json["name"] as String,
+    email: json["email"] as String,
     phone: json["phone"],
     image: json["image"],
-    isAdmin: json["is_admin"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    isAdmin: json["is_admin"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
   );
 
   Map<String, dynamic> toJson() => {

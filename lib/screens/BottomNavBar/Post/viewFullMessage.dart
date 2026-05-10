@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:nilesisters/Settings/customColors.dart';
 
 class ViewFullMessage extends StatefulWidget {
-  final user_name;
-  final post_text;
-  final post_date;
-  ViewFullMessage(
-      {
-        this.user_name,
-        this.post_text,
-        this.post_date,
-      });
+  final String user_name;
+  final String post_text;
+  final String post_date;
+
+  const ViewFullMessage({
+    super.key,
+    required this.user_name,
+    required this.post_text,
+    required this.post_date,
+  });
 
   @override
   _ViewFullMessageState createState() => _ViewFullMessageState();

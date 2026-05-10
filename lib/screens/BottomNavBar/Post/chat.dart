@@ -10,7 +10,7 @@ class Chat_Screen extends StatefulWidget {
 }
 
 class _Chat_ScreenState extends State<Chat_Screen> {
-  Timer _timer;
+  Timer? _timer;
   final messageTextController = TextEditingController();
 
   @override
@@ -101,7 +101,7 @@ class _Chat_ScreenState extends State<Chat_Screen> {
               child: Text(DemoLocalization.of(context)
                   .getTranslatedValue('show_posts')),
               style: TextButton.styleFrom(
-                  primary: Colors.white, backgroundColor: Colors.blue),
+                  foregroundColor: Colors.white, backgroundColor: Colors.blue),
             ),
           )
         ],

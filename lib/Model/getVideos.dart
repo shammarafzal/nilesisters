@@ -11,16 +11,16 @@ String getVideosToJson(GetVideos data) => json.encode(data.toJson());
 
 class GetVideos {
   GetVideos({
-    @required this.status,
-    @required this.data,
+    required this.status,
+    required this.data,
   });
 
-  bool status;
-  List<Datum> data;
+  final bool status;
+  final List<Datum> data;
 
   factory GetVideos.fromJson(Map<String, dynamic> json) => GetVideos(
-    status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    status: json["status"] as bool,
+    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -31,25 +31,25 @@ class GetVideos {
 
 class Datum {
   Datum({
-    @required this.id,
-    @required this.title,
-    @required this.link,
-    @required this.createdAt,
-    @required this.updatedAt,
+    required this.id,
+    required this.title,
+    required this.link,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String title;
-  String link;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final int id;
+  final String title;
+  final String link;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    title: json["title"],
-    link: json["link"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    id: json["id"] as int,
+    title: json["title"] as String,
+    link: json["link"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
   );
 
   Map<String, dynamic> toJson() => {

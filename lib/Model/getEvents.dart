@@ -1,8 +1,3 @@
-// To parse this JSON data, do
-//
-//     final getEvents = getEventsFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 GetEvents getEventsFromJson(String str) => GetEvents.fromJson(json.decode(str));
@@ -11,16 +6,16 @@ String getEventsToJson(GetEvents data) => json.encode(data.toJson());
 
 class GetEvents {
   GetEvents({
-    @required this.status,
-    @required this.data,
+    required this.status,
+    required this.data,
   });
 
-  bool status;
-  List<Datum> data;
+  final bool status;
+  final List<Datum> data;
 
   factory GetEvents.fromJson(Map<String, dynamic> json) => GetEvents(
-    status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    status: json["status"] as bool,
+    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -31,49 +26,49 @@ class GetEvents {
 
 class Datum {
   Datum({
-    @required this.id,
-    @required this.title,
-    @required this.date,
-    @required this.time,
-    @required this.location,
-    @required this.fee,
-    @required this.benefits,
-    @required this.details,
-    @required this.file,
-    @required this.addressLatitude,
-    @required this.addressLongitude,
-    @required this.createdAt,
-    @required this.updatedAt,
+    required this.id,
+    required this.title,
+    required this.date,
+    required this.time,
+    required this.location,
+    required this.fee,
+    required this.benefits,
+    required this.details,
+    required this.file,
+    required this.addressLatitude,
+    required this.addressLongitude,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String title;
-  String date;
-  String time;
-  String location;
-  String fee;
-  String benefits;
-  String details;
-  String file;
-  String addressLatitude;
-  String addressLongitude;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final int id;
+  final String title;
+  final String date;
+  final String time;
+  final String location;
+  final String fee;
+  final String benefits;
+  final String details;
+  final String file;
+  final String addressLatitude;
+  final String addressLongitude;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    title: json["title"],
-    date: json["date"],
-    time: json["time"],
-    location: json["location"],
-    fee: json["fee"],
-    benefits: json["benefits"],
-    details: json["details"],
-    file: json["file"],
-    addressLatitude: json["address_latitude"],
-    addressLongitude: json["address_longitude"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    id: json["id"] as int,
+    title: json["title"] as String,
+    date: json["date"] as String,
+    time: json["time"] as String,
+    location: json["location"] as String,
+    fee: json["fee"] as String,
+    benefits: json["benefits"] as String,
+    details: json["details"] as String,
+    file: json["file"] as String,
+    addressLatitude: json["address_latitude"] as String,
+    addressLongitude: json["address_longitude"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
   );
 
   Map<String, dynamic> toJson() => {

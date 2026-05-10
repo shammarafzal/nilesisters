@@ -10,16 +10,16 @@ String getResourcesToJson(GetResources data) => json.encode(data.toJson());
 
 class GetResources {
   GetResources({
-    this.status,
-    this.data,
+    required this.status,
+    required this.data,
   });
 
-  bool status;
-  List<Datum> data;
+  final bool status;
+  final List<Datum> data;
 
   factory GetResources.fromJson(Map<String, dynamic> json) => GetResources(
-    status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    status: json["status"] as bool,
+    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -30,40 +30,40 @@ class GetResources {
 
 class Datum {
   Datum({
-    this.id,
-    this.title,
-    this.edition,
-    this.context,
-    this.format,
-    this.totalPages,
-    this.file,
-    this.icon,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.title,
+    required this.edition,
+    required this.context,
+    required this.format,
+    required this.totalPages,
+    required this.file,
+    required this.icon,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String title;
-  String edition;
-  String context;
-  String format;
-  String totalPages;
-  String file;
-  String icon;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final int id;
+  final String title;
+  final String edition;
+  final String context;
+  final String format;
+  final String totalPages;
+  final String file;
+  final String icon;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    title: json["title"],
-    edition: json["edition"],
-    context: json["context"],
-    format: json["format"],
-    totalPages: json["total_pages"],
-    file: json["file"],
-    icon: json["icon"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    id: json["id"] as int,
+    title: json["title"] as String,
+    edition: json["edition"] as String,
+    context: json["context"] as String,
+    format: json["format"] as String,
+    totalPages: json["total_pages"] as String,
+    file: json["file"] as String,
+    icon: json["icon"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
   );
 
   Map<String, dynamic> toJson() => {

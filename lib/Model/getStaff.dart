@@ -11,16 +11,16 @@ String getStaffToJson(GetStaff data) => json.encode(data.toJson());
 
 class GetStaff {
   GetStaff({
-    @required this.status,
-    @required this.data,
+    required this.status,
+    required this.data,
   });
 
-  bool status;
-  List<Datum> data;
+  final bool status;
+  final List<Datum> data;
 
   factory GetStaff.fromJson(Map<String, dynamic> json) => GetStaff(
-    status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    status: json["status"] as bool,
+    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -31,31 +31,31 @@ class GetStaff {
 
 class Datum {
   Datum({
-    @required this.id,
-    @required this.name,
-    @required this.designation,
-    @required this.bio,
-    @required this.image,
-    @required this.createdAt,
-    @required this.updatedAt,
+    required this.id,
+    required this.name,
+    required this.designation,
+    required this.bio,
+    required this.image,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String name;
-  String designation;
-  String bio;
-  String image;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final int id;
+  final String name;
+  final String designation;
+  final String bio;
+  final String image;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    name: json["name"],
-    designation: json["designation"],
-    bio: json["bio"],
-    image: json["image"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    id: json["id"] as int,
+    name: json["name"] as String,
+    designation: json["designation"] as String,
+    bio: json["bio"] as String,
+    image: json["image"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
   );
 
   Map<String, dynamic> toJson() => {

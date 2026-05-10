@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:nilesisters/Settings/customColors.dart';
 import 'package:nilesisters/utils/Utils.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -14,11 +13,7 @@ class VerifyToken extends StatefulWidget {
 
 class _VerifyTokenState extends State<VerifyToken> {
   TextEditingController _controller = TextEditingController(text: "");
-  String thisText = "";
-  int pinLength = 4;
-  bool hasError = false;
-  String errorMessage;
-  Timer _timer;
+  Timer? _timer;
   @override
   void dispose() {
     _controller.dispose();
@@ -48,37 +43,20 @@ class _VerifyTokenState extends State<VerifyToken> {
               ),
               Center(
                 child: Container(
-                  height: 100.0,
-                  child: PinCodeTextField(
-                    autofocus: true,
+                  width: 220,
+                  child: TextField(
                     controller: _controller,
-                    hideCharacter: true,
-                    highlight: true,
-                    highlightColor: CustomColors().secondaryColor,
-                    defaultBorderColor: CustomColors().secondaryColor,
-                    hasTextBorderColor: CustomColors().secondaryColor,
-                    maxLength: pinLength,
-                    hasError: hasError,
-                    maskCharacter: "*",
-                    onTextChanged: (text) {
-                      setState(() {
-                        hasError = false;
-                      });
-                    },
-                    pinBoxWidth: 50,
-                    pinBoxHeight: 64,
-                    hasUnderline: true,
-                    wrapAlignment: WrapAlignment.spaceAround,
-                    pinBoxDecoration:
-                    ProvidedPinBoxDecoration.defaultPinBoxDecoration,
-                    pinTextStyle: TextStyle(fontSize: 22.0, color: CustomColors().secondaryColor),
-                    pinTextAnimatedSwitcherTransition:
-                    ProvidedPinBoxTextAnimation.scalingTransition,
-                    pinTextAnimatedSwitcherDuration:
-                    Duration(milliseconds: 300),
-                    highlightAnimationBeginColor: CustomColors().secondaryColor,
-                    highlightAnimationEndColor: CustomColors().secondaryColor,
+                    autofocus: true,
                     keyboardType: TextInputType.number,
+                    maxLength: 4,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      counterText: '',
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: CustomColors().secondaryColor),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -88,7 +66,7 @@ class _VerifyTokenState extends State<VerifyToken> {
                 decoration: BoxDecoration(
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(20)),
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () async {
 
                     await EasyLoading.show(

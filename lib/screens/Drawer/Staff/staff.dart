@@ -1,73 +1,88 @@
-import 'package:nilesisters/Model/getStaff.dart';
 import 'package:flutter/material.dart';
-import 'package:nilesisters/utils/Utils.dart';
 import 'package:nilesisters/Localization/demo_localization.dart';
+import 'package:nilesisters/Model/getStaff.dart';
+import 'package:nilesisters/utils/Utils.dart';
 
 class StaffViewer extends StatefulWidget {
   @override
-  _StaffViewerState createState() => _StaffViewerState();
+  State<StaffViewer> createState() => _StaffViewerState();
 }
+
 class _StaffViewerState extends State<StaffViewer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
+      appBar: AppBar(
         elevation: 0.0,
         centerTitle: true,
         backgroundColor: Colors.blue,
-        title: Text(DemoLocalization.of(context)
-            .getTranslatedValue('staff')),
+        title: Text(DemoLocalization.of(context).getTranslatedValue('staff')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Container(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(DemoLocalization.of(context)
-                    .getTranslatedValue('staff'),style: TextStyle(fontSize: 26,fontWeight: FontWeight.bold),),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                DemoLocalization.of(context).getTranslatedValue('staff'),
+                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
-              FutureBuilder<GetStaff>(
-                future: Utils().fetchstaff(),
-                builder: (context,snapshot){
-                  if(snapshot.hasData){
-                    return GridView.builder(itemCount: snapshot.data.data.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, index ){
-                        return Card(
-                          elevation: 5,
-                          child: GridTile(
-                            footer: Container(
-                              color: Colors.white70,
-                              child: SizedBox(
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(10,0,0,5),
-                                    child: Column(
-                                      children: [
-                                        Align(alignment: Alignment.topLeft,child: Text(snapshot.data.data[index].name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),)),
-                                        Align(alignment: Alignment.topLeft,child: Text(snapshot.data.data[index].designation,style: TextStyle(fontSize: 16),))
-                                      ],
-                                    ),
+            ),
+            FutureBuilder<GetStaff>(
+              future: Utils().fetchstaff(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final staff = snapshot.data!;
+                return GridView.builder(
+                  itemCount: staff.data.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, index) {
+                    final member = staff.data[index];
+                    return Card(
+                      elevation: 5,
+                      child: GridTile(
+                        footer: Container(
+                          color: Colors.white70,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 5),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    member.name,
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                   ),
-                                )
-                            ),
-                            child: Image.network(
-                              Utils().image_base_url+'${snapshot.data.data[index].image}',
-                              fit: BoxFit.cover,
+                                ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    member.designation,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        );
-                      },
+                        ),
+                        child: Image.network(
+                          '${Utils().image_base_url}${member.image}',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     );
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
-              ),
-            ],
-          ),
+                  },
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

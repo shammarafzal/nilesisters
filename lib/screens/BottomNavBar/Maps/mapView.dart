@@ -7,18 +7,14 @@ class mapView extends StatefulWidget {
 }
 
 class _mapViewState extends State<mapView> {
-  GoogleMapController _controller;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  GoogleMapController? _controller;
 
   final CameraPosition _initialPosition =
   CameraPosition(target: LatLng(32.75914335350104, -117.0754778));
   final List<Marker> marker = [];
   Set<Marker> _markers = {};
   void _onMapCreated(GoogleMapController controller) {
+    _controller = controller;
     setState(() {
       _markers.add(Marker(
           markerId: MarkerId('id-1'),

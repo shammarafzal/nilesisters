@@ -4,7 +4,7 @@ import 'package:nilesisters/Localization/demo_localization.dart';
 import 'package:nilesisters/Settings/SizeConfig.dart';
 import 'package:nilesisters/utils/Utils.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'contactDetails.dart';
 
@@ -690,7 +690,7 @@ class _ContactUsState extends State<ContactUs> {
                           backgroundColor: Colors.blue,
                           child: IconButton(
                             icon: Icon(
-                              FontAwesome.facebook_square,
+                              FontAwesomeIcons.facebookSquare,
                               color: Colors.white,
                             ),
                             onPressed: () {
@@ -703,7 +703,7 @@ class _ContactUsState extends State<ContactUs> {
                           backgroundColor: Colors.blue,
                           child: IconButton(
                             icon: Icon(
-                              FontAwesome.facebook_square,
+                              FontAwesomeIcons.facebookSquare,
                               color: Colors.white,
                             ),
                             onPressed: () {
@@ -729,7 +729,7 @@ class _ContactUsState extends State<ContactUs> {
                           backgroundColor: Colors.blue,
                           child: IconButton(
                             icon: Icon(
-                              FontAwesome.instagram,
+                              FontAwesomeIcons.instagram,
                               color: Colors.white,
                             ),
                             onPressed: () {
@@ -742,7 +742,7 @@ class _ContactUsState extends State<ContactUs> {
                           backgroundColor: Colors.blue,
                           child: IconButton(
                             icon: Icon(
-                              FontAwesome.instagram,
+                              FontAwesomeIcons.instagram,
                               color: Colors.white,
                             ),
                             onPressed: () {

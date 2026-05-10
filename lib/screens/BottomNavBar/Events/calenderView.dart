@@ -2,55 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DynamicEvent extends StatefulWidget {
-  final year, month, day, title;
-  DynamicEvent({this.year, this.month, this.day, this.title});
+  final int year;
+  final int month;
+  final int day;
+  final String title;
+
+  const DynamicEvent({
+    super.key,
+    required this.year,
+    required this.month,
+    required this.day,
+    required this.title,
+  });
+
   @override
-  _DynamicEventState createState() => _DynamicEventState();
+  State<DynamicEvent> createState() => _DynamicEventState();
 }
 
 class _DynamicEventState extends State<DynamicEvent> {
-  CalendarController _controller;
-  Map<DateTime, List<dynamic>> _events;
-  List<dynamic> _selectedEvents;
-  // TextEditingController _eventController;
-  //SharedPreferences prefs;
+  late final DateTime _focusedDay;
+  late final Map<DateTime, List<String>> _events;
+  List<String> _selectedEvents = <String>[];
 
   @override
   void initState() {
     super.initState();
-    _controller = CalendarController();
-    // _eventController = TextEditingController();
-
-
+    _focusedDay = DateTime(widget.year, widget.month, widget.day);
     _events = {
-      new DateTime(widget.year, widget.month, widget.day): [widget.title]
+      DateTime(widget.year, widget.month, widget.day): [widget.title]
     };
-    _selectedEvents = [];
-    prefsData();
-  }
-
-  prefsData() async {
-    //prefs = await SharedPreferences.getInstance();
-    setState(() {
-      // ignore: unnecessary_statements
-      _events;
-    });
-  }
-
-  Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
-    Map<String, dynamic> newMap = {};
-    map.forEach((key, value) {
-      newMap[key.toString()] = map[key];
-    });
-    return newMap;
-  }
-
-  Map<DateTime, dynamic> decodeMap(Map<String, dynamic> map) {
-    Map<DateTime, dynamic> newMap = {};
-    map.forEach((key, value) {
-      newMap[DateTime.parse(key)] = map[key];
-    });
-    return newMap;
   }
 
   @override
@@ -71,22 +51,30 @@ class _DynamicEventState extends State<DynamicEvent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TableCalendar(
-              availableCalendarFormats: const {
-                CalendarFormat.month: '',
-
+              firstDay: DateTime.utc(2000, 1, 1),
+              lastDay: DateTime.utc(2100, 12, 31),
+              focusedDay: _focusedDay,
+              calendarFormat: CalendarFormat.month,
+              eventLoader: (day) {
+                return _events[DateTime(day.year, day.month, day.day)] ?? const <String>[];
               },
-              events: _events,
-             // initialCalendarFormat: CalendarFormat.week,
               calendarStyle: CalendarStyle(
-                  canEventMarkersOverflow: true,
-                  todayColor: Colors.orange,
-                  selectedColor: Theme.of(context).primaryColor,
-                  todayStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.white)),
+                todayDecoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                selectedDecoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                todayTextStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  color: Colors.white,
+                ),
+              ),
               headerStyle: HeaderStyle(
-                centerHeaderTitle: true,
+                titleCentered: true,
                 formatButtonDecoration: BoxDecoration(
                   color: Colors.orange,
                   borderRadius: BorderRadius.circular(20.0),
@@ -95,34 +83,14 @@ class _DynamicEventState extends State<DynamicEvent> {
                 formatButtonShowsNext: false,
               ),
               startingDayOfWeek: StartingDayOfWeek.monday,
-              onDaySelected: (date, events, holidays) {
+              selectedDayPredicate: (day) {
+                return isSameDay(day, _focusedDay);
+              },
+              onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
-                  _selectedEvents = events;
+                  _selectedEvents = _events[DateTime(selectedDay.year, selectedDay.month, selectedDay.day)] ?? <String>[];
                 });
               },
-              builders: CalendarBuilders(
-                selectedDayBuilder: (context, date, events) => Container(
-                    margin: const EdgeInsets.all(4.0),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Text(
-                      date.day.toString(),
-                      style: TextStyle(color: Colors.white),
-                    )),
-                todayDayBuilder: (context, date, events) => Container(
-                    margin: const EdgeInsets.all(4.0),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Text(
-                      date.day.toString(),
-                      style: TextStyle(color: Colors.white),
-                    )),
-              ),
-              calendarController: _controller,
             ),
             ..._selectedEvents.map((event) => Padding(
               padding: const EdgeInsets.all(8.0),
@@ -136,7 +104,7 @@ class _DynamicEventState extends State<DynamicEvent> {
                 child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
+                child: Text(
                         event,
                         style: TextStyle(
                             color: Colors.blue,
@@ -156,44 +124,4 @@ class _DynamicEventState extends State<DynamicEvent> {
       ),*/
     );
   }
-
-/*_showAddDialog() async {
-    await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              backgroundColor: Colors.white70,
-              title: Text("Add Events"),
-              content: TextField(
-                controller: _eventController,
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text(
-                    "Save",
-                    style: TextStyle(
-                        color: Colors.red, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    if (_eventController.text.isEmpty) return;
-                    setState(() {
-                      if (_events[_controller.selectedDay] != null) {
-                        _events[_controller.selectedDay]
-                            .add('_eventController.text');
-                        //_events['2021,5,28'].add('_eventController.text');
-                      } else {
-                        _events[_controller.selectedDay] = [
-                          "_eventController.text"
-                        ];
-                        print(_events);
-                      }
-                      prefs.setString(
-                          "events", json.encode(encodeMap(_events)));
-                      _eventController.clear();
-                      Navigator.pop(context);
-                    });
-                  },
-                )
-              ],
-            ));
-  }*/
 }

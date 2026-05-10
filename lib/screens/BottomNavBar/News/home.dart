@@ -21,8 +21,9 @@ class _HomeState extends State<Home> {
           future: Utils().fetchhome(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              final news = snapshot.data!;
               return ListView.builder(
-                itemCount: snapshot.data.data.length,
+                itemCount: news.data.length,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, index) {
                   return Container(
@@ -33,34 +34,30 @@ class _HomeState extends State<Home> {
                           Navigator.push(
                             context,
                             new MaterialPageRoute(
-                              builder: (context) => new NewsDetails(
-                                news_detail_name:
-                                    snapshot.data.data[index].title,
-                                news_detail_link:
-                                snapshot.data.data[index].newsLink,
-                                news_detail_text:
-                                    snapshot.data.data[index].description,
-                                news_detail_category:
-                                    snapshot.data.data[index].category,
+                                builder: (context) => new NewsDetails(
+                                news_detail_name: news.data[index].title,
+                                news_detail_link: news.data[index].newsLink,
+                                news_detail_text: news.data[index].description,
+                                news_detail_category: news.data[index].category,
                                 news_detail_image: Utils().image_base_url +
-                                    '${snapshot.data.data[index].image}',
+                                    '${news.data[index].image}',
                                 news_detail_date:
-                                    '${snapshot.data.data[index].createdAt.month}/${snapshot.data.data[index].createdAt.day}/${snapshot.data.data[index].createdAt.year}',
+                                    '${news.data[index].createdAt.month}/${news.data[index].createdAt.day}/${news.data[index].createdAt.year}',
                               ),
                             ),
                           );
                         },
                         child: GridTile(
-                          child: Container(
-                            color: CustomColors().buttonTextColor,
-                            child: Image.network(Utils().image_base_url +
-                                '${snapshot.data.data[index].image}'),
+                            child: Container(
+                              color: CustomColors().buttonTextColor,
+                              child: Image.network(Utils().image_base_url +
+                                '${news.data[index].image}'),
                           ),
                           footer: new Container(
                             color: Colors.white70,
                             child: ListTile(
                               leading:
-                              SizedBox(width: SizeConfig.screenWidth*0.8, child: Text(snapshot.data.data[index].title,
+                              SizedBox(width: SizeConfig.screenWidth*0.8, child: Text(news.data[index].title,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.0)),)

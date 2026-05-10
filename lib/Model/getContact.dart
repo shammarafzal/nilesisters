@@ -10,16 +10,16 @@ String getContactToJson(GetContact data) => json.encode(data.toJson());
 
 class GetContact {
   GetContact({
-    this.status,
-    this.data,
+    required this.status,
+    required this.data,
   });
 
-  bool status;
-  List<Datum> data;
+  final bool status;
+  final List<Datum> data;
 
   factory GetContact.fromJson(Map<String, dynamic> json) => GetContact(
-    status: json["status"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    status: json["status"] as bool,
+    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -30,46 +30,46 @@ class GetContact {
 
 class Datum {
   Datum({
-    this.id,
-    this.officeName,
-    this.address,
-    this.englishPhone,
-    this.spanishPhone,
-    this.email,
-    this.facebookPage1,
-    this.facebookPage2,
-    this.instagramPage1,
-    this.instagramPage2,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.officeName,
+    required this.address,
+    required this.englishPhone,
+    required this.spanishPhone,
+    required this.email,
+    required this.facebookPage1,
+    required this.facebookPage2,
+    required this.instagramPage1,
+    required this.instagramPage2,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  int id;
-  String officeName;
-  String address;
-  String englishPhone;
-  String spanishPhone;
-  String email;
-  String facebookPage1;
-  String facebookPage2;
-  String instagramPage1;
-  String instagramPage2;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final int id;
+  final String officeName;
+  final String address;
+  final String englishPhone;
+  final String spanishPhone;
+  final String email;
+  final String facebookPage1;
+  final String facebookPage2;
+  final String instagramPage1;
+  final String instagramPage2;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    officeName: json["office_name"],
-    address: json["address"],
-    englishPhone: json["english_phone"],
-    spanishPhone: json["spanish_phone"],
-    email: json["email"],
-    facebookPage1: json["facebook_page_1"],
-    facebookPage2: json["facebook_page_2"],
-    instagramPage1: json["instagram_page_1"],
-    instagramPage2: json["instagram_page_2"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
+    id: json["id"] as int,
+    officeName: json["office_name"] as String,
+    address: json["address"] as String,
+    englishPhone: json["english_phone"] as String,
+    spanishPhone: json["spanish_phone"] as String,
+    email: json["email"] as String,
+    facebookPage1: json["facebook_page_1"] as String,
+    facebookPage2: json["facebook_page_2"] as String,
+    instagramPage1: json["instagram_page_1"] as String,
+    instagramPage2: json["instagram_page_2"] as String,
+    createdAt: DateTime.parse(json["created_at"] as String),
+    updatedAt: DateTime.parse(json["updated_at"] as String),
   );
 
   Map<String, dynamic> toJson() => {

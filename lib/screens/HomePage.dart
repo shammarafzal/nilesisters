@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Timer _timer;
+  Timer? _timer;
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -105,9 +105,11 @@ class _HomePageState extends State<HomePage> {
           actions: [
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: DropdownButton(
-                  onChanged: (Language language) {
-                    _changeLanguage(language);
+              child: DropdownButton<Language>(
+                  onChanged: (Language? language) {
+                    if (language != null) {
+                      _changeLanguage(language);
+                    }
                   },
                   underline: SizedBox(),
                   icon: Icon(
@@ -135,16 +137,17 @@ class _HomePageState extends State<HomePage> {
                         future:  Utils().fetchuser(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
+                            final user = snapshot.data!;
                             return UserAccountsDrawerHeader(
                               currentAccountPicture: GestureDetector(
                                 child: CircleAvatar(
                                   backgroundColor: Colors.black,
                                   backgroundImage: NetworkImage(
-                                      Utils().image_base_url+'${snapshot.data.user.image}'),
+                                      Utils().image_base_url+'${user.user.image}'),
                                 ),
                               ),
-                              accountName: Text(snapshot.data.user.name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                              accountEmail: Text(snapshot.data.user.email),
+                              accountName: Text(user.user.name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                              accountEmail: Text(user.user.email),
                               decoration: new BoxDecoration(color: Colors.blue),
 
                             );
