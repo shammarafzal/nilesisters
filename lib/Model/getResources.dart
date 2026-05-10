@@ -18,8 +18,10 @@ class GetResources {
   final List<Datum> data;
 
   factory GetResources.fromJson(Map<String, dynamic> json) => GetResources(
-    status: json["status"] as bool,
-    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
+    status: json["status"].toString().toLowerCase() == 'true' || json["status"] == 1 || json["status"] == true,
+    data: json["data"] == null 
+      ? [] 
+      : List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -54,16 +56,16 @@ class Datum {
   final DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"] as int,
-    title: json["title"] as String,
-    edition: json["edition"] as String,
-    context: json["context"] as String,
-    format: json["format"] as String,
-    totalPages: json["total_pages"] as String,
-    file: json["file"] as String,
-    icon: json["icon"] as String,
-    createdAt: DateTime.parse(json["created_at"] as String),
-    updatedAt: DateTime.parse(json["updated_at"] as String),
+    id: json["id"] is int ? json["id"] as int : int.tryParse(json["id"].toString()) ?? 0,
+    title: json["title"]?.toString() ?? '',
+    edition: json["edition"]?.toString() ?? '',
+    context: json["context"]?.toString() ?? '',
+    format: json["format"]?.toString() ?? '',
+    totalPages: json["total_pages"]?.toString() ?? '0',
+    file: json["file"]?.toString() ?? '',
+    icon: json["icon"]?.toString() ?? '',
+    createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"].toString()) : DateTime.now(),
+    updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"].toString()) : DateTime.now(),
   );
 
   Map<String, dynamic> toJson() => {

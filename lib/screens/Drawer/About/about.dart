@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:nilesisters/Model/getStaff.dart';
+import 'package:nilesisters/Model/getAbout.dart';
 import 'package:nilesisters/Settings/ngo_ui.dart';
 import 'package:nilesisters/Settings/ngo_nav_bar.dart';
 import 'package:nilesisters/utils/Utils.dart';
 
-class StaffViewer extends StatefulWidget {
+class founder extends StatefulWidget {
   @override
-  State<StaffViewer> createState() => _StaffViewerState();
+  State<founder> createState() => _founderState();
 }
 
-class _StaffViewerState extends State<StaffViewer> with SingleTickerProviderStateMixin {
+class _founderState extends State<founder> with SingleTickerProviderStateMixin {
   late AnimationController _headerController;
   late Animation<double> _imageScale;
 
@@ -37,14 +37,15 @@ class _StaffViewerState extends State<StaffViewer> with SingleTickerProviderStat
     return Scaffold(
       extendBodyBehindAppBar: true,
       bottomNavigationBar: const NgoBottomNavBar(),
-      body: FutureBuilder<GetStaff>(
-        future: Utils().fetchstaff(),
+      body: FutureBuilder<GetAbout>(
+        future: Utils().fetchabout(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator(color: NgoPalette.primary));
           }
 
-          final staff = snapshot.data!;
+          final about = snapshot.data!;
+          final imageUrl = '${Utils().image_base_url}${about.data.image}';
 
           return Stack(
             children: [
@@ -53,7 +54,7 @@ class _StaffViewerState extends State<StaffViewer> with SingleTickerProviderStat
                 slivers: [
                   // Premium SliverAppBar
                   SliverAppBar(
-                    expandedHeight: 380.0,
+                    expandedHeight: 450.0,
                     pinned: true,
                     stretch: true,
                     backgroundColor: NgoPalette.navy,
@@ -71,7 +72,7 @@ class _StaffViewerState extends State<StaffViewer> with SingleTickerProviderStat
                     ),
                     flexibleSpace: FlexibleSpaceBar(
                       title: const Text(
-                        'Staff',
+                        'Founder',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w800,
@@ -86,7 +87,7 @@ class _StaffViewerState extends State<StaffViewer> with SingleTickerProviderStat
                           ScaleTransition(
                             scale: _imageScale,
                             child: Image.network(
-                              'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop',
+                              imageUrl,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -121,7 +122,7 @@ class _StaffViewerState extends State<StaffViewer> with SingleTickerProviderStat
                                       borderRadius: BorderRadius.circular(30),
                                     ),
                                     child: const Text(
-                                      'THE HEARTBEAT',
+                                      'OUR LEGACY',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 11,
@@ -132,7 +133,7 @@ class _StaffViewerState extends State<StaffViewer> with SingleTickerProviderStat
                                   ),
                                   const SizedBox(height: 16),
                                   const Text(
-                                    'Meet Our\nDedicated Team',
+                                    'Empowering\nGenerations',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 42,
@@ -150,40 +151,45 @@ class _StaffViewerState extends State<StaffViewer> with SingleTickerProviderStat
                     ),
                   ),
 
-                  // Staff Grid Sections
+                  // Content Sections
                   SliverToBoxAdapter(
                     child: NgoBackground(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 30, 20, 100),
+                        padding: const EdgeInsets.fromLTRB(20, 40, 20, 100),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const _EntranceAnimation(
-                              delay: 500,
-                              type: EntranceType.slideUp,
-                              child: NgoSectionHeader(
-                                title: 'Leadership & Staff',
-                                subtitle: 'A team of passionate individuals committed to making a difference every single day.',
+                            _EntranceAnimation(
+                              delay: 600,
+                              type: EntranceType.scale,
+                              child: _PremiumSection(
+                                icon: Icons.auto_stories,
+                                title: 'The Narrative',
+                                content: about.data.description,
+                                accentColor: NgoPalette.primary,
                               ),
                             ),
-                            const SizedBox(height: 30),
-                            GridView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: staff.data.length,
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.68,
-                                crossAxisSpacing: 18,
-                                mainAxisSpacing: 18,
+                            const SizedBox(height: 35),
+                            _EntranceAnimation(
+                              delay: 800,
+                              type: EntranceType.slideRight,
+                              child: _PremiumSection(
+                                icon: Icons.lightbulb_outline,
+                                title: 'Strategic Mission',
+                                content: about.data.mission,
+                                accentColor: Colors.amber[800]!,
+                                isHighlighted: true,
                               ),
-                              itemBuilder: (context, index) {
-                                return _EntranceAnimation(
-                                  delay: 600 + (index * 100),
-                                  type: EntranceType.scale,
-                                  child: _PremiumStaffCard(member: staff.data[index]),
-                                );
-                              },
+                            ),
+                            const SizedBox(height: 35),
+                            _EntranceAnimation(
+                              delay: 1000,
+                              type: EntranceType.slideLeft,
+                              child: _PremiumSection(
+                                icon: Icons.history,
+                                title: 'Historical Roots',
+                                content: about.data.history,
+                                accentColor: NgoPalette.navy,
+                              ),
                             ),
                           ],
                         ),
@@ -200,85 +206,90 @@ class _StaffViewerState extends State<StaffViewer> with SingleTickerProviderStat
   }
 }
 
-class _PremiumStaffCard extends StatelessWidget {
-  const _PremiumStaffCard({required this.member});
+class _PremiumSection extends StatelessWidget {
+  const _PremiumSection({
+    required this.icon,
+    required this.title,
+    required this.content,
+    required this.accentColor,
+    this.isHighlighted = false,
+  });
 
-  final dynamic member;
+  final IconData icon;
+  final String title;
+  final String content;
+  final Color accentColor;
+  final bool isHighlighted;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: NgoPalette.navy.withValues(alpha: 0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: accentColor.withValues(alpha: 0.1),
+            blurRadius: 30,
+            offset: const Offset(0, 15),
           ),
         ],
+        border: Border.all(
+          color: isHighlighted ? accentColor.withValues(alpha: 0.2) : Colors.transparent,
+          width: 2,
+        ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(32),
         child: Stack(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: Image.network(
-                    '${Utils().image_base_url}${member.image}',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            Positioned(
+              top: -20,
+              right: -20,
+              child: Icon(
+                icon,
+                size: 120,
+                color: accentColor.withValues(alpha: 0.03),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(28.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: accentColor.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(icon, color: accentColor, size: 26),
+                      ),
+                      const SizedBox(width: 16),
                       Text(
-                        member.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        title,
+                        style: TextStyle(
+                          fontSize: 24,
                           fontWeight: FontWeight.w900,
                           color: NgoPalette.ink,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        member.designation,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: NgoPalette.primary,
+                          letterSpacing: -0.8,
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            // Subtle accent line
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 4,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [NgoPalette.primary, NgoPalette.secondary.withValues(alpha: 0.5)],
+                  const SizedBox(height: 20),
+                  Text(
+                    content,
+                    style: TextStyle(
+                      fontSize: 16,
+                      height: 1.7,
+                      color: NgoPalette.muted.withValues(alpha: 0.9),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ],
@@ -288,7 +299,7 @@ class _PremiumStaffCard extends StatelessWidget {
   }
 }
 
-enum EntranceType { slideUp, scale }
+enum EntranceType { slideUp, slideRight, slideLeft, scale }
 
 class _EntranceAnimation extends StatefulWidget {
   const _EntranceAnimation({
@@ -323,14 +334,27 @@ class _EntranceAnimationState extends State<_EntranceAnimation> with SingleTicke
       CurvedAnimation(parent: _controller, curve: const Interval(0.0, 0.6, curve: Curves.easeOut)),
     );
 
-    _slide = Tween<Offset>(
-      begin: widget.type == EntranceType.slideUp ? const Offset(0, 0.2) : Offset.zero,
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    Offset startOffset;
+    switch (widget.type) {
+      case EntranceType.slideUp:
+        startOffset = const Offset(0, 0.3);
+        break;
+      case EntranceType.slideRight:
+        startOffset = const Offset(-0.2, 0);
+        break;
+      case EntranceType.slideLeft:
+        startOffset = const Offset(0.2, 0);
+        break;
+      case EntranceType.scale:
+        startOffset = Offset.zero;
+        break;
+    }
+
+    _slide = Tween<Offset>(begin: startOffset, end: Offset.zero).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
     );
 
-    _scale = Tween<double>(begin: widget.type == EntranceType.scale ? 0.85 : 1.0, end: 1.0).animate(
+    _scale = Tween<double>(begin: widget.type == EntranceType.scale ? 0.8 : 1.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
     );
 

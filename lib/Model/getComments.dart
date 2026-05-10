@@ -18,8 +18,10 @@ class GetComments {
   final List<Datum> data;
 
   factory GetComments.fromJson(Map<String, dynamic> json) => GetComments(
-    status: json["status"] as bool,
-    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
+    status: json["status"].toString().toLowerCase() == 'true' || json["status"] == 1 || json["status"] == true,
+    data: json["data"] == null 
+      ? [] 
+      : List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -48,13 +50,13 @@ class Datum {
   final User user;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"] as int,
-    comment: json["comment"] as String,
-    postId: json["post_id"] as String,
-    userId: json["user_id"] as String,
-    createdAt: DateTime.parse(json["created_at"] as String),
-    updatedAt: DateTime.parse(json["updated_at"] as String),
-    user: User.fromJson(json["user"] as Map<String, dynamic>),
+    id: json["id"] is int ? json["id"] as int : int.tryParse(json["id"]?.toString() ?? '0') ?? 0,
+    comment: json["comment"]?.toString() ?? '',
+    postId: json["post_id"]?.toString() ?? '0',
+    userId: json["user_id"]?.toString() ?? '0',
+    createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"].toString()) : DateTime.now(),
+    updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"].toString()) : DateTime.now(),
+    user: User.fromJson(json["user"] as Map<String, dynamic>? ?? {}),
   );
 
   Map<String, dynamic> toJson() => {
@@ -90,14 +92,14 @@ class User {
   final DateTime updatedAt;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"] as int,
-    name: json["name"] as String,
-    email: json["email"] as String,
+    id: json["id"] is int ? json["id"] as int : int.tryParse(json["id"]?.toString() ?? '0') ?? 0,
+    name: json["name"]?.toString() ?? 'Unknown User',
+    email: json["email"]?.toString() ?? '',
     phone: json["phone"],
     image: json["image"],
-    isAdmin: json["is_admin"] as String,
-    createdAt: DateTime.parse(json["created_at"] as String),
-    updatedAt: DateTime.parse(json["updated_at"] as String),
+    isAdmin: json["is_admin"]?.toString() ?? '0',
+    createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"].toString()) : DateTime.now(),
+    updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"].toString()) : DateTime.now(),
   );
 
   Map<String, dynamic> toJson() => {

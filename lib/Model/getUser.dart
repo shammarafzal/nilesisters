@@ -18,7 +18,7 @@ class GetUser {
   final User user;
 
   factory GetUser.fromJson(Map<String, dynamic> json) => GetUser(
-    status: json["status"] as String,
+    status: json["status"].toString(),
     user: User.fromJson(json["user"] as Map<String, dynamic>),
   );
 
@@ -55,7 +55,7 @@ class User {
     email: json["email"] as String,
     phone: json["phone"],
     image: json["image"],
-    isAdmin: json["is_admin"] as String,
+    isAdmin: json["is_admin"].toString(),
     createdAt: DateTime.parse(json["created_at"] as String),
     updatedAt: DateTime.parse(json["updated_at"] as String),
   );

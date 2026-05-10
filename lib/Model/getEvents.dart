@@ -14,8 +14,10 @@ class GetEvents {
   final List<Datum> data;
 
   factory GetEvents.fromJson(Map<String, dynamic> json) => GetEvents(
-    status: json["status"] as bool,
-    data: List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
+    status: json["status"].toString().toLowerCase() == 'true' || json["status"] == 1 || json["status"] == true,
+    data: json["data"] == null 
+      ? [] 
+      : List<Datum>.from((json["data"] as List<dynamic>).map((x) => Datum.fromJson(x as Map<String, dynamic>))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -56,19 +58,19 @@ class Datum {
   final DateTime updatedAt;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"] as int,
-    title: json["title"] as String,
-    date: json["date"] as String,
-    time: json["time"] as String,
-    location: json["location"] as String,
-    fee: json["fee"] as String,
-    benefits: json["benefits"] as String,
-    details: json["details"] as String,
-    file: json["file"] as String,
-    addressLatitude: json["address_latitude"] as String,
-    addressLongitude: json["address_longitude"] as String,
-    createdAt: DateTime.parse(json["created_at"] as String),
-    updatedAt: DateTime.parse(json["updated_at"] as String),
+    id: json["id"] is int ? json["id"] as int : int.tryParse(json["id"].toString()) ?? 0,
+    title: json["title"]?.toString() ?? '',
+    date: json["date"]?.toString() ?? '',
+    time: json["time"]?.toString() ?? '',
+    location: json["location"]?.toString() ?? '',
+    fee: json["fee"]?.toString() ?? '',
+    benefits: json["benefits"]?.toString() ?? '',
+    details: json["details"]?.toString() ?? '',
+    file: json["file"]?.toString() ?? '',
+    addressLatitude: json["address_latitude"]?.toString() ?? '0.0',
+    addressLongitude: json["address_longitude"]?.toString() ?? '0.0',
+    createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"].toString()) : DateTime.now(),
+    updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"].toString()) : DateTime.now(),
   );
 
   Map<String, dynamic> toJson() => {
